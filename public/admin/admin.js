@@ -21,6 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const adminUserDisplay = document.getElementById('admin-user-display');
   const btnLogout = document.getElementById('btn-logout');
 
+  // Handle Unauthorized Session Expiration
+  function handleUnauthorized() {
+    showToast('Sesi login telah berakhir atau tidak valid. Mengarahkan ke login...', 'error');
+    localStorage.removeItem('expr_admin_token');
+    localStorage.removeItem('expr_admin_user');
+    setTimeout(() => {
+      window.location.href = '/login';
+    }, 1200);
+  }
+
   // Verify Auth
   fetch('/api/admin/check-auth', {
     headers: { 'Authorization': `Bearer ${token}` }
@@ -33,9 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (adminUserDisplay) adminUserDisplay.textContent = data.username || 'admin';
   })
   .catch(() => {
-    localStorage.removeItem('expr_admin_token');
-    localStorage.removeItem('expr_admin_user');
-    window.location.href = '/login';
+    handleUnauthorized();
   });
 
   // Logout Handler
@@ -304,6 +312,10 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
       });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return null;
+      }
       const data = await res.json();
       if (res.ok && data.success) {
         showToast('Gambar berhasil diunggah!');
@@ -348,6 +360,10 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: authHeaders,
         body: JSON.stringify(updatedData)
       });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return false;
+      }
       const data = await res.json();
       if (res.ok && data.success) {
         currentContent = updatedData;
@@ -554,6 +570,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/admin/consultations', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return;
+      }
       const json = await res.json();
       if (res.ok && json.success) {
         consultationsList = json.data || [];
@@ -627,6 +647,10 @@ document.addEventListener('DOMContentLoaded', () => {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      if (res.status === 401) {
+        handleUnauthorized();
+        return;
+      }
       const data = await res.json();
       if (res.ok && data.success) {
         showToast('Data prospek berhasil dihapus');
@@ -656,6 +680,10 @@ document.addEventListener('DOMContentLoaded', () => {
           headers: authHeaders,
           body: JSON.stringify({ currentPassword, newUsername, newPassword })
         });
+        if (res.status === 401) {
+          handleUnauthorized();
+          return;
+        }
         const data = await res.json();
         if (res.ok && data.success) {
           showToast('Kredensial berhasil diperbarui!');

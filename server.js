@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
 const multer = require('multer');
 
 const app = express();
@@ -59,8 +60,48 @@ let memoryContent = null;
 let memoryAdminConfig = null;
 let memoryConsultations = null;
 
-// In-memory Auth Token Set
-const activeTokens = new Set(['admin-dev-session-token']);
+// Secret key for HMAC token signing (stateless for serverless / Vercel multi-instance environments)
+const AUTH_SECRET = process.env.ADMIN_SECRET || 'expressa_cms_jwt_secret_key_2026_fixed';
+
+function generateToken(username) {
+  const payload = {
+    u: username,
+    iat: Date.now(),
+    exp: Date.now() + (30 * 24 * 60 * 60 * 1000) // 30 days expiration
+  };
+  const payloadStr = JSON.stringify(payload);
+  const encodedPayload = Buffer.from(payloadStr).toString('base64url');
+  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(encodedPayload).digest('hex');
+  return `expr.${encodedPayload}.${signature}`;
+}
+
+function verifyToken(token) {
+  if (!token || typeof token !== 'string') return null;
+  // Dev backward compatibility
+  if (token === 'admin-dev-session-token') return { u: 'admin' };
+
+  try {
+    const parts = token.split('.');
+    if (parts.length === 3 && parts[0] === 'expr') {
+      const encodedPayload = parts[1];
+      const signature = parts[2];
+      const expectedSig = crypto.createHmac('sha256', AUTH_SECRET).update(encodedPayload).digest('hex');
+
+      const sigBuf = Buffer.from(signature);
+      const expectedSigBuf = Buffer.from(expectedSig);
+      if (sigBuf.length === expectedSigBuf.length && crypto.timingSafeEqual(sigBuf, expectedSigBuf)) {
+        const payloadStr = Buffer.from(encodedPayload, 'base64url').toString('utf8');
+        const payload = JSON.parse(payloadStr);
+        if (payload.exp && payload.exp > Date.now()) {
+          return payload;
+        }
+      }
+    }
+  } catch (e) {
+    // Malformed token or JSON parse error
+  }
+  return null;
+}
 
 function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
@@ -68,9 +109,11 @@ function authMiddleware(req, res, next) {
     return res.status(401).json({ success: false, message: 'Silakan login terlebih dahulu.' });
   }
   const token = authHeader.split(' ')[1];
-  if (!activeTokens.has(token)) {
-    return res.status(401).json({ success: false, message: 'Sesi login telah berakhir atau tidak valid.' });
+  const payload = verifyToken(token);
+  if (!payload) {
+    return res.status(401).json({ success: false, message: 'Sesi login telah berakhir atau tidak valid. Silakan login kembali.' });
   }
+  req.user = payload;
   next();
 }
 
@@ -306,8 +349,7 @@ app.post('/api/login', (req, res) => {
   }
 
   if (username === adminConfig.username && password === adminConfig.password) {
-    const token = 'expr_' + Date.now() + '_' + Math.random().toString(36).substring(2, 10);
-    activeTokens.add(token);
+    const token = generateToken(adminConfig.username);
     return res.json({
       success: true,
       message: 'Login berhasil!',
@@ -338,11 +380,6 @@ app.get('/api/admin/check-auth', authMiddleware, (req, res) => {
 
 // Logout
 app.post('/api/admin/logout', (req, res) => {
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1];
-    activeTokens.delete(token);
-  }
   res.json({ success: true, message: 'Logout berhasil.' });
 });
 

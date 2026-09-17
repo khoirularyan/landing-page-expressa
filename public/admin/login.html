@@ -114,13 +114,22 @@
       fetch('/api/admin/check-auth', {
         headers: { 'Authorization': `Bearer ${token}` }
       })
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Invalid token');
+        return res.json();
+      })
       .then(data => {
-        if (data.authenticated) {
+        if (data && data.authenticated) {
           window.location.href = '/admin';
+        } else {
+          localStorage.removeItem('expr_admin_token');
+          localStorage.removeItem('expr_admin_user');
         }
       })
-      .catch(() => {});
+      .catch(() => {
+        localStorage.removeItem('expr_admin_token');
+        localStorage.removeItem('expr_admin_user');
+      });
     }
 
     const form = document.getElementById('login-form');
