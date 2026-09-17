@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expressa CMS - Admin Dashboard</title>
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230066FF'/><text x='50%' y='68%' font-size='60' font-family='sans-serif' font-weight='900' fill='white' text-anchor='middle'>E</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+          colors: {
+            brand: {
+              500: '#0066FF',
+              600: '#0052CC',
+              dark: '#0A0F1D',
+              darker: '#060913'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0A0F1D; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #334155; }
+    .tab-btn.active {
+      background-color: rgba(0, 102, 255, 0.15);
+      border-color: #0066FF;
+      color: #60a5fa;
+    }
+  </style>
+</head>
+<body class="bg-[#0A0F1D] text-slate-100 min-h-full flex flex-col font-sans selection:bg-blue-600 selection:text-white">
+
+  <!-- Top Navigation Header -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40 px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <a href="/" target="_blank" class="flex items-center gap-2.5 group">
+        <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-black text-sm flex items-center justify-center shadow-md shadow-blue-600/30">
+          E
+        </div>
+        <div>
+          <span class="font-extrabold text-blue-600 tracking-wider text-base">EXPRESSA</span>
+          <span class="hidden sm:inline-block ml-2 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded">CMS Panel</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- Right Controls -->
+    <div class="flex items-center gap-3">
+      <a href="/" target="_blank" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-3.5 py-2 rounded-lg border border-slate-700 transition-colors">
+        <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+        <span>Lihat Website</span>
+      </a>
+      
+      <div class="h-5 w-px bg-slate-800 hidden sm:block"></div>
+
+      <div class="flex items-center gap-2">
+        <div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span id="admin-user-display" class="font-medium text-slate-200">admin</span>
+        </div>
+        <button id="btn-logout" class="text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 px-3 py-2 rounded-lg border border-rose-500/20 transition-colors flex items-center gap-1.5">
+          <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">Keluar</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout Container -->
+  <div class="flex-1 max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row gap-6">
+
+    <!-- Left Sidebar: Tab Navigation -->
+    <aside class="w-full lg:w-64 shrink-0 space-y-2">
+      <div class="text-[11px] font-bold uppercase tracking-wider text-slate-500 px-3 pb-1">Menu Pengaturan</div>
+      
+      <nav class="space-y-1.5">
+        <button data-tab="tab-hero" class="tab-btn active w-full flex items-center gap-3 px-3.5 py-3 rounded-xl border border-transparent text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-left">
+          <i data-lucide="type" class="w-4 h-4"></i>
+          <span>Hero & Teks Konten</span>
+        </button>
+
+        <button data-tab="tab-images" class="tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-xl border border-transparent text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-left">
+          <i data-lucide="image" class="w-4 h-4"></i>
+          <span>Kelola Gambar</span>
+        </button>
+
+        <button data-tab="tab-leads" class="tab-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl border border-transparent text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-left">
+          <div class="flex items-center gap-3">
+            <i data-lucide="inbox" class="w-4 h-4"></i>
+            <span>Prospek Konsultasi</span>
+          </div>
+          <span id="leads-count-badge" class="px-2 py-0.5 text-[10px] font-bold bg-blue-600 text-white rounded-full">0</span>
+        </button>
+
+        <button data-tab="tab-settings" class="tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-xl border border-transparent text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-left">
+          <i data-lucide="key" class="w-4 h-4"></i>
+          <span>Akun & Password</span>
+        </button>
+      </nav>
+
+      <!-- Quick Info Card -->
+      <div class="pt-4">
+        <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-400 space-y-2">
+          <div class="flex items-center gap-1.5 text-blue-400 font-bold">
+            <i data-lucide="info" class="w-3.5 h-3.5"></i>
+            <span>Tips Pengelolaan</span>
+          </div>
+          <p class="leading-relaxed">
+            Perubahan teks dan gambar yang disimpan akan langsung tampil secara realtime di landing page Expressa.
+          </p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Right Main Content Area -->
+    <main class="flex-1 bg-slate-900/70 border border-slate-800 rounded-3xl p-6 sm:p-8 backdrop-blur-xl shadow-xl relative min-h-[500px]">
+
+      <!-- Toast Notification Container -->
+      <div id="toast" class="hidden fixed bottom-6 right-6 z-50 px-5 py-3.5 rounded-xl text-sm font-medium shadow-2xl flex items-center gap-2.5 transition-all"></div>
+
+      <!-- ============================================== -->
+      <!-- TAB 1: HERO & TEKS KONTEN                      -->
+      <!-- ============================================== -->
+      <section id="tab-hero" class="tab-pane space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-bold text-white">Hero & Teks Konten</h2>
+            <p class="text-xs text-slate-400 mt-1">Ubah headline utama, deskripsi pengantar, dan angka pencapaian perusahaan.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+            <div id="save-hero-badge" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-bold animate-pulse shadow-lg shadow-emerald-950/50">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Teks Berhasil Disimpan!</span>
+            </div>
+            <button id="btn-save-hero" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2">
+              <i id="btn-save-hero-icon" data-lucide="save" class="w-4 h-4"></i>
+              <span id="btn-save-hero-text">Simpan Perubahan Teks</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success Alert Banner for Hero Text -->
+        <div id="alert-save-hero" class="hidden p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-xl shadow-emerald-950/40 transition-all">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+              <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="text-white font-bold text-sm">Perubahan Teks Berhasil Disimpan!</div>
+              <div class="text-xs text-emerald-300/80 font-normal mt-0.5">Seluruh teks dan angka statistik telah tersimpan dan langsung aktif di Landing Page.</div>
+            </div>
+          </div>
+          <button type="button" onclick="document.getElementById('alert-save-hero').classList.add('hidden')" class="text-emerald-400 hover:text-white p-1.5 rounded-lg hover:bg-emerald-500/20 transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <form id="form-hero" class="space-y-6">
+          <!-- Headlines Section -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+              <i data-lucide="heading" class="w-4 h-4"></i>
+              <span>Judul Utama (Hero Headline)</span>
+            </h3>
+
+            <div class="grid grid-cols-1 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Baris 1 (Teks Putih)</label>
+                <input type="text" id="hero-part1" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Baris 2 (Teks Gradient Biru/Cyan)</label>
+                <input type="text" id="hero-part2" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Baris 3 (Teks Putih Penutup)</label>
+                <input type="text" id="hero-part3" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtitle Section -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+              <i data-lucide="align-left" class="w-4 h-4"></i>
+              <span>Subjudul & Tombol Aksi</span>
+            </h3>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Deskripsi Singkat (Subtitle)</label>
+              <textarea id="hero-subtitle" rows="3" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Teks Tombol Utama (CTA 1)</label>
+                <input type="text" id="hero-cta" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-slate-300 mb-1.5">Teks Tombol Kedua (CTA 2)</label>
+                <input type="text" id="hero-secondary-cta" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              </div>
+            </div>
+          </div>
+
+          <!-- Statistics Section -->
+          <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+              <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
+              <span>4 Angka Pencapaian (Key Metrics)</span>
+            </h3>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Statistik 1</span>
+                <input type="text" id="stat1-number" placeholder="200+" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-white">
+                <input type="text" id="stat1-label" placeholder="Project Selesai" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
+              </div>
+
+              <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Statistik 2</span>
+                <input type="text" id="stat2-number" placeholder="50+" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-white">
+                <input type="text" id="stat2-label" placeholder="Klien Perusahaan" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
+              </div>
+
+              <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Statistik 3</span>
+                <input type="text" id="stat3-number" placeholder="15+" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-white">
+                <input type="text" id="stat3-label" placeholder="Industri" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
+              </div>
+
+              <div class="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-2">
+                <span class="text-[10px] font-bold text-slate-400 uppercase">Statistik 4</span>
+                <input type="text" id="stat4-number" placeholder="98%" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-sm font-bold text-blue-400">
+                <input type="text" id="stat4-label" placeholder="Kepuasan Klien" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-300">
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 2: KELOLA GAMBAR                           -->
+      <!-- ============================================== -->
+      <section id="tab-images" class="tab-pane hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-bold text-white">Kelola Gambar Landing Page</h2>
+            <p class="text-xs text-slate-400 mt-1">Ganti gambar sisi kanan Hero, gambar Case Studies, atau foto Tim Expressa.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+            <div id="save-images-badge" class="hidden items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-xs font-bold animate-pulse shadow-lg shadow-emerald-950/50">
+              <i data-lucide="check-circle" class="w-4 h-4"></i>
+              <span>Gambar Berhasil Disimpan!</span>
+            </div>
+            <button id="btn-save-images" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2">
+              <i id="btn-save-images-icon" data-lucide="save" class="w-4 h-4"></i>
+              <span id="btn-save-images-text">Simpan Perubahan Gambar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success Alert Banner for Images -->
+        <div id="alert-save-images" class="hidden p-4 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-semibold flex items-center justify-between shadow-xl shadow-emerald-950/40 transition-all">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+              <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="text-white font-bold text-sm">Perubahan Gambar Berhasil Disimpan!</div>
+              <div class="text-xs text-emerald-300/80 font-normal mt-0.5">Seluruh gambar telah diperbarui ke sistem dan langsung aktif di Landing Page.</div>
+            </div>
+          </div>
+          <button type="button" onclick="document.getElementById('alert-save-images').classList.add('hidden')" class="text-emerald-400 hover:text-white p-1.5 rounded-lg hover:bg-emerald-500/20 transition-colors">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+        <!-- 1. Hero Right Image Manager -->
+        <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 sm:p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              <span>Gambar Utama Hero (Sisi Kanan)</span>
+            </h3>
+            <span class="text-[10px] text-slate-400 uppercase font-semibold">Tampil di Halaman Beranda</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+            <!-- Image Live Preview -->
+            <div class="md:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-4 overflow-hidden shadow-xl">
+              <div class="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800 pb-2 mb-3">
+                <span class="font-semibold text-slate-300">Live Preview (Tanpa Border)</span>
+                <span class="text-[10px] text-emerald-400 font-medium bg-emerald-500/10 px-2 py-0.5 rounded">Transparan Ready</span>
+              </div>
+              <div class="relative min-h-[220px] max-h-[300px] rounded-xl overflow-hidden bg-[#0A0F1D] flex items-center justify-center p-3 border border-dashed border-slate-800">
+                <img id="hero-img-preview" src="" alt="Hero Preview" class="max-h-[260px] w-auto max-w-full object-contain drop-shadow-xl">
+              </div>
+            </div>
+
+            <!-- Image Controls -->
+            <div class="md:col-span-6 space-y-4">
+              <!-- Upload File -->
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-2">Unggah File PNG / Foto Baru</label>
+                <div class="flex items-center gap-2">
+                  <input type="file" id="hero-file-input" accept="image/*" class="hidden">
+                  <button type="button" onclick="document.getElementById('hero-file-input').click()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-md shadow-blue-600/30 transition-colors flex items-center gap-2">
+                    <i data-lucide="upload" class="w-4 h-4"></i>
+                    <span>Pilih File PNG / Gambar</span>
+                  </button>
+                  <span id="hero-upload-status" class="text-xs text-slate-400 italic"></span>
+                </div>
+                <p class="text-[11px] text-slate-500 mt-2">
+                  Tip: Anda dapat mengunggah file PNG transparan (seperti foto cutout orang/karakter). Gambar akan tampil bersih tanpa border di halaman utama.
+                </p>
+              </div>
+
+              <!-- Or URL Input -->
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1.5">Atau Masukkan URL Gambar Langsung</label>
+                <input type="text" id="hero-image-url" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-3.5 py-2 text-xs text-white focus:outline-none focus:border-blue-500 font-mono">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Case Studies Images -->
+        <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 sm:p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-500"></span>
+              <span>Gambar Studi Kasus (Case Studies)</span>
+            </h3>
+            <span class="text-[10px] text-slate-400 uppercase font-semibold">3 Proyek Utama</span>
+          </div>
+
+          <div id="case-studies-container" class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Rendered by admin.js -->
+          </div>
+        </div>
+
+        <!-- 3. Team Member Images -->
+        <div class="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-5 sm:p-6 space-y-5">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span>Foto Anggota Tim (Expressa Roles)</span>
+            </h3>
+            <span class="text-[10px] text-slate-400 uppercase font-semibold">7 Peran Tim</span>
+          </div>
+
+          <div id="team-container" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+            <!-- Rendered by admin.js -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 3: PROSPEK KONSULTASI                      -->
+      <!-- ============================================== -->
+      <section id="tab-leads" class="tab-pane hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-bold text-white">Daftar Pengajuan Konsultasi</h2>
+            <p class="text-xs text-slate-400 mt-1">Data prospek klien yang mengisi formulir konsultasi dari landing page.</p>
+          </div>
+          <button id="btn-refresh-leads" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2 rounded-xl border border-slate-700 transition-colors flex items-center gap-2">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            <span>Segarkan Data</span>
+          </button>
+        </div>
+
+        <div class="overflow-x-auto rounded-2xl border border-slate-800">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-slate-950/90 text-[11px] uppercase font-bold text-slate-400 border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-4">Waktu</th>
+                <th class="py-3 px-4">Nama Lengkap</th>
+                <th class="py-3 px-4">Kontak (WhatsApp)</th>
+                <th class="py-3 px-4">Perusahaan</th>
+                <th class="py-3 px-4">Layanan</th>
+                <th class="py-3 px-4">Pesan Kebutuhan</th>
+                <th class="py-3 px-4 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="leads-table-body" class="divide-y divide-slate-800/60 bg-slate-900/50">
+              <tr>
+                <td colspan="7" class="py-8 text-center text-slate-500">Memuat data pengajuan...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB 4: AKUN & PASSWORD                        -->
+      <!-- ============================================== -->
+      <section id="tab-settings" class="tab-pane hidden space-y-6">
+        <div class="pb-5 border-b border-slate-800">
+          <h2 class="text-xl font-bold text-white">Pengaturan Akun Admin</h2>
+          <p class="text-xs text-slate-400 mt-1">Ubah username dan kata sandi untuk masuk ke CMS Expressa.</p>
+        </div>
+
+        <div class="max-w-md bg-slate-950/60 border border-slate-800/80 rounded-2xl p-6 space-y-4">
+          <form id="form-credentials" class="space-y-4">
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Password Saat Ini (Konfirmasi)</label>
+              <input type="password" id="curr-password" required class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div class="pt-2 border-t border-slate-800/80">
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Username Baru (Opsional)</label>
+              <input type="text" id="new-username" placeholder="Biarkan kosong jika tidak diubah" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-slate-300 mb-1.5">Password Baru</label>
+              <input type="password" id="new-password" placeholder="Minimal 6 karakter" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div class="pt-2">
+              <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm py-2.5 px-4 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center justify-center gap-2">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>Perbarui Kredensial</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Admin CMS Logic -->
+  <script src="/admin/admin.js"></script>
+</body>
+</html>

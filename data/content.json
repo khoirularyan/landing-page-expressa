@@ -1,0 +1,90 @@
+{
+  "hero": {
+    "headlinePart1": "Sistem Digital",
+    "headlinePart2": "yang Mengikuti",
+    "headlinePart3": "Cara Kerja Bisnis Anda.",
+    "subtitle": "Setiap bisnis memiliki proses yang berbeda. Kami membantu mengubah proses tersebut menjadi sistem digital yang lebih terintegrasi, efisien, dan siap berkembang.",
+    "ctaText": "Konsultasikan Kebutuhan Anda",
+    "secondaryCtaText": "Lihat Project Kami",
+    "imageUrl": "/uploads/img-1789608935050-306209448.png",
+    "imageCaption": "app.expressa.id/dashboard"
+  },
+  "stats": {
+    "stat1": {
+      "number": "200+",
+      "label": "Project Selesai"
+    },
+    "stat2": {
+      "number": "50+",
+      "label": "Klien Perusahaan"
+    },
+    "stat3": {
+      "number": "15+",
+      "label": "Industri"
+    },
+    "stat4": {
+      "number": "98%",
+      "label": "Kepuasan Klien"
+    }
+  },
+  "caseStudies": [
+    {
+      "id": "cobra-dental",
+      "client": "Cobra Dental Indonesia",
+      "industry": "Alat Kesehatan & Dental Care",
+      "description": "Sistem terintegrasi untuk mendukung operasional multi-cabang, pelacakan inventaris, dan alur distribusi alat kesehatan yang lebih efisien.",
+      "imageUrl": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": "petrokimia-gresik",
+      "client": "Petrokimia Gresik",
+      "industry": "Pupuk & Kimia",
+      "description": "Solusi digital untuk mendukung proses operasional pabrikasi, pencatatan otomatis shift produksi, dan pelaporan terintegrasi skala enterprise.",
+      "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      "id": "fokus-jasa-mitra",
+      "client": "Fokus Jasa Mitra",
+      "industry": "Manpower & Business Services",
+      "description": "Sistem manajemen operasional dan presensi untuk memantau penempatan ribuan tenaga kerja profesional di berbagai mitra perusahaan klien.",
+      "imageUrl": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80"
+    }
+  ],
+  "team": [
+    {
+      "role": "Business Analyst",
+      "subtitle": "Analisis Proses",
+      "imageUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "role": "Project Manager",
+      "subtitle": "Manajemen Proyek",
+      "imageUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "role": "Developer",
+      "subtitle": "Arsitektur & Kode",
+      "imageUrl": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "role": "UI/UX",
+      "subtitle": "Desain Pengalaman",
+      "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "role": "Implementator",
+      "subtitle": "Adopsi Lapangan",
+      "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "role": "Network Eng.",
+      "subtitle": "Cloud & Jaringan",
+      "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
+    },
+    {
+      "role": "Support",
+      "subtitle": "Pendampingan 24/7",
+      "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
+    }
+  ]
+}

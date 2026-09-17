@@ -1,0 +1,349 @@
+/* Expressa Custom Styles & Animations - Modern Continuous Scroll */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
+
+:root {
+  --primary-blue: #0066FF;
+  --primary-hover: #0052CC;
+  --accent-cyan: #00D2FF;
+  --dark-navy: #0A0F1D;
+  --darker-navy: #060913;
+  --glass-bg: rgba(15, 23, 42, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--dark-navy);
+  color: #1e293b;
+}
+
+/* Handwritten script font for annotations */
+.font-handwriting {
+  font-family: 'Caveat', cursive, sans-serif;
+}
+
+/* Section Stacking & Layout (Clean, Natural Continuous Scroll) */
+.section-layer {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 100px;
+  padding-bottom: 60px;
+  box-sizing: border-box;
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-panel-light {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.05);
+}
+
+.glass-card-dark {
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Glowing text and borders */
+.glow-blue {
+  box-shadow: 0 0 25px rgba(0, 102, 255, 0.45);
+}
+
+.glow-cyan {
+  box-shadow: 0 0 30px rgba(0, 210, 255, 0.35);
+}
+
+.text-glow {
+  text-shadow: 0 0 20px rgba(0, 102, 255, 0.6);
+}
+
+/* Scroll Reveal Animations */
+.reveal-init,
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-init.is-visible,
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.94) translateY(28px);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+
+/* Stagger delay classes (both shorthand and millisecond syntax) */
+.delay-1, .delay-100 { transition-delay: 100ms; }
+.delay-2, .delay-200 { transition-delay: 200ms; }
+.delay-3, .delay-300 { transition-delay: 300ms; }
+.delay-4, .delay-400 { transition-delay: 400ms; }
+.delay-5, .delay-500 { transition-delay: 500ms; }
+.delay-6, .delay-600 { transition-delay: 600ms; }
+.delay-700 { transition-delay: 700ms; }
+
+/* Subtle Ambient Animations */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+@keyframes bounceDown {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(6px);
+  }
+  60% {
+    transform: translateY(3px);
+  }
+}
+
+.animate-float {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounceDown 2.5s infinite;
+}
+
+/* 3D Cube Visual on Slide 4 */
+.cube-viewport {
+  perspective: 900px;
+  width: 220px;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cube-3d {
+  width: 140px;
+  height: 140px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg) rotateY(35deg);
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  animation: gentleCubeFloat 6s ease-in-out infinite;
+}
+
+@keyframes gentleCubeFloat {
+  0%, 100% {
+    transform: rotateX(-20deg) rotateY(35deg) translateY(0px);
+  }
+  50% {
+    transform: rotateX(-22deg) rotateY(42deg) translateY(-10px);
+  }
+}
+
+.cube-face {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  background: rgba(0, 102, 255, 0.25);
+  border: 2px solid rgba(0, 210, 255, 0.7);
+  box-shadow: inset 0 0 35px rgba(0, 102, 255, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 12px;
+  font-weight: 700;
+  color: white;
+}
+
+.cube-front  { transform: translateZ(70px); }
+.cube-back   { transform: rotateY(180deg) translateZ(70px); }
+.cube-right  { transform: rotateY(90deg) translateZ(70px); }
+.cube-left   { transform: rotateY(-90deg) translateZ(70px); }
+.cube-top    { transform: rotateX(90deg) translateZ(70px); background: rgba(0, 210, 255, 0.35); }
+.cube-bottom { transform: rotateX(-90deg) translateZ(70px); background: rgba(0, 50, 150, 0.4); }
+
+/* Orbit container */
+.orbit-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 580px;
+  height: 380px;
+  transform: translate(-50%, -50%) rotateX(65deg);
+  border: 2px dashed rgba(0, 150, 255, 0.4);
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 30px rgba(0, 102, 255, 0.2);
+}
+
+/* Slide indicators on right edge */
+.deck-nav-dots {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 50;
+}
+
+.deck-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: rgba(148, 163, 184, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.deck-dot:hover {
+  background: rgba(0, 102, 255, 0.8);
+  transform: scale(1.3);
+}
+
+.deck-dot.active {
+  height: 28px;
+  background: #0066FF;
+  box-shadow: 0 0 12px #0066FF;
+}
+
+/* Tooltip for dots */
+.deck-dot .dot-label {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%) translateX(10px);
+  background: rgba(15, 23, 42, 0.9);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.deck-dot:hover .dot-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Interactive card hover */
+.interactive-card {
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 14px 30px -5px rgba(0, 102, 255, 0.25);
+}
+
+/* Light / Dark Mode Navbar adjustments */
+.nav-dark-mode {
+  color: #ffffff;
+}
+.nav-dark-mode .nav-link {
+  color: #cbd5e1;
+}
+.nav-dark-mode .nav-link:hover {
+  color: #ffffff;
+}
+
+.nav-light-mode {
+  color: #0f172a;
+}
+.nav-light-mode .nav-link {
+  color: #475569;
+}
+.nav-light-mode .nav-link:hover {
+  color: #0066FF;
+}
+
+/* Full Solid Blue Brand Logo in Navbar (User Request) */
+.nav-logo-text {
+  color: #0066FF !important;
+}
+
+/* Hero Image Vignette & Soft Blend */
+.hero-image-blend {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-vignette-mask {
+  /* Radial vignette mask to softly fade outer edges */
+  -webkit-mask-image: radial-gradient(ellipse 90% 86% at 50% 50%, black 62%, transparent 100%);
+  mask-image: radial-gradient(ellipse 90% 86% at 50% 50%, black 62%, transparent 100%);
+}
+
+.hero-bottom-fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  background: linear-gradient(to top, #0A0F1D 20%, rgba(10, 15, 29, 0.75) 55%, transparent 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-radial-vignette-overlay {
+  position: absolute;
+  inset: -10px;
+  background: radial-gradient(ellipse at center, transparent 48%, #0A0F1D 88%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.5;
+}

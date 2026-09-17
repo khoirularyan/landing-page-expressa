@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1789608208760,
+    "name": "Budi Santoso",
+    "email": "budi@company.com",
+    "phone": "08123456789",
+    "company": "PT Maju Jaya",
+    "service": "Custom Software",
+    "message": "Kebutuhan ERP",
+    "createdAt": "2026-09-17T01:23:28.760Z"
+  },
+  {
+    "id": 1789456157839,
+    "name": "Ahmad Fauzi",
+    "email": "ahmad@ptmaju.co.id",
+    "phone": "081298765432",
+    "company": "PT Maju Bersama",
+    "service": "ERP & Business System",
+    "message": "Kami ingin integrasikan sistem gudang dan finance kami.",
+    "createdAt": "2026-09-15T07:09:17.839Z"
+  }
+]
