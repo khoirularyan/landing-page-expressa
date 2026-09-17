@@ -7,27 +7,36 @@ const multer = require('multer');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Ensure directories exist
+// Detect Serverless / Vercel environment
+const IS_SERVERLESS = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_VERSION);
+const TMP_DIR = path.join('/tmp', 'expressa');
+
+// Ensure local directories exist (wrapped in try-catch to prevent EROFS)
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
 const DATA_DIR = path.join(__dirname, 'data');
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+try {
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+} catch (e) {}
+try {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+} catch (e) {}
+try {
+  if (IS_SERVERLESS && !fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
+} catch (e) {}
 
-// Multer Storage Configuration for Image Uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, UPLOADS_DIR);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname).toLowerCase() || '.png';
-    cb(null, 'img-' + uniqueSuffix + ext);
-  }
-});
+// File paths
+const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
+const ADMIN_FILE = path.join(DATA_DIR, 'admin-config.json');
+const DATA_FILE = path.join(__dirname, 'consultations.json');
 
+const TMP_CONTENT_FILE = path.join(TMP_DIR, 'content.json');
+const TMP_ADMIN_FILE = path.join(TMP_DIR, 'admin-config.json');
+const TMP_DATA_FILE = path.join(TMP_DIR, 'consultations.json');
+
+// Memory storage for uploads to completely eliminate EROFS on Vercel / serverless
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit
   fileFilter: function (req, file, cb) {
     const allowed = /jpeg|jpg|png|webp|svg|gif/;
     const extname = allowed.test(path.extname(file.originalname).toLowerCase());
@@ -39,16 +48,16 @@ const upload = multer({
   }
 });
 
-// Middleware
+// Middleware with large body limit for Base64 image payloads
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Data Files
-const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
-const ADMIN_FILE = path.join(DATA_DIR, 'admin-config.json');
-const DATA_FILE = path.join(__dirname, 'consultations.json');
+// In-memory data caches for fast retrieval and serverless resilience
+let memoryContent = null;
+let memoryAdminConfig = null;
+let memoryConsultations = null;
 
 // In-memory Auth Token Set
 const activeTokens = new Set(['admin-dev-session-token']);
@@ -65,68 +74,152 @@ function authMiddleware(req, res, next) {
   next();
 }
 
+// Content retrieval with serverless fallback
 function getContent() {
+  if (memoryContent) return memoryContent;
+
+  if (IS_SERVERLESS) {
+    try {
+      if (fs.existsSync(TMP_CONTENT_FILE)) {
+        memoryContent = JSON.parse(fs.readFileSync(TMP_CONTENT_FILE, 'utf8'));
+        return memoryContent;
+      }
+    } catch (e) {}
+  }
+
   try {
     if (fs.existsSync(CONTENT_FILE)) {
-      return JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
+      memoryContent = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
+      return memoryContent;
     }
   } catch (err) {
     console.error('Error reading content file:', err);
   }
+
   return {};
 }
 
+// Content saving with EROFS protection
 function saveContent(data) {
+  memoryContent = data;
+
   try {
     fs.writeFileSync(CONTENT_FILE, JSON.stringify(data, null, 2));
     return true;
   } catch (err) {
+    if (err.code === 'EROFS' || IS_SERVERLESS) {
+      try {
+        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
+        fs.writeFileSync(TMP_CONTENT_FILE, JSON.stringify(data, null, 2));
+        console.log('[CMS] Content saved to serverless /tmp cache.');
+        return true;
+      } catch (tmpErr) {
+        console.warn('[CMS] Warning saving to /tmp, retained in memory:', tmpErr.message);
+        return true;
+      }
+    }
     console.error('Error saving content file:', err);
     return false;
   }
 }
 
+// Admin config retrieval with serverless fallback
 function getAdminConfig() {
+  if (memoryAdminConfig) return memoryAdminConfig;
+
+  if (IS_SERVERLESS) {
+    try {
+      if (fs.existsSync(TMP_ADMIN_FILE)) {
+        memoryAdminConfig = JSON.parse(fs.readFileSync(TMP_ADMIN_FILE, 'utf8'));
+        return memoryAdminConfig;
+      }
+    } catch (e) {}
+  }
+
   try {
     if (fs.existsSync(ADMIN_FILE)) {
-      return JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
+      memoryAdminConfig = JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
+      return memoryAdminConfig;
     }
   } catch (err) {
     console.error('Error reading admin config:', err);
   }
+
   return { username: 'admin', password: 'admin123' };
 }
 
+// Admin config saving with EROFS protection
 function saveAdminConfig(cfg) {
+  memoryAdminConfig = cfg;
+
   try {
     fs.writeFileSync(ADMIN_FILE, JSON.stringify(cfg, null, 2));
     return true;
   } catch (err) {
-    console.error('Error saving admin config:', err);
+    if (err.code === 'EROFS' || IS_SERVERLESS) {
+      try {
+        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
+        fs.writeFileSync(TMP_ADMIN_FILE, JSON.stringify(cfg, null, 2));
+        return true;
+      } catch (tmpErr) {
+        return true;
+      }
+    }
     return false;
   }
 }
 
+// Consultations retrieval with serverless fallback
 function getConsultations() {
+  if (memoryConsultations) return memoryConsultations;
+
+  if (IS_SERVERLESS) {
+    try {
+      if (fs.existsSync(TMP_DATA_FILE)) {
+        memoryConsultations = JSON.parse(fs.readFileSync(TMP_DATA_FILE, 'utf8'));
+        return memoryConsultations;
+      }
+    } catch (e) {}
+  }
+
   try {
     if (fs.existsSync(DATA_FILE)) {
       const data = fs.readFileSync(DATA_FILE, 'utf8');
-      return JSON.parse(data || '[]');
+      memoryConsultations = JSON.parse(data || '[]');
+      return memoryConsultations;
     }
   } catch (err) {
     console.error('Error reading consultations file:', err);
   }
+
   return [];
 }
 
-function saveConsultation(record) {
+// Consultations saving with EROFS protection
+function saveAllConsultations(list) {
+  memoryConsultations = list;
+
   try {
-    const list = getConsultations();
-    list.unshift(record);
     fs.writeFileSync(DATA_FILE, JSON.stringify(list, null, 2));
+    return true;
   } catch (err) {
-    console.error('Error saving consultation record:', err);
+    if (err.code === 'EROFS' || IS_SERVERLESS) {
+      try {
+        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
+        fs.writeFileSync(TMP_DATA_FILE, JSON.stringify(list, null, 2));
+        return true;
+      } catch (tmpErr) {
+        return true;
+      }
+    }
+    return false;
   }
+}
+
+function saveConsultation(record) {
+  const list = getConsultations();
+  list.unshift(record);
+  saveAllConsultations(list);
 }
 
 // =============================================
@@ -138,11 +231,12 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
     app: 'Expressa Landing Page & CMS',
+    serverless: IS_SERVERLESS,
     timestamp: new Date().toISOString()
   });
 });
 
-// Get Public Content (Landing page feeds from here)
+// Public content endpoint
 app.get('/api/content', (req, res) => {
   const content = getContent();
   res.json({
@@ -283,22 +377,35 @@ app.put('/api/admin/content', authMiddleware, (req, res) => {
   res.status(500).json({ success: false, message: 'Gagal menyimpan konten ke sistem file.' });
 });
 
-// Upload Image
+// Upload Image - Memory buffer to Base64 (100% Serverless & Vercel friendly, zero EROFS error)
 app.post('/api/admin/upload', authMiddleware, upload.single('image'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ success: false, message: 'Tidak ada file gambar yang diunggah.' });
   }
 
-  const imageUrl = '/uploads/' + req.file.filename;
-  console.log(`[Upload Success] File uploaded: ${imageUrl}`);
+  // Convert buffer to Data URI (Base64) so it works natively on Vercel read-only filesystem
+  const base64Data = req.file.buffer.toString('base64');
+  const mimeType = req.file.mimetype || 'image/png';
+  const dataUrl = `data:${mimeType};base64,${base64Data}`;
+
+  // If local environment with writable filesystem, optionally save copy to disk as well
+  if (!IS_SERVERLESS) {
+    try {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = path.extname(req.file.originalname).toLowerCase() || '.png';
+      const filename = 'img-' + uniqueSuffix + ext;
+      fs.writeFileSync(path.join(UPLOADS_DIR, filename), req.file.buffer);
+    } catch (e) {}
+  }
+
+  console.log(`[Upload Success] File converted to Data URI (${req.file.originalname}, ${req.file.size} bytes).`);
   res.json({
     success: true,
     message: 'Gambar berhasil diunggah!',
-    url: imageUrl,
-    filename: req.file.filename
+    url: dataUrl,
+    filename: req.file.originalname
   });
 }, (error, req, res, next) => {
-  // Multer error handling
   res.status(400).json({ success: false, message: error.message });
 });
 
@@ -318,7 +425,7 @@ app.delete('/api/admin/consultations/:id', authMiddleware, (req, res) => {
   list = list.filter(item => item.id !== id);
 
   if (list.length !== initialLength) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(list, null, 2));
+    saveAllConsultations(list);
     return res.json({ success: true, message: 'Data prospek berhasil dihapus.' });
   }
   res.status(404).json({ success: false, message: 'Data tidak ditemukan.' });
@@ -338,12 +445,17 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
 });
 
+// Route for /admin/ -> public/admin/index.html
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
+});
+
 // Fallback to public/index.html for any other URL
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Start Server with fallback port support
+// Start Server with fallback port support (only in non-serverless environments)
 function startServer(port) {
   const server = app.listen(port, () => {
     console.log(`=============================================`);
@@ -364,4 +476,9 @@ function startServer(port) {
   });
 }
 
-startServer(PORT);
+if (!IS_SERVERLESS && process.env.NODE_ENV !== 'test') {
+  startServer(PORT);
+}
+
+// Export app instance for Vercel Serverless Functions
+module.exports = app;

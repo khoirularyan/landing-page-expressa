@@ -105,6 +105,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // LOAD INITIAL CONTENT
   // ==========================================
   async function loadContent() {
+    // 1. Instant hydration from client localStorage cache
+    try {
+      const cached = localStorage.getItem('expr_saved_content');
+      if (cached) {
+        currentContent = JSON.parse(cached);
+        populateHeroForm(currentContent);
+        populateImagesTab(currentContent);
+      }
+    } catch (e) {}
+
+    // 2. Fetch fresh content from server
     try {
       const res = await fetch('/api/content');
       const json = await res.json();
@@ -112,10 +123,12 @@ document.addEventListener('DOMContentLoaded', () => {
         currentContent = json.data;
         populateHeroForm(currentContent);
         populateImagesTab(currentContent);
+        try {
+          localStorage.setItem('expr_saved_content', JSON.stringify(currentContent));
+        } catch (e) {}
       }
     } catch (err) {
-      console.error('Failed to load content:', err);
-      showToast('Gagal memuat konten dari server', 'error');
+      console.error('Failed to load content from server, using local cache:', err);
     }
   }
 
@@ -338,6 +351,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (res.ok && data.success) {
         currentContent = updatedData;
+        try {
+          localStorage.setItem('expr_saved_content', JSON.stringify(updatedData));
+        } catch (e) {}
         showToast(successMsg, 'success');
         return true;
       } else {

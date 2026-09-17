@@ -229,66 +229,79 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Dynamic CMS Content Hydration
+  function applyContentToDOM(data) {
+    if (!data) return;
+
+    // 1. Hero Text & Image
+    if (data.hero) {
+      const h1 = document.getElementById('hero-headline-1');
+      const h2 = document.getElementById('hero-headline-2');
+      const h3 = document.getElementById('hero-headline-3');
+      const sub = document.getElementById('hero-subtitle');
+      const cta1 = document.getElementById('hero-cta-text');
+      const cta2 = document.getElementById('hero-secondary-cta-text');
+      const heroImg = document.getElementById('hero-preview-img');
+      const heroCaption = document.getElementById('hero-image-caption');
+
+      if (h1 && data.hero.headlinePart1) h1.textContent = data.hero.headlinePart1;
+      if (h2 && data.hero.headlinePart2) h2.textContent = data.hero.headlinePart2;
+      if (h3 && data.hero.headlinePart3) h3.textContent = data.hero.headlinePart3;
+      if (sub && data.hero.subtitle) sub.textContent = data.hero.subtitle;
+      if (cta1 && data.hero.ctaText) cta1.textContent = data.hero.ctaText;
+      if (cta2 && data.hero.secondaryCtaText) cta2.textContent = data.hero.secondaryCtaText;
+      if (heroImg && data.hero.imageUrl) heroImg.src = data.hero.imageUrl;
+      if (heroCaption && data.hero.imageCaption) heroCaption.textContent = data.hero.imageCaption;
+    }
+
+    // 2. Stats
+    if (data.stats) {
+      ['stat1', 'stat2', 'stat3', 'stat4'].forEach(key => {
+        const item = data.stats[key];
+        if (item) {
+          const numEl = document.getElementById(`${key}-number`);
+          const labelEl = document.getElementById(`${key}-label`);
+          if (numEl && item.number) numEl.textContent = item.number;
+          if (labelEl && item.label) labelEl.textContent = item.label;
+        }
+      });
+    }
+
+    // 3. Case Studies Images
+    if (data.caseStudies && Array.isArray(data.caseStudies)) {
+      data.caseStudies.forEach((cs, idx) => {
+        const imgEl = document.getElementById(`cs-img-${idx}`);
+        if (imgEl && cs.imageUrl) imgEl.src = cs.imageUrl;
+      });
+    }
+
+    // 4. Team Images
+    if (data.team && Array.isArray(data.team)) {
+      data.team.forEach((tm, idx) => {
+        const imgEl = document.getElementById(`team-img-${idx}`);
+        if (imgEl && tm.imageUrl) imgEl.src = tm.imageUrl;
+      });
+    }
+  }
+
   async function loadDynamicContent() {
+    // 1. Instant hydration from client cache if available (zero flicker)
+    try {
+      const cached = localStorage.getItem('expr_saved_content');
+      if (cached) {
+        applyContentToDOM(JSON.parse(cached));
+      }
+    } catch (e) {}
+
+    // 2. Fetch fresh content from server
     try {
       const res = await fetch('/api/content');
       if (!res.ok) return;
       const json = await res.json();
       if (!json.success || !json.data) return;
-      const data = json.data;
-
-      // 1. Hero Text
-      if (data.hero) {
-        const h1 = document.getElementById('hero-headline-1');
-        const h2 = document.getElementById('hero-headline-2');
-        const h3 = document.getElementById('hero-headline-3');
-        const sub = document.getElementById('hero-subtitle');
-        const cta1 = document.getElementById('hero-cta-text');
-        const cta2 = document.getElementById('hero-secondary-cta-text');
-        const heroImg = document.getElementById('hero-preview-img');
-        const heroCaption = document.getElementById('hero-image-caption');
-
-        if (h1 && data.hero.headlinePart1) h1.textContent = data.hero.headlinePart1;
-        if (h2 && data.hero.headlinePart2) h2.textContent = data.hero.headlinePart2;
-        if (h3 && data.hero.headlinePart3) h3.textContent = data.hero.headlinePart3;
-        if (sub && data.hero.subtitle) sub.textContent = data.hero.subtitle;
-        if (cta1 && data.hero.ctaText) cta1.textContent = data.hero.ctaText;
-        if (cta2 && data.hero.secondaryCtaText) cta2.textContent = data.hero.secondaryCtaText;
-        if (heroImg && data.hero.imageUrl) heroImg.src = data.hero.imageUrl;
-        if (heroCaption && data.hero.imageCaption) heroCaption.textContent = data.hero.imageCaption;
-      }
-
-      // 2. Stats
-      if (data.stats) {
-        ['stat1', 'stat2', 'stat3', 'stat4'].forEach(key => {
-          const item = data.stats[key];
-          if (item) {
-            const numEl = document.getElementById(`${key}-number`);
-            const labelEl = document.getElementById(`${key}-label`);
-            if (numEl && item.number) numEl.textContent = item.number;
-            if (labelEl && item.label) labelEl.textContent = item.label;
-          }
-        });
-      }
-
-      // 3. Case Studies Images
-      if (data.caseStudies && Array.isArray(data.caseStudies)) {
-        data.caseStudies.forEach((cs, idx) => {
-          const imgEl = document.getElementById(`cs-img-${idx}`);
-          if (imgEl && cs.imageUrl) imgEl.src = cs.imageUrl;
-        });
-      }
-
-      // 4. Team Images
-      if (data.team && Array.isArray(data.team)) {
-        data.team.forEach((tm, idx) => {
-          const imgEl = document.getElementById(`team-img-${idx}`);
-          if (imgEl && tm.imageUrl) imgEl.src = tm.imageUrl;
-        });
-      }
-
+      applyContentToDOM(json.data);
+      localStorage.setItem('expr_saved_content', JSON.stringify(json.data));
     } catch (err) {
-      console.warn('[CMS Loader] Fallback to static HTML content:', err.message);
+      console.warn('[CMS Loader] Fallback to cache/static HTML:', err.message);
     }
   }
 
