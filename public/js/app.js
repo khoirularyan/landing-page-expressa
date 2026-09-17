@@ -284,11 +284,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadDynamicContent() {
+    let localData = null;
     // 1. Instant hydration from client cache if available (zero flicker)
     try {
       const cached = localStorage.getItem('expr_saved_content');
       if (cached) {
-        applyContentToDOM(JSON.parse(cached));
+        localData = JSON.parse(cached);
+        applyContentToDOM(localData);
       }
     } catch (e) {}
 
@@ -298,6 +300,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!res.ok) return;
       const json = await res.json();
       if (!json.success || !json.data) return;
+
+      // If local cache is newer than server data (e.g. serverless cold container with older static JSON), keep local
+      if (localData && localData._lastUpdated && (!json.data._lastUpdated || json.data._lastUpdated < localData._lastUpdated)) {
+        console.log('[CMS Loader] Local changes are newer than server, preserving local content.');
+        return;
+      }
+
       applyContentToDOM(json.data);
       localStorage.setItem('expr_saved_content', JSON.stringify(json.data));
     } catch (err) {

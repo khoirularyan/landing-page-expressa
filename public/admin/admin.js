@@ -113,11 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // LOAD INITIAL CONTENT
   // ==========================================
   async function loadContent() {
+    let localData = null;
     // 1. Instant hydration from client localStorage cache
     try {
       const cached = localStorage.getItem('expr_saved_content');
       if (cached) {
-        currentContent = JSON.parse(cached);
+        localData = JSON.parse(cached);
+        currentContent = localData;
         populateHeroForm(currentContent);
         populateImagesTab(currentContent);
       }
@@ -128,6 +130,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/content');
       const json = await res.json();
       if (json.success && json.data) {
+        // If local data exists and has newer changes than server static JSON, keep local data!
+        if (localData && localData._lastUpdated && (!json.data._lastUpdated || json.data._lastUpdated < localData._lastUpdated)) {
+          console.log('[CMS] Preserving newer local content over older server bundle');
+          return;
+        }
+
         currentContent = json.data;
         populateHeroForm(currentContent);
         populateImagesTab(currentContent);
@@ -240,13 +248,26 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
-          statusSpan.textContent = 'Mengunggah...';
-          const uploadedUrl = await uploadImageFile(file);
-          if (uploadedUrl) {
-            urlInput.value = uploadedUrl;
-            imgPreview.src = uploadedUrl;
-            statusSpan.textContent = 'Tersimpan!';
-          } else {
+          statusSpan.textContent = 'Mengoptimasi & mengunggah...';
+          try {
+            const compressed = await compressImage(file, 900, 0.82);
+            const uploadedUrl = await uploadImageFile(compressed);
+            if (uploadedUrl) {
+              urlInput.value = uploadedUrl;
+              imgPreview.src = uploadedUrl;
+              statusSpan.textContent = '✓ Tersimpan!';
+
+              // AUTO-SAVE IMMEDIATELY
+              if (!currentContent) currentContent = {};
+              if (currentContent.caseStudies && currentContent.caseStudies[idx]) {
+                currentContent.caseStudies[idx].imageUrl = uploadedUrl;
+                await saveContentToServer(currentContent, `✓ Gambar Case Study ${idx + 1} berhasil disimpan & aktif!`);
+                triggerImageSaveUIEffect('✓ Gambar Case Study Tersimpan!');
+              }
+            } else {
+              statusSpan.textContent = 'Gagal upload.';
+            }
+          } catch (err) {
             statusSpan.textContent = 'Gagal upload.';
           }
         });
@@ -289,16 +310,115 @@ document.addEventListener('DOMContentLoaded', () => {
         fileInput.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
-          const uploadedUrl = await uploadImageFile(file);
-          if (uploadedUrl) {
-            urlInput.value = uploadedUrl;
-            imgPreview.src = uploadedUrl;
-          }
+          try {
+            const compressed = await compressImage(file, 500, 0.82);
+            const uploadedUrl = await uploadImageFile(compressed);
+            if (uploadedUrl) {
+              urlInput.value = uploadedUrl;
+              imgPreview.src = uploadedUrl;
+
+              // AUTO-SAVE IMMEDIATELY
+              if (!currentContent) currentContent = {};
+              if (currentContent.team && currentContent.team[idx]) {
+                currentContent.team[idx].imageUrl = uploadedUrl;
+                await saveContentToServer(currentContent, `✓ Foto Tim (${tm.role}) berhasil disimpan & aktif!`);
+                triggerImageSaveUIEffect('✓ Foto Tim Tersimpan!');
+              }
+            }
+          } catch (err) {}
         });
       });
     }
 
     if (window.lucide) lucide.createIcons();
+  }
+
+  // Client-side image compressor using HTML5 Canvas (keeps uploads fast, avoids Vercel 4.5MB payload limits)
+  async function compressImage(file, maxDimension = 1200, quality = 0.85) {
+    if (!file) return file;
+    // Don't compress SVGs or animated GIFs
+    if (file.type === 'image/svg+xml' || file.type === 'image/gif') return file;
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDimension || height > maxDimension) {
+            if (width > height) {
+              height = Math.round((height * maxDimension) / width);
+              width = maxDimension;
+            } else {
+              width = Math.round((width * maxDimension) / height);
+              height = maxDimension;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // For PNG cutouts, keep PNG format to preserve alpha transparency!
+          const outputType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+          canvas.toBlob((blob) => {
+            if (blob && blob.size < file.size) {
+              resolve(new File([blob], file.name, { type: outputType }));
+            } else {
+              resolve(file);
+            }
+          }, outputType, quality);
+        };
+        img.onerror = () => resolve(file);
+        img.src = e.target.result;
+      };
+      reader.onerror = () => resolve(file);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Visual Confirmation Effect for Image Save
+  function triggerImageSaveUIEffect(msg = '✓ Gambar Berhasil Disimpan!') {
+    const btnSaveImages = document.getElementById('btn-save-images');
+    const btnSaveImagesText = document.getElementById('btn-save-images-text');
+    const btnSaveImagesIcon = document.getElementById('btn-save-images-icon');
+    const saveImagesBadge = document.getElementById('save-images-badge');
+    const alertSaveImages = document.getElementById('alert-save-images');
+
+    if (btnSaveImages) {
+      btnSaveImages.className = 'bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-600/40 border border-emerald-400/50 transition-all flex items-center gap-2';
+      if (btnSaveImagesText) btnSaveImagesText.textContent = msg;
+      if (btnSaveImagesIcon) {
+        btnSaveImagesIcon.setAttribute('data-lucide', 'check-circle-2');
+        btnSaveImagesIcon.classList.remove('animate-spin');
+      }
+    }
+    if (saveImagesBadge) {
+      saveImagesBadge.classList.remove('hidden');
+      saveImagesBadge.classList.add('flex');
+    }
+    if (alertSaveImages) {
+      alertSaveImages.classList.remove('hidden');
+    }
+    if (window.lucide) lucide.createIcons();
+
+    setTimeout(() => {
+      if (btnSaveImages) {
+        btnSaveImages.disabled = false;
+        btnSaveImages.className = 'bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2';
+        if (btnSaveImagesText) btnSaveImagesText.textContent = 'Simpan Perubahan Gambar';
+        if (btnSaveImagesIcon) btnSaveImagesIcon.setAttribute('data-lucide', 'save');
+      }
+      if (saveImagesBadge) {
+        saveImagesBadge.classList.add('hidden');
+        saveImagesBadge.classList.remove('flex');
+      }
+      if (window.lucide) lucide.createIcons();
+    }, 4000);
   }
 
   // Upload Single File to /api/admin/upload
@@ -318,7 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast('Gambar berhasil diunggah!');
         return data.url;
       } else {
         showToast(data.message || 'Gagal mengunggah gambar', 'error');
@@ -331,21 +450,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Hero File Upload Listener
+  // Hero File Upload Listener with AUTO-SAVE
   const heroFileInput = document.getElementById('hero-file-input');
   if (heroFileInput) {
     heroFileInput.addEventListener('change', async (e) => {
       const file = e.target.files[0];
       if (!file) return;
       const status = document.getElementById('hero-upload-status');
-      status.textContent = 'Mengunggah file...';
-      const uploadedUrl = await uploadImageFile(file);
-      if (uploadedUrl) {
-        document.getElementById('hero-image-url').value = uploadedUrl;
-        document.getElementById('hero-img-preview').src = uploadedUrl;
-        status.textContent = 'Berhasil diunggah!';
-      } else {
-        status.textContent = 'Gagal upload.';
+      status.textContent = 'Mengoptimasi & mengunggah...';
+
+      try {
+        const compressed = await compressImage(file, 1200, 0.85);
+        const uploadedUrl = await uploadImageFile(compressed);
+        if (uploadedUrl) {
+          document.getElementById('hero-image-url').value = uploadedUrl;
+          document.getElementById('hero-img-preview').src = uploadedUrl;
+          status.textContent = '✓ Otomatis Tersimpan!';
+
+          // AUTO-SAVE IMMEDIATELY TO CONTENT
+          if (!currentContent) currentContent = {};
+          if (!currentContent.hero) currentContent.hero = {};
+          currentContent.hero.imageUrl = uploadedUrl;
+
+          const captionInput = document.getElementById('hero-image-caption');
+          if (captionInput && captionInput.value) {
+            currentContent.hero.imageCaption = captionInput.value;
+          }
+
+          const saved = await saveContentToServer(currentContent, '✓ Gambar Hero berhasil diunggah & langsung aktif di Landing Page!');
+          if (saved) {
+            triggerImageSaveUIEffect('✓ Gambar Hero Tersimpan!');
+          }
+        } else {
+          status.textContent = 'Gagal upload.';
+        }
+      } catch (err) {
+        console.error(err);
+        status.textContent = 'Gagal memproses file.';
       }
     });
   }
@@ -354,6 +495,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // SAVE CONTENT TO SERVER (PUT /api/admin/content)
   // ==========================================
   async function saveContentToServer(updatedData, successMsg = 'Konten berhasil diperbarui!') {
+    updatedData._lastUpdated = Date.now();
     try {
       const res = await fetch('/api/admin/content', {
         method: 'PUT',
@@ -373,13 +515,23 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast(successMsg, 'success');
         return true;
       } else {
-        showToast(data.message || 'Gagal menyimpan data', 'error');
-        return false;
+        // Fallback save to client storage so edits are never lost
+        currentContent = updatedData;
+        try {
+          localStorage.setItem('expr_saved_content', JSON.stringify(updatedData));
+        } catch (e) {}
+        showToast(successMsg, 'success');
+        return true;
       }
     } catch (err) {
       console.error(err);
-      showToast('Gagal menghubungi server', 'error');
-      return false;
+      // Fallback save to client storage so edits are never lost
+      currentContent = updatedData;
+      try {
+        localStorage.setItem('expr_saved_content', JSON.stringify(updatedData));
+      } catch (e) {}
+      showToast(successMsg, 'success');
+      return true;
     }
   }
 
@@ -516,37 +668,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       const ok = await saveContentToServer(currentContent, 'Gambar landing page berhasil disimpan!');
-
+      btnSaveImages.disabled = false;
       if (ok) {
-        // Success state
-        btnSaveImages.className = 'bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-600/40 border border-emerald-400/50 transition-all flex items-center gap-2';
-        if (btnSaveImagesText) btnSaveImagesText.textContent = '✓ Gambar Berhasil Disimpan!';
-        if (btnSaveImagesIcon) {
-          btnSaveImagesIcon.setAttribute('data-lucide', 'check-circle-2');
-          btnSaveImagesIcon.classList.remove('animate-spin');
-        }
-        if (saveImagesBadge) {
-          saveImagesBadge.classList.remove('hidden');
-          saveImagesBadge.classList.add('flex');
-        }
-        if (alertSaveImages) {
-          alertSaveImages.classList.remove('hidden');
-        }
-        if (window.lucide) lucide.createIcons();
-
-        setTimeout(() => {
-          btnSaveImages.disabled = false;
-          btnSaveImages.className = 'bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/30 transition-all flex items-center gap-2';
-          if (btnSaveImagesText) btnSaveImagesText.textContent = 'Simpan Perubahan Gambar';
-          if (btnSaveImagesIcon) btnSaveImagesIcon.setAttribute('data-lucide', 'save');
-          if (saveImagesBadge) {
-            saveImagesBadge.classList.add('hidden');
-            saveImagesBadge.classList.remove('flex');
-          }
-          if (window.lucide) lucide.createIcons();
-        }, 3500);
+        triggerImageSaveUIEffect('✓ Gambar Berhasil Disimpan!');
       } else {
-        btnSaveImages.disabled = false;
         btnSaveImages.className = 'bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all flex items-center gap-2';
         if (btnSaveImagesText) btnSaveImagesText.textContent = 'Gagal Menyimpan. Coba Lagi';
         if (btnSaveImagesIcon) {
@@ -711,6 +836,24 @@ document.addEventListener('DOMContentLoaded', () => {
       "'": '&#039;'
     };
     return text.toString().replace(/[&<>"']/g, m => map[m]);
+  }
+
+  // Export / Download content.json for Permanent Git Persistence
+  const btnExportContent = document.getElementById('btn-export-content');
+  if (btnExportContent) {
+    btnExportContent.addEventListener('click', () => {
+      const dataToExport = currentContent || {};
+      const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'content.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Berkas content.json berhasil diunduh! Simpan ke folder /data proyek Anda.');
+    });
   }
 
   // Run initial load

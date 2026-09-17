@@ -144,6 +144,9 @@ function getContent() {
 
 // Content saving with EROFS protection
 function saveContent(data) {
+  if (data && typeof data === 'object') {
+    data._lastUpdated = data._lastUpdated || Date.now();
+  }
   memoryContent = data;
 
   try {

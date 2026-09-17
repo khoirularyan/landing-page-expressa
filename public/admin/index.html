@@ -113,15 +113,30 @@
       </nav>
 
       <!-- Quick Info Card -->
-      <div class="pt-4">
+      <div class="pt-4 space-y-3">
         <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-4 text-xs text-slate-400 space-y-2">
           <div class="flex items-center gap-1.5 text-blue-400 font-bold">
             <i data-lucide="info" class="w-3.5 h-3.5"></i>
             <span>Tips Pengelolaan</span>
           </div>
           <p class="leading-relaxed">
-            Perubahan teks dan gambar yang disimpan akan langsung tampil secara realtime di landing page Expressa.
+            Perubahan teks dan gambar otomatis tersimpan dan aktif secara instan di landing page Expressa.
           </p>
+        </div>
+
+        <!-- Download Permanent content.json Card -->
+        <div class="bg-blue-950/30 border border-blue-800/50 rounded-2xl p-4 text-xs space-y-2.5">
+          <div class="flex items-center gap-1.5 text-blue-300 font-bold">
+            <i data-lucide="download-cloud" class="w-4 h-4 text-blue-400"></i>
+            <span>Simpan Permanen ke Proyek</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-relaxed">
+            Unduh <code class="text-blue-300 font-mono">content.json</code> hasil edit Anda untuk disimpan ke folder proyek git agar permanen di semua perangkat pengunjung.
+          </p>
+          <button id="btn-export-content" type="button" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-3 rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Download content.json</span>
+          </button>
         </div>
       </div>
     </aside>
