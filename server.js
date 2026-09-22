@@ -62,6 +62,9 @@ let memoryConsultations = null;
 
 // Secret key for HMAC token signing (stateless for serverless / Vercel multi-instance environments)
 const AUTH_SECRET = process.env.ADMIN_SECRET || 'expressa_cms_jwt_secret_key_2026_fixed';
+if (!process.env.ADMIN_SECRET) {
+  console.warn('[WARN] ADMIN_SECRET env var not set — using insecure fallback. Set ADMIN_SECRET in .env for production!');
+}
 
 function generateToken(username) {
   const payload = {
@@ -77,8 +80,6 @@ function generateToken(username) {
 
 function verifyToken(token) {
   if (!token || typeof token !== 'string') return null;
-  // Dev backward compatibility
-  if (token === 'admin-dev-session-token') return { u: 'admin' };
 
   try {
     const parts = token.split('.');
