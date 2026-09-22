@@ -128,5 +128,49 @@
       "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
     }
   ],
+  "gallery": [
+    {
+      "id": "gal-1",
+      "title": "Enterprise ERP Distribution Hub",
+      "category": "ERP & Bisnis",
+      "imageUrl": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1000&q=80",
+      "description": "Dasbor integrasi multi-gudang dan pelacakan batch serial number secara real-time."
+    },
+    {
+      "id": "gal-2",
+      "title": "Field Sales & Courier Dispatch Mobile App",
+      "category": "Mobile App",
+      "imageUrl": "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1000&q=80",
+      "description": "Aplikasi kurir dan sales lapangan terhubung GPS offline-first ke server ERP pusat."
+    },
+    {
+      "id": "gal-3",
+      "title": "Smart Factory Shift & QC Monitoring",
+      "category": "Industrial & IoT",
+      "imageUrl": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1000&q=80",
+      "description": "Pemantauan output mesin produksi dan pencatatan cacat produk jalur konveyor pabrik."
+    },
+    {
+      "id": "gal-4",
+      "title": "Automated OCR Invoice & WhatsApp Billing",
+      "category": "Otomasi & AI",
+      "imageUrl": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=80",
+      "description": "Ekstraksi otomatis faktur vendor dan pengiriman invoice PDF otomatis via WhatsApp API."
+    },
+    {
+      "id": "gal-5",
+      "title": "Executive Financial Analytics & Cashflow",
+      "category": "ERP & Bisnis",
+      "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80",
+      "description": "Visualisasi laba-rugi kotor dan proyeksi arus kas bulanan konsolidasi group perusahaan."
+    },
+    {
+      "id": "gal-6",
+      "title": "B2B Wholesale Ordering & Customer Portal",
+      "category": "Web Platform",
+      "imageUrl": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1000&q=80",
+      "description": "Portal pemesanan grosir tiering harga khusus distributor dengan plafon piutang otomatis."
+    }
+  ],
   "_lastUpdated": 1790043190845
 }

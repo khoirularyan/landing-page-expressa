@@ -31,7 +31,7 @@
               500: '#0066FF',
               600: '#0052CC',
               700: '#003d99',
-              dark: '#131B2E',
+              dark: '#334460',
               navy: '#0B132B'
             }
           }
@@ -49,7 +49,7 @@
   <!-- Immediate Theme Initializer -->
   <script src="/js/theme.js"></script>
 </head>
-<body class="bg-white dark:bg-[#131B2E] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
+<body class="bg-white dark:bg-[#1E293B] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
 
   <!-- ========================================== -->
   <!-- NAVBAR                                     -->
@@ -64,13 +64,10 @@
     <!-- Center Navigation Links -->
     <div class="hidden md:flex items-center gap-7 lg:gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
       <a href="#beranda" class="nav-anchor text-blue-600 dark:text-blue-400 font-semibold transition-colors">Beranda</a>
-      <a href="#framework" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Framework</a>
-      <a href="#layanan" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Layanan</a>
-      <a href="/portofolio" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5">
-        <span>Portofolio</span>
-        <span class="nav-badge-new text-[10px] bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-700/60 px-1.5 py-0.5 rounded-full font-bold">Baru</span>
-      </a>
+      <a href="/portofolio" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Portofolio</a>
+      <a href="/galeri" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Galeri Project</a>
       <a href="/tim" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tim</a>
+      <a href="/about" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
     </div>
 
     <!-- Right Controls: Theme Toggle & CTA Button -->
@@ -96,7 +93,7 @@
     <!-- ======================================================== -->
     <!-- SECTION 01: HERO WITH CONTRAST NAVY & FLOATING PILLARS   -->
     <!-- ======================================================== -->
-    <section id="beranda" class="pt-32 pb-28 sm:pb-36 md:pb-40 px-6 md:px-12 bg-[#0B132B] dark:bg-[#0E1729] text-white curved-bottom relative overflow-hidden transition-colors duration-200">
+    <section id="beranda" class="pt-32 pb-28 sm:pb-36 md:pb-40 px-6 md:px-12 bg-[#0B132B] dark:bg-[#182338] text-white curved-bottom relative overflow-hidden transition-colors duration-200">
       <!-- Decorative Glow & Dot Accents -->
       <div class="absolute inset-0 bg-[radial-gradient(#1e3a8a_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div>
       <div class="absolute -top-20 -right-20 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
@@ -148,7 +145,7 @@
               <img id="hero-preview-img" src="/assets/images/expressa-hero-team.png" alt="Tim Expressa Engineering" class="relative z-10 w-full h-auto max-h-[420px] lg:max-h-[460px] object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] hover:scale-105 transition-transform duration-500">
 
               <!-- Floating badge: Dedicated Engineering Team -->
-              <div class="relative -mt-6 z-20 w-full max-w-sm bg-slate-900/80 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/15 shadow-2xl flex items-center gap-3">
+              <div class="relative -mt-6 z-20 w-full max-w-sm bg-slate-900/80 dark:bg-slate-800/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/15 shadow-2xl flex items-center gap-3">
                 <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-600/40">
                   <i data-lucide="code-2" class="w-4 h-4"></i>
                 </div>
@@ -171,7 +168,7 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         
         <!-- Pillar 1 -->
-        <div onclick="openConsultationModal('ERP & Business System')" class="clean-card p-6 bg-white dark:bg-[#182238] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-blue-500 transition-all cursor-pointer group">
+        <div onclick="openConsultationModal('ERP & Business System')" class="clean-card p-6 bg-white dark:bg-[#283852] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-blue-500 transition-all cursor-pointer group">
           <div>
             <div class="flex items-center justify-between mb-4">
               <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
@@ -191,7 +188,7 @@
         </div>
 
         <!-- Pillar 2 -->
-        <div onclick="openConsultationModal('Mobile Application')" class="clean-card p-6 bg-white dark:bg-[#182238] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-indigo-500 transition-all cursor-pointer group">
+        <div onclick="openConsultationModal('Mobile Application')" class="clean-card p-6 bg-white dark:bg-[#283852] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-indigo-500 transition-all cursor-pointer group">
           <div>
             <div class="flex items-center justify-between mb-4">
               <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
@@ -211,7 +208,7 @@
         </div>
 
         <!-- Pillar 3 -->
-        <div onclick="openConsultationModal('AI & Automation')" class="clean-card p-6 bg-white dark:bg-[#182238] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-cyan-500 transition-all cursor-pointer group">
+        <div onclick="openConsultationModal('AI & Automation')" class="clean-card p-6 bg-white dark:bg-[#283852] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-cyan-500 transition-all cursor-pointer group">
           <div>
             <div class="flex items-center justify-between mb-4">
               <div class="w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:bg-cyan-600 group-hover:text-white transition-colors">
@@ -236,7 +233,7 @@
     <!-- ======================================================== -->
     <!-- SECTION 02: FRAMEWORK EXPRESSA SOLUTION (PIPELINE FLOW)   -->
     <!-- ======================================================== -->
-    <section id="framework" class="py-20 px-4 sm:px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+    <section id="framework" class="py-20 px-4 sm:px-6 md:px-12 bg-white dark:bg-[#1E293B] transition-colors duration-200">
       <div class="max-w-7xl mx-auto w-full">
         
         <!-- Header -->
@@ -250,7 +247,7 @@
         </div>
 
         <!-- Pipeline Showcase Container with modern ambient backdrop (Clean Borderless) -->
-        <div class="relative bg-slate-50/70 dark:bg-[#151F33]/80 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm overflow-hidden">
+        <div class="relative bg-slate-50/70 dark:bg-[#26354D]/80 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm overflow-hidden">
           
           <!-- Ambient soft aura -->
           <div class="absolute -top-24 -left-24 w-72 h-72 bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
@@ -282,7 +279,7 @@
             
             <!-- 01. Order -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0 active" data-step-index="0">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="file-text" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -290,8 +287,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-0 sm:left-1/2 sm:-translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-10 sm:left-1/2 sm:-translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-0 sm:left-1/2 sm:-translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-10 sm:left-1/2 sm:-translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">01 • Order</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -311,7 +308,7 @@
 
             <!-- 02. Assesmen -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="1">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="clipboard-check" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -319,8 +316,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">02 • Assesmen</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -340,7 +337,7 @@
 
             <!-- 03. POV Stakeholder -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="2">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="users" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -348,8 +345,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">03 • POV Stakeholder</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -369,7 +366,7 @@
 
             <!-- 04. Blueprint -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="3">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="compass" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -377,8 +374,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">04 • Blueprint</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -398,7 +395,7 @@
 
             <!-- 05. Development -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="4">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="code" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -406,8 +403,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">05 • Development</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -427,7 +424,7 @@
 
             <!-- 06. QC -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="5">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="shield-check" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -435,8 +432,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">06 • QC</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -456,7 +453,7 @@
 
             <!-- 07. UAT -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="6">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="check-square" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -464,8 +461,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">07 • UAT</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -485,7 +482,7 @@
 
             <!-- 08. Training -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="7">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="graduation-cap" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -493,8 +490,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">08 • Training</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -514,7 +511,7 @@
 
             <!-- 09. Pre Go-Live -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="8">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="server" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -522,8 +519,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">09 • Pre Go-Live</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -543,7 +540,7 @@
 
             <!-- 10. Launching -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="9">
-              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="rocket" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -551,8 +548,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">10 • Launching</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -572,7 +569,7 @@
 
             <!-- 11. Support & Maintenance -->
             <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="10">
-              <div class="framework-card w-36 h-32 sm:w-40 sm:h-36 md:w-44 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+              <div class="framework-card w-36 h-32 sm:w-40 sm:h-36 md:w-44 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#283852] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
                 <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
                   <i data-lucide="headphones" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
@@ -580,8 +577,8 @@
               </div>
 
               <!-- Popover Kecil -->
-              <div class="step-popover absolute top-full mt-3 right-0 left-auto sm:left-1/2 sm:right-auto sm:-translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
-                <div class="absolute -top-1.5 right-10 sm:left-1/2 sm:-translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+              <div class="step-popover absolute top-full mt-3 right-0 left-auto sm:left-1/2 sm:right-auto sm:-translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#334460] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 right-10 sm:left-1/2 sm:-translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#334460] rotate-45 rounded-xs"></div>
                 <div class="relative z-10 text-center">
                   <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">11 • Support &amp; Maintenance</div>
                   <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
@@ -612,7 +609,7 @@
     <!-- ======================================================== -->
     <!-- SECTION 03: CLIENT TRUST STRIP (RUNNING MARQUEE TICKER)  -->
     <!-- ======================================================== -->
-    <section class="py-10 px-6 md:px-12 bg-slate-50 dark:bg-[#182238] border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200 overflow-hidden">
+    <section class="py-10 px-6 md:px-12 bg-slate-50 dark:bg-[#283852] border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200 overflow-hidden">
       <div class="max-w-7xl mx-auto">
         <div class="text-center mb-6">
           <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
@@ -710,15 +707,11 @@
     <!-- ======================================================== -->
     <!-- SECTION 04: VALUE CHECKLIST + QUICK CONSULTATION BOX     -->
     <!-- ======================================================== -->
-    <section class="py-16 md:py-24 px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+    <section class="py-16 md:py-24 px-6 md:px-12 bg-white dark:bg-[#1E293B] transition-colors duration-200">
       <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         <!-- Left: Bold Value Checklist (7 cols) -->
         <div class="lg:col-span-7 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">
-            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
-            <span>Prinsip Kerja Expressa</span>
-          </div>
 
           <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
             Solusi Presisi, <br>
@@ -731,7 +724,7 @@
 
           <!-- 3 Value Rows -->
           <div class="space-y-3.5 pt-2">
-            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800">
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#283852] border border-slate-200/80 dark:border-slate-800">
               <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <i data-lucide="check-circle-2" class="w-5 h-5"></i>
               </div>
@@ -741,7 +734,7 @@
               </div>
             </div>
 
-            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800">
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#283852] border border-slate-200/80 dark:border-slate-800">
               <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
               </div>
@@ -751,7 +744,7 @@
               </div>
             </div>
 
-            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800">
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#283852] border border-slate-200/80 dark:border-slate-800">
               <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <i data-lucide="headphones" class="w-5 h-5"></i>
               </div>
@@ -781,7 +774,7 @@
 
         <!-- Right: Floating Quick Consultation Card (5 cols) -->
         <div class="lg:col-span-5">
-          <div class="clean-card p-6 sm:p-8 bg-white dark:bg-[#182238] border-2 border-blue-500/30 dark:border-blue-500/40 rounded-3xl shadow-2xl relative">
+          <div class="clean-card p-6 sm:p-8 bg-white dark:bg-[#283852] border-2 border-blue-500/30 dark:border-blue-500/40 rounded-3xl shadow-2xl relative">
             <div class="absolute -top-3 right-6 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">
               Respon &lt; 24 Jam
             </div>
@@ -794,17 +787,17 @@
             <form id="quick-consultation-form" class="space-y-3.5">
               <div>
                 <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap *</label>
-                <input type="text" id="quick-name" required placeholder="Budi Santoso" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0E1729] transition-colors">
+                <input type="text" id="quick-name" required placeholder="Budi Santoso" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#182338] transition-colors">
               </div>
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor WhatsApp *</label>
-                <input type="tel" id="quick-phone" required placeholder="081234567890" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0E1729] transition-colors">
+                <input type="tel" id="quick-phone" required placeholder="081234567890" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#182338] transition-colors">
               </div>
 
               <div>
                 <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilihan Kebutuhan Solusi</label>
-                <select id="quick-service" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0E1729] transition-colors">
+                <select id="quick-service" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#182338] transition-colors">
                   <option value="ERP & Business System">ERP & Manajemen Stok Multi-Gudang</option>
                   <option value="Mobile Application">Aplikasi Mobile Operasional (iOS & Android)</option>
                   <option value="Custom Software">Custom Web Dashboard & Software</option>
@@ -833,7 +826,7 @@
     <!-- ======================================================== -->
     <!-- SECTION 05: LAYANAN WITH INTERACTIVE TAB SWITCHER        -->
     <!-- ======================================================== -->
-    <section id="layanan" class="py-20 px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+    <section id="layanan" class="py-20 px-6 md:px-12 bg-white dark:bg-[#1E293B] transition-colors duration-200">
       <div class="max-w-7xl mx-auto w-full">
         
         <!-- Header -->
@@ -966,7 +959,7 @@
     <!-- ======================================================== -->
     <!-- SECTION 06: MENGAPA KAMI (ASYMMETRICAL FEATURETTE)      -->
     <!-- ======================================================== -->
-    <section class="py-20 px-6 md:px-12 bg-slate-50 dark:bg-[#182238] border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
+    <section id="about-us" class="py-20 px-6 md:px-12 bg-slate-50 dark:bg-[#283852] border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
       <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
         
         <!-- Left: Rounded Tech Collage with Badges -->
@@ -975,7 +968,7 @@
             <img id="whyus-preview-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Expressa Technology" class="w-full h-80 sm:h-96 object-cover opacity-90 hover:scale-105 transition-transform duration-500">
             
             <!-- Floating Badge 1 (Top Left) -->
-            <div class="absolute top-4 left-4 bg-white/95 dark:bg-[#182238]/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-3 animate-float-slow">
+            <div class="absolute top-4 left-4 bg-white/95 dark:bg-[#283852]/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-3 animate-float-slow">
               <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
                 <i data-lucide="trending-up" class="w-5 h-5"></i>
               </div>
@@ -986,7 +979,7 @@
             </div>
 
             <!-- Floating Badge 2 (Bottom Right) -->
-            <div class="absolute bottom-4 right-4 bg-white/95 dark:bg-[#182238]/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-3">
+            <div class="absolute bottom-4 right-4 bg-white/95 dark:bg-[#283852]/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-3">
               <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
                 <i data-lucide="shield-check" class="w-5 h-5"></i>
               </div>
@@ -1000,10 +993,6 @@
 
         <!-- Right: 3 Value Impact Cards -->
         <div class="lg:col-span-6 space-y-6">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">
-            <i data-lucide="award" class="w-3.5 h-3.5"></i>
-            <span>Mengapa Memilih Expressa</span>
-          </div>
 
           <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
             Dampak Terukur untuk <br>
@@ -1011,7 +1000,7 @@
           </h2>
 
           <div class="space-y-4 pt-2">
-            <div class="clean-card p-5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
+            <div class="clean-card p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
               <div class="flex items-center gap-3 mb-1.5">
                 <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">01</div>
                 <h3 class="font-bold text-slate-900 dark:text-white text-sm">Bukan Template Massal</h3>
@@ -1021,7 +1010,7 @@
               </p>
             </div>
 
-            <div class="clean-card p-5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
+            <div class="clean-card p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
               <div class="flex items-center gap-3 mb-1.5">
                 <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">02</div>
                 <h3 class="font-bold text-slate-900 dark:text-white text-sm">Terkoneksi Menyeluruh Tanpa Silo</h3>
@@ -1031,7 +1020,7 @@
               </p>
             </div>
 
-            <div class="clean-card p-5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
+            <div class="clean-card p-5 bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
               <div class="flex items-center gap-3 mb-1.5">
                 <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">03</div>
                 <h3 class="font-bold text-slate-900 dark:text-white text-sm">Pendampingan Jangka Panjang</h3>
@@ -1050,7 +1039,7 @@
     <!-- ======================================================== -->
     <!-- SECTION 07: STUDI KASUS PILIHAN & TEASER TIM            -->
     <!-- ======================================================== -->
-    <section id="project" class="py-20 px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+    <section id="project" class="py-20 px-6 md:px-12 bg-white dark:bg-[#1E293B] transition-colors duration-200">
       <div class="max-w-7xl mx-auto w-full">
         
         <!-- Header -->
@@ -1063,7 +1052,7 @@
           </div>
 
           <div>
-            <a href="/portofolio" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-slate-50 dark:bg-[#182238] border border-slate-300 dark:border-slate-700 hover:border-slate-400 px-5 py-2.5 rounded-full transition-all shadow-sm">
+            <a href="/portofolio" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-slate-50 dark:bg-[#283852] border border-slate-300 dark:border-slate-700 hover:border-slate-400 px-5 py-2.5 rounded-full transition-all shadow-sm">
               <span>Buka Portofolio Lengkap</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
             </a>
@@ -1074,7 +1063,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <!-- Cobra Dental -->
-          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#182238]">
+          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#283852]">
             <div class="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
               <img id="cs-img-0" src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="Cobra Dental" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <div class="absolute top-3 left-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
@@ -1100,7 +1089,7 @@
           </div>
 
           <!-- Petrokimia Gresik -->
-          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#182238]">
+          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#283852]">
             <div class="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
               <img id="cs-img-1" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Petrokimia Gresik" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <div class="absolute top-3 left-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
@@ -1126,7 +1115,7 @@
           </div>
 
           <!-- Fokus Jasa Mitra -->
-          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#182238]">
+          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#283852]">
             <div class="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
               <img id="cs-img-2" src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" alt="Fokus Jasa Mitra" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
               <div class="absolute top-3 left-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
@@ -1154,7 +1143,7 @@
         </div>
 
         <!-- Teaser Tim Kami Banner -->
-        <div class="mt-12 clean-card p-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#182238] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="mt-12 clean-card p-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#283852] flex flex-col md:flex-row items-center justify-between gap-6">
           <div class="max-w-xl space-y-1.5 text-center md:text-left">
             <div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Tim Spesialis Expressa</div>
             <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">
@@ -1178,12 +1167,8 @@
     <!-- ======================================================== -->
     <!-- SECTION 08: HIGH-IMPACT CTA BANNER                       -->
     <!-- ======================================================== -->
-    <section class="py-16 md:py-20 px-6 md:px-12 bg-[#0B132B] dark:bg-[#0E1729] text-white relative overflow-hidden transition-colors duration-200">
+    <section class="py-16 md:py-20 px-6 md:px-12 bg-[#0B132B] dark:bg-[#182338] text-white relative overflow-hidden transition-colors duration-200">
       <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/50 border border-blue-700/60 text-blue-300 text-xs font-bold uppercase tracking-wider">
-          <i data-lucide="zap" class="w-3.5 h-3.5 text-blue-400"></i>
-          <span>Langkah Mudah Menuju Digitalisasi</span>
-        </div>
 
         <h2 class="text-2xl md:text-4xl font-extrabold text-white leading-tight">
           Siap Membangun Sistem yang Mengikuti Cara Kerja Bisnis Anda?
@@ -1211,7 +1196,7 @@
   <!-- ======================================================== -->
   <!-- FOOTER (DARK NAVY LIKE REFERENCE IMAGE)                  -->
   <!-- ======================================================== -->
-  <footer class="bg-[#0B132B] text-slate-400 py-12 px-6 md:px-12 text-xs">
+  <footer class="bg-[#0B132B] dark:bg-[#182338] text-slate-400 dark:text-slate-300 py-12 px-6 md:px-12 text-xs border-t border-transparent dark:border-slate-700/50">
     <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
       
       <!-- Brand Col -->
@@ -1226,10 +1211,10 @@
       <div class="space-y-2">
         <div class="text-white font-bold text-xs uppercase tracking-wider mb-3">Navigasi</div>
         <div><a href="#beranda" class="hover:text-white transition-colors">Beranda</a></div>
-        <div><a href="#framework" class="hover:text-white transition-colors">Framework Expressa</a></div>
-        <div><a href="#layanan" class="hover:text-white transition-colors">Layanan</a></div>
         <div><a href="/portofolio" class="hover:text-white transition-colors">Portofolio</a></div>
+        <div><a href="/galeri" class="hover:text-white transition-colors">Galeri Project</a></div>
         <div><a href="/tim" class="hover:text-white transition-colors">Tim Kami</a></div>
+        <div><a href="/about" class="hover:text-white transition-colors">About Us</a></div>
       </div>
 
       <!-- Links Col 2 -->
@@ -1269,7 +1254,7 @@
   <div id="consultation-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
     <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
 
-    <div id="modal-content" class="relative z-10 w-full max-w-lg bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-3xl shadow-2xl p-6 sm:p-8 text-slate-900 dark:text-white opacity-0 scale-95 translate-y-4 transition-all duration-300">
+    <div id="modal-content" class="relative z-10 w-full max-w-lg bg-white dark:bg-[#334460] border border-slate-200 dark:border-slate-700 rounded-3xl shadow-2xl p-6 sm:p-8 text-slate-900 dark:text-white opacity-0 scale-95 translate-y-4 transition-all duration-300">
       
       <button id="close-modal-btn" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -1285,28 +1270,28 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <div>
             <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap *</label>
-            <input type="text" id="consultation-name" required placeholder="Contoh: Budi Santoso" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
+            <input type="text" id="consultation-name" required placeholder="Contoh: Budi Santoso" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor WhatsApp *</label>
-            <input type="tel" id="consultation-phone" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
+            <input type="tel" id="consultation-phone" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Perusahaan / Usaha</label>
-            <input type="text" id="consultation-company" placeholder="Nama Perusahaan" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
+            <input type="text" id="consultation-company" placeholder="Nama Perusahaan" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
           <div>
             <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Bisnis</label>
-            <input type="email" id="consultation-email" placeholder="budi@company.com" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
+            <input type="email" id="consultation-email" placeholder="budi@company.com" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
         </div>
 
         <div>
           <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilihan Layanan / Solusi</label>
-          <select id="consultation-service" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
+          <select id="consultation-service" class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
             <option value="Custom Software">Custom Software / Web Application</option>
             <option value="Mobile Application">Mobile Application (Android & iOS)</option>
             <option value="ERP & Business System">ERP & Business Management System</option>
@@ -1323,7 +1308,7 @@
 
         <div>
           <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Ceritakan Singkat Kebutuhan Anda</label>
-          <textarea id="consultation-message" rows="3" placeholder="Misal: Kami ingin mengintegrasikan stok barang multi-gudang dan otomatisasi pembuatan invoice..." class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors resize-none"></textarea>
+          <textarea id="consultation-message" rows="3" placeholder="Misal: Kami ingin mengintegrasikan stok barang multi-gudang dan otomatisasi pembuatan invoice..." class="w-full bg-slate-50 dark:bg-[#1E293B] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors resize-none"></textarea>
         </div>
 
         <button type="submit" id="submit-consultation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm py-3 rounded-xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all">

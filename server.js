@@ -490,6 +490,16 @@ app.get(['/tim', '/team', '/tim.html', '/team.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'tim.html'));
 });
 
+// Route for /galeri & /gallery -> public/galeri.html
+app.get(['/galeri', '/gallery', '/galeri-project', '/gallery-project', '/galeri.html', '/gallery.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'galeri.html'));
+});
+
+// Route for /about & /about-us -> public/about.html
+app.get(['/about', '/about-us', '/tentang', '/tentang-kami', '/about.html', '/about-us.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'about.html'));
+});
+
 // Route for /admin -> public/admin/index.html
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));

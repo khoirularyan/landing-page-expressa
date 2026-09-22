@@ -84,6 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
         loadConsultations();
       }
 
+      if (targetTabId === 'tab-gallery') {
+        if (currentContent) populateGalleryTab(currentContent);
+      }
+
       if (window.lucide) lucide.createIcons();
     });
   });
@@ -122,6 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentContent = localData;
         populateHeroForm(currentContent);
         populateImagesTab(currentContent);
+        populateGalleryTab(currentContent);
       }
     } catch (e) {}
 
@@ -139,6 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentContent = json.data;
         populateHeroForm(currentContent);
         populateImagesTab(currentContent);
+        populateGalleryTab(currentContent);
         try {
           localStorage.setItem('expr_saved_content', JSON.stringify(currentContent));
         } catch (e) {}
@@ -563,6 +569,202 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (window.lucide) lucide.createIcons();
+  }
+
+  // Populate Tab: Galeri Project
+  function populateGalleryTab(data) {
+    const galleryAdminContainer = document.getElementById('gallery-admin-container');
+    const btnAddGallery = document.getElementById('btn-add-gallery');
+    const btnSaveGallery = document.getElementById('btn-save-gallery');
+    const btnSaveGalleryText = document.getElementById('btn-save-gallery-text');
+
+    if (!galleryAdminContainer) return;
+
+    if (!currentContent) currentContent = {};
+    if (!currentContent.gallery || !Array.isArray(currentContent.gallery)) {
+      currentContent.gallery = (data && data.gallery) ? [...data.gallery] : [];
+    }
+
+    function renderGalleryAdminCards() {
+      galleryAdminContainer.innerHTML = '';
+
+      if (currentContent.gallery.length === 0) {
+        galleryAdminContainer.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 bg-slate-900/50 rounded-2xl border border-slate-800">
+            <p class="text-xs">Belum ada item di galeri proyek.</p>
+            <button type="button" onclick="document.getElementById('btn-add-gallery').click()" class="mt-3 text-xs text-blue-400 hover:underline">
+              + Tambah Proyek Pertama
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      currentContent.gallery.forEach((item, idx) => {
+        const card = document.createElement('div');
+        card.className = 'gallery-admin-card bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-4';
+        
+        card.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+            <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span>Proyek #${idx + 1}</span>
+            </span>
+            <button type="button" class="btn-delete-gallery text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors" title="Hapus Proyek Ini">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+          <!-- Image Preview & Upload -->
+          <div class="space-y-2">
+            <div class="relative w-full aspect-[16/10] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center">
+              <img id="gal-img-preview-${idx}" src="${item.imageUrl || ''}" alt="${escapeHtml(item.title || 'Proyek')}" class="w-full h-full object-cover ${item.imageUrl ? '' : 'hidden'}">
+              <div id="gal-img-placeholder-${idx}" class="text-slate-500 text-xs flex flex-col items-center gap-1 ${item.imageUrl ? 'hidden' : ''}">
+                <i data-lucide="image" class="w-6 h-6"></i>
+                <span>Belum ada gambar</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <input type="file" id="gal-file-${idx}" accept="image/*" class="hidden">
+              <button type="button" class="btn-upload-gal bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5">
+                <i data-lucide="upload" class="w-3.5 h-3.5 text-blue-400"></i>
+                <span>Unggah Foto</span>
+              </button>
+              <span id="gal-upload-status-${idx}" class="text-[11px] text-slate-400 italic"></span>
+            </div>
+            <input type="text" class="gal-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 font-mono" value="${escapeHtml(item.imageUrl || '')}" placeholder="https://... atau hasil unggah">
+          </div>
+
+          <!-- Title -->
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama / Judul Proyek</label>
+            <input type="text" class="gal-title-input w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(item.title || '')}" placeholder="Misal: Enterprise ERP Hub">
+          </div>
+
+          <!-- Category -->
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Kategori Solusi</label>
+            <input type="text" class="gal-category-input w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(item.category || '')}" placeholder="ERP & Bisnis / Mobile App / Industrial & IoT / Otomasi & AI / Web Platform">
+          </div>
+
+          <!-- Description -->
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Deskripsi Singkat</label>
+            <textarea rows="2" class="gal-desc-input w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 resize-none" placeholder="Penjelasan singkat mengenai implementasi fitur...">${escapeHtml(item.description || '')}</textarea>
+          </div>
+        `;
+
+        galleryAdminContainer.appendChild(card);
+
+        const imgPreview = card.querySelector(`#gal-img-preview-${idx}`);
+        const imgPlaceholder = card.querySelector(`#gal-img-placeholder-${idx}`);
+        const fileBtn = card.querySelector('.btn-upload-gal');
+        const fileInput = card.querySelector(`#gal-file-${idx}`);
+        const statusSpan = card.querySelector(`#gal-upload-status-${idx}`);
+        const urlInput = card.querySelector('.gal-url-input');
+        const titleInput = card.querySelector('.gal-title-input');
+        const categoryInput = card.querySelector('.gal-category-input');
+        const descInput = card.querySelector('.gal-desc-input');
+        const deleteBtn = card.querySelector('.btn-delete-gallery');
+
+        titleInput.addEventListener('input', () => {
+          item.title = titleInput.value;
+        });
+
+        categoryInput.addEventListener('input', () => {
+          item.category = categoryInput.value;
+        });
+
+        descInput.addEventListener('input', () => {
+          item.description = descInput.value;
+        });
+
+        urlInput.addEventListener('input', () => {
+          item.imageUrl = urlInput.value.trim();
+          if (item.imageUrl) {
+            imgPreview.src = item.imageUrl;
+            imgPreview.classList.remove('hidden');
+            imgPlaceholder.classList.add('hidden');
+          } else {
+            imgPreview.classList.add('hidden');
+            imgPlaceholder.classList.remove('hidden');
+          }
+        });
+
+        if (fileBtn && fileInput) {
+          fileBtn.addEventListener('click', () => fileInput.click());
+          fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            statusSpan.textContent = 'Mengunggah...';
+            try {
+              const compressed = await compressImage(file, 1200, 0.85);
+              const uploadedUrl = await uploadImageFile(compressed);
+              if (uploadedUrl) {
+                urlInput.value = uploadedUrl;
+                item.imageUrl = uploadedUrl;
+                imgPreview.src = uploadedUrl;
+                imgPreview.classList.remove('hidden');
+                imgPlaceholder.classList.add('hidden');
+                statusSpan.textContent = '✓ Terunggah!';
+
+                await saveContentToServer(currentContent, `✓ Foto Proyek (${item.title || 'Galeri'}) berhasil diunggah & disimpan!`);
+              } else {
+                statusSpan.textContent = 'Gagal upload.';
+              }
+            } catch (err) {
+              statusSpan.textContent = 'Gagal upload.';
+            }
+          });
+        }
+
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', async () => {
+            if (confirm(`Hapus proyek "${item.title || 'ini'}" dari galeri?`)) {
+              currentContent.gallery.splice(idx, 1);
+              renderGalleryAdminCards();
+              await saveContentToServer(currentContent, 'Proyek galeri berhasil dihapus.');
+            }
+          });
+        }
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    renderGalleryAdminCards();
+
+    // Add New Gallery Item
+    if (btnAddGallery && !btnAddGallery.dataset.listenerAttached) {
+      btnAddGallery.dataset.listenerAttached = 'true';
+      btnAddGallery.addEventListener('click', async () => {
+        if (!currentContent.gallery) currentContent.gallery = [];
+        currentContent.gallery.unshift({
+          id: `gal-${Date.now()}`,
+          title: 'Proyek Sistem Baru',
+          category: 'ERP & Bisnis',
+          imageUrl: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=80',
+          description: 'Implementasi solusi digital kustom yang dibangun presisi sesuai proses operasional perusahaan.'
+        });
+        renderGalleryAdminCards();
+        await saveContentToServer(currentContent, 'Proyek baru ditambahkan ke galeri.');
+      });
+    }
+
+    // Save All Gallery Changes Button
+    if (btnSaveGallery && !btnSaveGallery.dataset.listenerAttached) {
+      btnSaveGallery.dataset.listenerAttached = 'true';
+      btnSaveGallery.addEventListener('click', async () => {
+        btnSaveGallery.disabled = true;
+        if (btnSaveGalleryText) btnSaveGalleryText.textContent = 'Menyimpan...';
+        await saveContentToServer(currentContent, '✓ Seluruh perubahan Galeri Project berhasil disimpan!');
+        setTimeout(() => {
+          btnSaveGallery.disabled = false;
+          if (btnSaveGalleryText) btnSaveGalleryText.textContent = 'Simpan Perubahan';
+        }, 1200);
+      });
+    }
   }
 
   // Client-side image compressor using HTML5 Canvas (keeps uploads fast, avoids Vercel 4.5MB payload limits)

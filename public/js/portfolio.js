@@ -13,12 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
     btn.addEventListener('click', () => {
       // Update active button state
       filterBtns.forEach(b => {
-        b.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-sm');
-        b.classList.add('bg-white', 'dark:bg-[#1E293B]', 'border', 'border-slate-300', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-300');
+        b.classList.remove('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/25');
+        b.classList.add('bg-slate-100', 'dark:bg-[#182238]', 'border', 'border-slate-200/80', 'dark:border-slate-700/80', 'text-slate-600', 'dark:text-slate-300');
       });
 
-      btn.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-sm');
-      btn.classList.remove('bg-white', 'dark:bg-[#1E293B]', 'border-slate-300', 'dark:border-slate-700', 'text-slate-600', 'dark:text-slate-300');
+      btn.classList.add('active', 'bg-blue-600', 'text-white', 'shadow-md', 'shadow-blue-600/25');
+      btn.classList.remove('bg-slate-100', 'dark:bg-[#182238]', 'border-slate-200/80', 'dark:border-slate-700/80', 'text-slate-600', 'dark:text-slate-300');
 
       const targetCategory = btn.getAttribute('data-category');
 

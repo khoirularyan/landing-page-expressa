@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | Expressa - Technology That Works Your Way</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230066FF'/><text x='50%' y='68%' font-size='60' font-family='sans-serif' font-weight='900' fill='white' text-anchor='middle'>E</text></svg>">
+  
+  <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            handwriting: ['Caveat', 'cursive']
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#0066FF',
+              600: '#0052CC',
+              700: '#003d99',
+              dark: '#0A0F1D',
+              navy: '#0B132B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Immediate Theme Initializer -->
+  <script src="/js/theme.js"></script>
+</head>
+<body class="bg-white dark:bg-[#131B2E] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+  <!-- ========================================== -->
+  <!-- NAVBAR                                     -->
+  <!-- ========================================== -->
+  <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between backdrop-blur-md bg-white/95 dark:bg-[#131B2E]/95 border-b border-slate-200/80 dark:border-slate-800 shadow-sm">
+    <!-- Brand Logo -->
+    <a href="/" class="flex flex-col group">
+      <div class="text-xl font-extrabold tracking-wider leading-tight text-blue-600 nav-logo-text">EXPRESSA</div>
+      <div class="nav-subtitle text-[10px] tracking-widest text-slate-500 dark:text-slate-400 font-medium -mt-0.5">Technology That Works Your Way</div>
+    </a>
+
+    <!-- Center Navigation Links -->
+    <div class="hidden md:flex items-center gap-7 lg:gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+      <a href="/" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Beranda</a>
+      <a href="/portofolio" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Portofolio</a>
+      <a href="/galeri" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Galeri Project</a>
+      <a href="/tim" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tim</a>
+      <a href="/about" class="nav-anchor text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-0.5 transition-colors">About Us</a>
+    </div>
+
+    <!-- Right Controls: Theme Toggle & CTA Button -->
+    <div class="flex items-center gap-3">
+      <!-- Dark / Light Mode Toggle Button -->
+      <button id="theme-toggle-btn" type="button" aria-label="Ganti Mode Tampilan" class="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
+        <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
+      </button>
+
+      <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-700 text-white text-xs md:text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 active:scale-95">
+        <span>Konsultasi</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========================================== -->
+  <!-- MAIN CONTENT CONTAINER                    -->
+  <!-- ========================================== -->
+  <main class="relative w-full pt-32 pb-24 overflow-hidden flex-1">
+    <!-- Ambient Backdrop Aura -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/3 -right-24 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+
+      <!-- Header Section -->
+      <div class="mb-16 text-center max-w-3xl mx-auto">
+
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight">
+          Teknologi yang Mengikuti <br>
+          <span class="text-blue-600 dark:text-blue-400">Cara Kerja Bisnis Anda.</span>
+        </h1>
+
+        <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm md:text-base mt-4 leading-relaxed max-w-2xl mx-auto">
+          Expressa didirikan dengan keyakinan bahwa sistem terbaik adalah sistem yang beradaptasi dengan keunikan proses bisnis Anda, mempermudah kerja tim lapangan, dan mendorong pertumbuhan tanpa kompromi.
+        </p>
+
+        <!-- Metric Numbers Strip -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 p-5 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 text-center">
+          <div class="p-2">
+            <div class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">200+</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">Sistem Selesai</div>
+          </div>
+          <div class="p-2">
+            <div class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">50+</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">Klien Korporasi</div>
+          </div>
+          <div class="p-2">
+            <div class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">15+</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">Klaster Industri</div>
+          </div>
+          <div class="p-2">
+            <div class="text-2xl sm:text-3xl font-black text-blue-600 dark:text-blue-400">98%</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5">Tingkat Kepuasan</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- SECTION 1: CERITA & LATAR BELAKANG KAMI     -->
+      <!-- ========================================== -->
+      <div class="clean-card bg-white dark:bg-[#182238] rounded-3xl border border-slate-200/80 dark:border-slate-800 p-6 sm:p-10 lg:p-12 mb-16 shadow-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          
+          <!-- Left: Image with Floating Impact Badges -->
+          <div class="lg:col-span-6 relative">
+            <div class="relative rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-900 aspect-[4/3] shadow-md border border-slate-200/80 dark:border-slate-800">
+              <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=80" alt="Kolaborasi Tim Expressa" class="w-full h-full object-cover">
+              
+              <!-- Floating Badge 1 -->
+              <div class="absolute top-4 left-4 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="font-extrabold text-slate-900 dark:text-white text-[11px]">100% Kustom &amp; Presisi</div>
+                  <div class="text-[9px] text-slate-500 dark:text-slate-400">Tanpa template kaku</div>
+                </div>
+              </div>
+
+              <!-- Floating Badge 2 -->
+              <div class="absolute bottom-4 right-4 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+                  <i data-lucide="shield-check" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <div class="font-extrabold text-slate-900 dark:text-white text-[11px]">Kedaulatan Data Penuh</div>
+                  <div class="text-[9px] text-slate-500 dark:text-slate-400">Aset mandiri milik klien</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Narrative Content -->
+          <div class="lg:col-span-6 space-y-4">
+            <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Perjalanan Kami</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+              Menjembatani Celah Antara Kebutuhan Nyata &amp; Kompleksitas Teknologi
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Banyak perusahaan di Indonesia menghadapi dilema digitalisasi: memilih software massal yang kaku dan memaksa tim mengubah kebiasaan kerja efektif mereka, atau mengembangkan sistem kustom yang seringkali berlarut-larut tanpa pemahaman bisnis yang mendalam.
+            </p>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              Expressa hadir membawa terobosan baru. Kami memadukan metodologi <strong class="text-slate-900 dark:text-white">Business Analysis First</strong> dengan arsitektur rekayasa software modern. Kami tidak sekadar mengetik baris kode, kami membedah alur operasional, menemukan hambatan, dan merancang sistem digital yang benar-benar dirasakan manfaatnya dari jajaran direksi hingga staf lapangan.
+            </p>
+            <div class="pt-2 flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
+                <span>Audit Alur Kerja Gratis</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
+                <span>Pendampingan Lapangan</span>
+              </div>
+              <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
+                <span>Integrasi Multi-Divisi</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- SECTION 2: VISI & MISI PERUSAHAAN          -->
+      <!-- ========================================== -->
+      <div class="mb-16">
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Arah &amp; Komitmen</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">Visi &amp; Misi Expressa</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          
+          <!-- Card Visi -->
+          <div class="clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-3xl p-8 sm:p-10 flex flex-col justify-between shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 dark:bg-blue-500/10 rounded-bl-full pointer-events-none"></div>
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-6">
+                <i data-lucide="compass" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Visi Perusahaan</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1 mb-4">
+                Mitra Transformasi Digital Terpercaya No. 1
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Menjadi katalis transformasi teknologi pilihan utama di Asia Tenggara yang mendemokratisasikan sistem enterprise kustom, sehingga setiap bisnis dapat memiliki infrastruktur digital berkelas dunia yang efisien, transparan, dan terukur.
+              </p>
+            </div>
+            <div class="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6 flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <i data-lucide="target" class="w-4 h-4 text-blue-500"></i>
+              <span>Fokus Strategis Jangka Panjang</span>
+            </div>
+          </div>
+
+          <!-- Card Misi -->
+          <div class="clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-3xl p-8 sm:p-10 flex flex-col justify-between shadow-sm relative overflow-hidden group">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 dark:bg-emerald-500/10 rounded-bl-full pointer-events-none"></div>
+            <div>
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-6">
+                <i data-lucide="flag" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Misi Perusahaan</span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1 mb-4">
+                3 Pilar Aksi Nyata Kami
+              </h3>
+              <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+                <div class="flex items-start gap-3">
+                  <div class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">1</div>
+                  <p class="leading-relaxed"><strong class="text-slate-900 dark:text-white">Presisi Operasional:</strong> Merancang sistem perangkat lunak yang selaras dengan SOP riil tanpa membebani tim dengan birokrasi sistem berlebih.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">2</div>
+                  <p class="leading-relaxed"><strong class="text-slate-900 dark:text-white">Integrasi Data Real-Time:</strong> Meniadakan silo informasi antardivisi, menyatukan rantai pasok, penjualan, dan akuntansi secara transparan.</p>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">3</div>
+                  <p class="leading-relaxed"><strong class="text-slate-900 dark:text-white">Adopsi Berkelanjutan:</strong> Mengawal proses implementasi, migrasi data, dan pelatihan hingga sistem benar-benar hidup dalam ritme kerja klien.</p>
+                </div>
+              </div>
+            </div>
+            <div class="pt-6 border-t border-slate-100 dark:border-slate-800 mt-6 flex items-center gap-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+              <i data-lucide="zap" class="w-4 h-4 text-emerald-500"></i>
+              <span>Eksekusi Terukur &amp; Teruji</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- SECTION 3: 4 NILAI UTAMA KAMI (CORE VALUES)-->
+      <!-- ========================================== -->
+      <div class="p-8 sm:p-12 rounded-3xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 mb-16 shadow-sm">
+        <div class="max-w-2xl mx-auto text-center mb-10">
+          <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Prinsip &amp; Fondasi</span>
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">4 Nilai Pokok Expressa</h2>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Komitmen moral dan teknis yang memandu setiap keputusan rekayasa sistem yang kami bangun.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <div class="clean-card bg-white dark:bg-[#131B2E] p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="activity" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Pragmatisme Solusi</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Kami tidak mengejar kerumitan teknologi demi gengsi. Tolok ukur keberhasilan kami adalah penghematan waktu dan akselerasi bisnis tim Anda.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Hasil Nyata Terukur
+            </div>
+          </div>
+
+          <div class="clean-card bg-white dark:bg-[#131B2E] p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="eye" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Transparansi Mutlak</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Setiap progres modul, status sprint mingguan, dan estimasi waktu disampaikan secara jujur dan terbuka tanpa ada hal yang ditutupi.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              Tanpa Biaya Siluman
+            </div>
+          </div>
+
+          <div class="clean-card bg-white dark:bg-[#131B2E] p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="key" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Kedaulatan Klien</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Anda memegang hak kendali penuh atas kode sumber dan basis data. Tidak ada skema lock-in yang mengunci kebebasan perusahaan Anda.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              100% Kepemilikan Klien
+            </div>
+          </div>
+
+          <div class="clean-card bg-white dark:bg-[#131B2E] p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
+            <div>
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base">Kemitraan Sejati</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Hubungan kami tidak berhenti di peluncuran. Kami siap menjadi departemen teknologi eksternal yang menjaga kestabilan sistem jangka panjang.
+              </p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 text-[10px] font-bold uppercase tracking-wider text-blue-600 dark:text-blue-400">
+              SLA &amp; Support Responsif
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- SECTION 4: EKSPLORASI EKOSISTEM EXPRESSA   -->
+      <!-- ========================================== -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+        
+        <div class="clean-card bg-white dark:bg-[#182238] p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between shadow-sm group">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+              <i data-lucide="users" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-lg">Kenali Tim Ahli Kami</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+              Temui para business analyst, project manager, UI/UX designer, dan cloud engineer yang siap mendampingi proyek Anda.
+            </p>
+          </div>
+          <div class="pt-6 mt-4">
+            <a href="/tim" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+              <span>Buka Profil Tim</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="clean-card bg-white dark:bg-[#182238] p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between shadow-sm group">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+              <i data-lucide="briefcase" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-lg">Studi Kasus Klien</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+              Pelajari bagaimana Cobra Dental, Petrokimia Gresik, dan puluhan mitra lain menuntaskan tantangan operasional mereka.
+            </p>
+          </div>
+          <div class="pt-6 mt-4">
+            <a href="/portofolio" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+              <span>Eksplorasi Portofolio</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="clean-card bg-white dark:bg-[#182238] p-6 sm:p-8 rounded-3xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between shadow-sm group">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4">
+              <i data-lucide="camera" class="w-5 h-5"></i>
+            </div>
+            <h3 class="font-bold text-slate-900 dark:text-white text-lg">Galeri Antarmuka Sistem</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+              Lihat pratinjau visual dasbor ERP, aplikasi kurir, dan otomasi alur kerja melalui showcase galeri foto proyek.
+            </p>
+          </div>
+          <div class="pt-6 mt-4">
+            <a href="/galeri" class="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+              <span>Buka Galeri Proyek</span>
+              <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- SECTION 5: BOTTOM BANNER CTA               -->
+      <!-- ========================================== -->
+      <div class="p-8 sm:p-12 rounded-3xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 text-center relative overflow-hidden shadow-sm">
+        <div class="relative z-10 max-w-2xl mx-auto space-y-3">
+          <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white">
+            Siap Membangun Sistem yang Mengikuti Cara Kerja Anda?
+          </h2>
+          <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Diskusikan kebutuhan operasional Anda secara langsung dengan tim analis Expressa. Tanpa biaya, tanpa komitmen awal.
+          </p>
+          <div class="pt-3 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button data-action="open-consultation" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-3 rounded-full flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-105 active:scale-95">
+              <span>Jadwalkan Konsultasi Gratis</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+            <a href="https://wa.me/6281234567890?text=Halo%20Expressa%2C%20saya%20tertarik%20mengenal%20lebih%20jauh%20dan%20ingin%20konsultasi%20sistem" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-full border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-[#1E293B] text-slate-700 dark:text-slate-200 text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+              <i data-lucide="message-circle" class="w-4 h-4 text-emerald-500"></i>
+              <span>Hubungi via WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- FOOTER (DARK NAVY LIKE HOMEPAGE)           -->
+  <!-- ========================================== -->
+  <footer class="bg-[#0B132B] dark:bg-[#0B132B] text-slate-400 dark:text-slate-300 py-10 px-6 md:px-12 text-xs border-t border-transparent dark:border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="font-bold text-white">EXPRESSA</span> &nbsp;|&nbsp; Technology That Works Your Way &copy; 2024. All rights reserved.
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/" class="hover:text-white transition-colors">Beranda</a>
+        <a href="/portofolio" class="hover:text-white transition-colors">Portofolio</a>
+        <a href="/galeri" class="hover:text-white transition-colors">Galeri Project</a>
+        <a href="/tim" class="hover:text-white transition-colors">Tim</a>
+        <a href="/about" class="text-blue-400 font-semibold">About Us</a>
+        <a href="/admin" class="hover:text-white transition-colors flex items-center gap-1">
+          <i data-lucide="shield" class="w-3 h-3"></i>
+          <span>CMS Admin</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================== -->
+  <!-- INTERACTIVE CONSULTATION MODAL             -->
+  <!-- ========================================== -->
+  <div id="consultation-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
+
+    <div id="modal-content" class="relative z-10 w-full max-w-lg bg-white dark:bg-[#182238] border border-slate-200 dark:border-slate-700/80 rounded-3xl shadow-2xl p-6 sm:p-8 text-slate-900 dark:text-white opacity-0 scale-95 translate-y-4 transition-all duration-300">
+      
+      <button id="close-modal-btn" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <form id="consultation-form" class="space-y-4">
+        <div>
+          <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">KONSULTASI GRATIS</span>
+          <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-0.5">Diskusikan Kebutuhan Digital Anda</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Isi formulir singkat di bawah ini, konsultan Expressa akan segera menghubungi Anda.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap *</label>
+            <input type="text" id="consultation-name" required placeholder="Contoh: Budi Santoso" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0B132B] transition-colors">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor WhatsApp *</label>
+            <input type="tel" id="consultation-phone" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0B132B] transition-colors">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Perusahaan / Usaha</label>
+            <input type="text" id="consultation-company" placeholder="Nama Perusahaan" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0B132B] transition-colors">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Bisnis</label>
+            <input type="email" id="consultation-email" placeholder="budi@company.com" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0B132B] transition-colors">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilihan Layanan / Solusi</label>
+          <select id="consultation-service" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0B132B] transition-colors">
+            <option value="Custom Software">Custom Software / Web Application</option>
+            <option value="Mobile Application">Mobile Application (Android & iOS)</option>
+            <option value="ERP & Business System">ERP & Business Management System</option>
+            <option value="System Integration">Integrasi Sistem & API</option>
+            <option value="AI & Automation">AI & Otomasi Alur Kerja</option>
+            <option value="IT & Digital Consulting">Konsultasi IT & Strategi Digital</option>
+            <option value="Lainnya">Lainnya / Ingin Berdiskusi Dahulu</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Ceritakan Singkat Kebutuhan Anda</label>
+          <textarea id="consultation-message" rows="3" placeholder="Misal: Kami ingin berdiskusi mengenai sistem ERP terintegrasi multi-cabang..." class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0B132B] transition-colors resize-none"></textarea>
+        </div>
+
+        <button type="submit" id="submit-consultation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm py-3 rounded-xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all">
+          <i data-lucide="loader-2" id="submit-spinner" class="w-4 h-4 animate-spin hidden"></i>
+          <span id="submit-btn-text">Kirim Pengajuan Konsultasi</span>
+        </button>
+      </form>
+
+      <!-- Success State -->
+      <div id="form-success" class="hidden text-center py-6 space-y-4">
+        <div class="w-14 h-14 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center mx-auto">
+          <i data-lucide="check" class="w-8 h-8"></i>
+        </div>
+        <div>
+          <h4 class="text-lg font-bold text-slate-900 dark:text-white">Terima Kasih, <span id="success-client-name">Klien</span>!</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+            Pengajuan konsultasi Anda telah berhasil kami terima. Tim Expressa akan segera menghubungi Anda dalam 1x24 jam kerja.
+          </p>
+        </div>
+        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a id="wa-direct-btn" href="#" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-colors">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+            <span>Chat Langsung via WhatsApp</span>
+          </a>
+          <button onclick="closeConsultationModal()" class="w-full sm:w-auto bg-slate-100 dark:bg-[#1E293B] hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors">
+            Tutup
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/js/consultation.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+  </script>
+</body>
+</html>
