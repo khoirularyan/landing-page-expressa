@@ -480,6 +480,16 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'login.html'));
 });
 
+// Route for /portofolio & /portfolio -> public/portofolio.html
+app.get(['/portofolio', '/portfolio', '/portofolio.html', '/proyek'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'portofolio.html'));
+});
+
+// Route for /tim & /team -> public/tim.html
+app.get(['/tim', '/team', '/tim.html', '/team.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'tim.html'));
+});
+
 // Route for /admin -> public/admin/index.html
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));

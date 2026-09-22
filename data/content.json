@@ -6,9 +6,50 @@
     "subtitle": "Setiap bisnis memiliki proses yang berbeda. Kami membantu mengubah proses tersebut menjadi sistem digital yang lebih terintegrasi, efisien, dan siap berkembang.",
     "ctaText": "Konsultasikan Kebutuhan Anda",
     "secondaryCtaText": "Lihat Project Kami",
-    "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
-    "imageCaption": "app.expressa.id/dashboard"
+    "imageUrl": "/assets/images/expressa-hero-team.png",
+    "imageCaption": "Tim Engineering Expressa"
   },
+  "whyUs": {
+    "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+  },
+  "clients": [
+    {
+      "id": "client-1",
+      "name": "COBRA DENTAL",
+      "icon": "building",
+      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZExMEhd_7hsaqNPZ4sKS8nLKPX1kcJZ085IBAe5qrvw&s=10"
+    },
+    {
+      "id": "client-2",
+      "name": "PETROKIMIA GRESIK",
+      "icon": "activity",
+      "logoUrl": "https://hems.jpp-petrokimia-gresik.com/gambar/img/JPP.png"
+    },
+    {
+      "id": "client-3",
+      "name": "FOKUS JASA MITRA",
+      "icon": "users",
+      "logoUrl": ""
+    },
+    {
+      "id": "client-4",
+      "name": "WHOLESALE ID",
+      "icon": "database",
+      "logoUrl": ""
+    },
+    {
+      "id": "client-5",
+      "name": "FMCG LOGISTICS",
+      "icon": "layers",
+      "logoUrl": ""
+    },
+    {
+      "id": "client-6",
+      "name": "MEDIKA UTAMA",
+      "icon": "shield-check",
+      "logoUrl": ""
+    }
+  ],
   "stats": {
     "stat1": {
       "number": "200+",
@@ -86,5 +127,6 @@
       "subtitle": "Pendampingan 24/7",
       "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
     }
-  ]
+  ],
+  "_lastUpdated": 1790043190845
 }

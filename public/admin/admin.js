@@ -204,6 +204,238 @@ document.addEventListener('DOMContentLoaded', () => {
           heroCaptionPreview.textContent = heroCaptionInput.value || 'app.expressa.id/dashboard';
         });
       }
+
+      // Hero File Upload
+      const heroFileInput = document.getElementById('hero-file-input');
+      const heroUploadStatus = document.getElementById('hero-upload-status');
+      if (heroFileInput && !heroFileInput.dataset.listenerAttached) {
+        heroFileInput.dataset.listenerAttached = 'true';
+        heroFileInput.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          if (heroUploadStatus) heroUploadStatus.textContent = 'Mengoptimasi & mengunggah...';
+          try {
+            const compressed = await compressImage(file, 1200, 0.85);
+            const uploadedUrl = await uploadImageFile(compressed);
+            if (uploadedUrl) {
+              if (heroUrlInput) heroUrlInput.value = uploadedUrl;
+              if (heroImg) heroImg.src = uploadedUrl;
+              if (heroUploadStatus) heroUploadStatus.textContent = '✓ Terunggah & aktif!';
+              if (!currentContent) currentContent = {};
+              if (!currentContent.hero) currentContent.hero = {};
+              currentContent.hero.imageUrl = uploadedUrl;
+              await saveContentToServer(currentContent, '✓ Gambar Hero berhasil disimpan & aktif!');
+              triggerImageSaveUIEffect('✓ Gambar Hero Tersimpan!');
+            } else {
+              if (heroUploadStatus) heroUploadStatus.textContent = 'Gagal upload.';
+            }
+          } catch (err) {
+            if (heroUploadStatus) heroUploadStatus.textContent = 'Gagal upload.';
+          }
+        });
+      }
+    }
+
+    // 2. Mengapa Expressa (Why Us Featurette)
+    const whyUsImg = document.getElementById('whyus-img-preview');
+    const whyUsUrlInput = document.getElementById('whyus-image-url');
+    const whyUsFileInput = document.getElementById('whyus-file-input');
+    const whyUsUploadStatus = document.getElementById('whyus-upload-status');
+
+    const currentWhyUsUrl = (data.whyUs && data.whyUs.imageUrl) ? data.whyUs.imageUrl : 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80';
+    if (whyUsImg) whyUsImg.src = currentWhyUsUrl;
+    if (whyUsUrlInput) {
+      whyUsUrlInput.value = currentWhyUsUrl;
+      if (!whyUsUrlInput.dataset.listenerAttached) {
+        whyUsUrlInput.dataset.listenerAttached = 'true';
+        whyUsUrlInput.addEventListener('input', () => {
+          if (whyUsImg) whyUsImg.src = whyUsUrlInput.value;
+        });
+      }
+    }
+    if (whyUsFileInput && !whyUsFileInput.dataset.listenerAttached) {
+      whyUsFileInput.dataset.listenerAttached = 'true';
+      whyUsFileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (whyUsUploadStatus) whyUsUploadStatus.textContent = 'Mengoptimasi & mengunggah...';
+        try {
+          const compressed = await compressImage(file, 1200, 0.85);
+          const uploadedUrl = await uploadImageFile(compressed);
+          if (uploadedUrl) {
+            if (whyUsUrlInput) whyUsUrlInput.value = uploadedUrl;
+            if (whyUsImg) whyUsImg.src = uploadedUrl;
+            if (whyUsUploadStatus) whyUsUploadStatus.textContent = '✓ Terunggah & aktif!';
+            if (!currentContent) currentContent = {};
+            if (!currentContent.whyUs) currentContent.whyUs = {};
+            currentContent.whyUs.imageUrl = uploadedUrl;
+            await saveContentToServer(currentContent, '✓ Gambar Mengapa Expressa berhasil disimpan & aktif!');
+            triggerImageSaveUIEffect('✓ Gambar Mengapa Expressa Tersimpan!');
+          } else {
+            if (whyUsUploadStatus) whyUsUploadStatus.textContent = 'Gagal upload.';
+          }
+        } catch (err) {
+          if (whyUsUploadStatus) whyUsUploadStatus.textContent = 'Gagal upload.';
+        }
+      });
+    }
+
+    // 3. Client Logos (Running Marquee Ticker)
+    const clientsContainer = document.getElementById('clients-container');
+    const btnAddClient = document.getElementById('btn-add-client');
+
+    function renderClientCards() {
+      if (!clientsContainer) return;
+      clientsContainer.innerHTML = '';
+      if (!currentContent.clients) currentContent.clients = [];
+
+      currentContent.clients.forEach((client, idx) => {
+        const card = document.createElement('div');
+        card.className = 'client-admin-card bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3';
+        card.dataset.clientId = client.id || `client-${idx + 1}`;
+
+        const hasLogo = Boolean(client.logoUrl);
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-[11px] font-bold text-slate-300 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span>Mitra #${idx + 1}</span>
+            </span>
+            <button type="button" class="btn-delete-client text-rose-400 hover:text-rose-300 p-1 rounded hover:bg-rose-500/10 transition-colors" title="Hapus Mitra">
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <!-- Preview -->
+          <div class="h-16 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center p-2.5 overflow-hidden">
+            <img id="client-preview-img-${idx}" src="${client.logoUrl || ''}" alt="${client.name || 'Logo'}" class="max-h-12 max-w-[140px] object-contain ${hasLogo ? '' : 'hidden'}">
+            <div id="client-preview-badge-${idx}" class="flex items-center gap-2 text-slate-300 font-bold text-xs ${hasLogo ? 'hidden' : ''}">
+              <div class="w-7 h-7 rounded-lg bg-blue-900/50 text-blue-400 flex items-center justify-center">
+                <i data-lucide="${client.icon || 'building'}" class="w-3.5 h-3.5"></i>
+              </div>
+              <span class="client-preview-name">${escapeHtml(client.name || 'Nama Perusahaan')}</span>
+            </div>
+          </div>
+
+          <!-- Name & Icon -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-1">Nama Perusahaan</label>
+              <input type="text" class="client-name-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(client.name || '')}">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-1">Fallback Icon</label>
+              <input type="text" class="client-icon-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(client.icon || 'building')}" placeholder="building, users, dsb">
+            </div>
+          </div>
+
+          <!-- Logo Upload & URL -->
+          <div class="space-y-1.5 pt-1">
+            <div class="flex items-center gap-2">
+              <input type="file" id="client-file-${idx}" accept="image/*" class="hidden">
+              <button type="button" class="btn-trigger-client-file bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5">
+                <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <span>Unggah Logo</span>
+              </button>
+              <span id="client-status-${idx}" class="text-[10px] text-slate-400"></span>
+            </div>
+            <input type="text" class="client-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-200 font-mono" value="${escapeHtml(client.logoUrl || '')}" placeholder="https://... atau biarkan kosong">
+          </div>
+        `;
+
+        clientsContainer.appendChild(card);
+
+        const nameInput = card.querySelector('.client-name-input');
+        const iconInput = card.querySelector('.client-icon-input');
+        const urlInput = card.querySelector('.client-url-input');
+        const previewImg = card.querySelector(`#client-preview-img-${idx}`);
+        const previewBadge = card.querySelector(`#client-preview-badge-${idx}`);
+        const previewName = card.querySelector('.client-preview-name');
+        const fileBtn = card.querySelector('.btn-trigger-client-file');
+        const fileInput = card.querySelector(`#client-file-${idx}`);
+        const statusSpan = card.querySelector(`#client-status-${idx}`);
+        const deleteBtn = card.querySelector('.btn-delete-client');
+
+        nameInput.addEventListener('input', () => {
+          client.name = nameInput.value;
+          if (previewName) previewName.textContent = nameInput.value || 'Nama Perusahaan';
+        });
+
+        iconInput.addEventListener('input', () => {
+          client.icon = iconInput.value || 'building';
+          if (window.lucide) lucide.createIcons();
+        });
+
+        urlInput.addEventListener('input', () => {
+          client.logoUrl = urlInput.value.trim();
+          if (client.logoUrl) {
+            previewImg.src = client.logoUrl;
+            previewImg.classList.remove('hidden');
+            previewBadge.classList.add('hidden');
+          } else {
+            previewImg.classList.add('hidden');
+            previewBadge.classList.remove('hidden');
+          }
+        });
+
+        if (fileBtn && fileInput) {
+          fileBtn.addEventListener('click', () => fileInput.click());
+          fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            statusSpan.textContent = 'Mengoptimasi & mengunggah...';
+            try {
+              const compressed = await compressImage(file, 500, 0.9);
+              const uploadedUrl = await uploadImageFile(compressed);
+              if (uploadedUrl) {
+                urlInput.value = uploadedUrl;
+                client.logoUrl = uploadedUrl;
+                previewImg.src = uploadedUrl;
+                previewImg.classList.remove('hidden');
+                previewBadge.classList.add('hidden');
+                statusSpan.textContent = '✓ Tersimpan!';
+
+                await saveContentToServer(currentContent, `✓ Logo Mitra (${client.name || 'Klien'}) berhasil disimpan & aktif!`);
+                triggerImageSaveUIEffect('✓ Logo Mitra Tersimpan!');
+              } else {
+                statusSpan.textContent = 'Gagal upload.';
+              }
+            } catch (err) {
+              statusSpan.textContent = 'Gagal upload.';
+            }
+          });
+        }
+
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', async () => {
+            if (confirm(`Hapus mitra "${client.name || 'ini'}" dari running ticker?`)) {
+              currentContent.clients.splice(idx, 1);
+              renderClientCards();
+              await saveContentToServer(currentContent, 'Mitra berhasil dihapus.');
+            }
+          });
+        }
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    renderClientCards();
+
+    if (btnAddClient && !btnAddClient.dataset.listenerAttached) {
+      btnAddClient.dataset.listenerAttached = 'true';
+      btnAddClient.addEventListener('click', async () => {
+        if (!currentContent.clients) currentContent.clients = [];
+        currentContent.clients.push({
+          id: `client-${Date.now()}`,
+          name: 'Perusahaan Mitra Baru',
+          icon: 'building',
+          logoUrl: ''
+        });
+        renderClientCards();
+        await saveContentToServer(currentContent, 'Mitra baru berhasil ditambahkan.');
+      });
     }
 
     // Case Studies Container
@@ -650,6 +882,30 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const captionInput = document.getElementById('hero-image-caption');
       if (captionInput) currentContent.hero.imageCaption = captionInput.value;
+
+      // Why Us Featurette Image
+      const whyUsUrlVal = document.getElementById('whyus-image-url')?.value;
+      if (whyUsUrlVal) {
+        if (!currentContent.whyUs) currentContent.whyUs = {};
+        currentContent.whyUs.imageUrl = whyUsUrlVal;
+      }
+
+      // Client Logos (Marquee Ticker)
+      const clientCards = document.querySelectorAll('.client-admin-card');
+      if (clientCards.length > 0) {
+        currentContent.clients = [];
+        clientCards.forEach((card, idx) => {
+          const name = card.querySelector('.client-name-input')?.value.trim() || `Mitra ${idx + 1}`;
+          const icon = card.querySelector('.client-icon-input')?.value.trim() || 'building';
+          const logoUrl = card.querySelector('.client-url-input')?.value.trim() || '';
+          currentContent.clients.push({
+            id: card.dataset.clientId || `client-${idx + 1}`,
+            name,
+            icon,
+            logoUrl
+          });
+        });
+      }
 
       // Case Studies
       if (currentContent.caseStudies) {

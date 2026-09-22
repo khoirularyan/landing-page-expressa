@@ -13,10 +13,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
   
-  <!-- Tailwind CSS CDN with configuration -->
+  <!-- Tailwind CSS CDN with Dark Mode configured -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
@@ -30,9 +31,8 @@
               500: '#0066FF',
               600: '#0052CC',
               700: '#003d99',
-              dark: '#0A0F1D',
-              darker: '#060913',
-              cyan: '#00D2FF'
+              dark: '#131B2E',
+              navy: '#0B132B'
             }
           }
         }
@@ -45,1457 +45,1275 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="/css/style.css">
-</head>
-<body class="bg-[#0A0F1D] text-slate-100 antialiased selection:bg-blue-600 selection:text-white">
 
-  <!-- Fixed Top Navbar -->
-  <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-3.5 px-6 md:px-12 flex items-center justify-between backdrop-blur-md border-b border-white/10 nav-dark-mode">
-    <!-- Brand Logo (Full Solid Blue as requested) -->
+  <!-- Immediate Theme Initializer -->
+  <script src="/js/theme.js"></script>
+</head>
+<body class="bg-white dark:bg-[#131B2E] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
+
+  <!-- ========================================== -->
+  <!-- NAVBAR                                     -->
+  <!-- ========================================== -->
+  <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between backdrop-blur-md border-b">
+    <!-- Brand Logo -->
     <a href="#beranda" class="flex flex-col group">
       <div class="text-xl font-extrabold tracking-wider leading-tight text-blue-600 nav-logo-text">EXPRESSA</div>
-      <div class="text-[10px] tracking-widest text-slate-400 font-medium -mt-0.5">Technology That Works Your Way</div>
+      <div class="nav-subtitle text-[10px] tracking-widest text-slate-500 dark:text-slate-400 font-medium -mt-0.5">Technology That Works Your Way</div>
     </a>
 
     <!-- Center Navigation Links -->
-    <div class="hidden md:flex items-center gap-6 lg:gap-7 text-sm font-medium">
-      <a href="#beranda" data-slide-target="0" class="nav-anchor text-blue-600 font-semibold transition-colors">Beranda</a>
-      <a href="#tentang-kami" data-slide-target="1" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Tentang Kami</a>
-      <a href="#tantangan" data-slide-target="2" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Tantangan</a>
-      <a href="#solusi" data-slide-target="3" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Solusi</a>
-      <a href="#transformasi" data-slide-target="4" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Transformasi</a>
-      <a href="#cara-kerja" data-slide-target="5" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Cara Kerja</a>
-      <a href="#project" data-slide-target="6" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Project</a>
-      <a href="#tim" data-slide-target="7" class="nav-anchor text-slate-400 hover:text-blue-500 transition-colors">Tim</a>
+    <div class="hidden md:flex items-center gap-7 lg:gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+      <a href="#beranda" class="nav-anchor text-blue-600 dark:text-blue-400 font-semibold transition-colors">Beranda</a>
+      <a href="#framework" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Framework</a>
+      <a href="#layanan" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Layanan</a>
+      <a href="/portofolio" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5">
+        <span>Portofolio</span>
+        <span class="nav-badge-new text-[10px] bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-300 border border-blue-200 dark:border-blue-700/60 px-1.5 py-0.5 rounded-full font-bold">Baru</span>
+      </a>
+      <a href="/tim" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tim</a>
     </div>
 
-    <!-- Right CTA Button -->
-    <div class="flex items-center gap-4">
-      <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white text-xs md:text-sm font-semibold px-5 py-2 rounded-full transition-all duration-300 flex items-center gap-2 shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 hover:scale-105 active:scale-95">
+    <!-- Right Controls: Theme Toggle & CTA Button -->
+    <div class="flex items-center gap-3">
+      <!-- Dark / Light Mode Toggle Button -->
+      <button id="theme-toggle-btn" type="button" aria-label="Ganti Mode Tampilan" class="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
+        <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
+      </button>
+
+      <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-700 text-white text-xs md:text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 active:scale-95">
         <span>Konsultasi</span>
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </button>
     </div>
   </nav>
 
-  <!-- Right Edge Floating Navigation Dots -->
-  <div class="deck-nav-dots hidden lg:flex">
-    <div class="deck-dot active" data-slide="0" onclick="goToSlide(0)">
-      <span class="dot-label">Beranda</span>
-    </div>
-    <div class="deck-dot" data-slide="1" onclick="goToSlide(1)">
-      <span class="dot-label">Setiap Bisnis Unik</span>
-    </div>
-    <div class="deck-dot" data-slide="2" onclick="goToSlide(2)">
-      <span class="dot-label">Tantangan Bisnis</span>
-    </div>
-    <div class="deck-dot" data-slide="3" onclick="goToSlide(3)">
-      <span class="dot-label">Solusi Digital</span>
-    </div>
-    <div class="deck-dot" data-slide="4" onclick="goToSlide(4)">
-      <span class="dot-label">Transformasi</span>
-    </div>
-    <div class="deck-dot" data-slide="5" onclick="goToSlide(5)">
-      <span class="dot-label">Cara Kerja</span>
-    </div>
-    <div class="deck-dot" data-slide="6" onclick="goToSlide(6)">
-      <span class="dot-label">Case Studies</span>
-    </div>
-    <div class="deck-dot" data-slide="7" onclick="goToSlide(7)">
-      <span class="dot-label">Tim Kami</span>
-    </div>
-  </div>
-
-  <!-- Main Content Wrapper (Continuous Natural Scroll) -->
+  <!-- ========================================== -->
+  <!-- MAIN CONTENT CONTAINER                    -->
+  <!-- ========================================== -->
   <main class="relative w-full overflow-hidden">
 
-      <!-- ========================================== -->
-      <!-- SECTION 01: HERO / BERANDA                 -->
-      <!-- ========================================== -->
-      <section id="beranda" class="section-layer bg-[#0A0F1D] text-white pt-28 pb-12 px-6 md:px-12 relative flex flex-col justify-between overflow-hidden">
-        <!-- Ultra-Clean Premium Dark Ambient Background -->
-        <div class="absolute top-1/4 -left-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="absolute bottom-1/3 right-10 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- ======================================================== -->
+    <!-- SECTION 01: HERO WITH CONTRAST NAVY & FLOATING PILLARS   -->
+    <!-- ======================================================== -->
+    <section id="beranda" class="pt-32 pb-28 sm:pb-36 md:pb-40 px-6 md:px-12 bg-[#0B132B] dark:bg-[#0E1729] text-white curved-bottom relative overflow-hidden transition-colors duration-200">
+      <!-- Decorative Glow & Dot Accents -->
+      <div class="absolute inset-0 bg-[radial-gradient(#1e3a8a_1.2px,transparent_1.2px)] [background-size:24px_24px] opacity-20 pointer-events-none"></div>
+      <div class="absolute -top-20 -right-20 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-20 -left-20 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none"></div>
 
-        <!-- Main Content Grid -->
-        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center flex-1 max-w-7xl mx-auto w-full">
+      <div class="max-w-7xl mx-auto w-full relative z-10">
+
+
+        <!-- Hero Grid: Left Content (7 cols) & Right Image (5 cols) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          <!-- Left Column: Copywriting & CTA -->
-          <div class="lg:col-span-6 space-y-6">
-            <h1 class="reveal-init delay-200 text-3xl md:text-5xl lg:text-[52px] font-extrabold leading-[1.15] tracking-tight">
-              <span id="hero-headline-1">Sistem Digital</span> <br>
-              <span id="hero-headline-2" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-white">yang Mengikuti</span> <br>
+          <!-- Left Column -->
+          <div class="lg:col-span-7 space-y-5">
+            <h1 class="reveal-init delay-100 text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-white leading-[1.14] tracking-tight">
+              <span id="hero-headline-1">Sistem Digital</span> <br class="hidden sm:inline">
+              <span id="hero-headline-2" class="text-blue-400">yang Mengikuti</span> <br class="hidden sm:inline">
               <span id="hero-headline-3">Cara Kerja Bisnis Anda.</span>
             </h1>
 
-            <p id="hero-subtitle" class="reveal-init delay-300 text-slate-300 text-sm md:text-base leading-relaxed max-w-xl font-normal">
-              Setiap bisnis memiliki proses yang berbeda. Kami membantu mengubah proses tersebut menjadi sistem digital yang lebih terintegrasi, efisien, dan siap berkembang.
+            <p id="hero-subtitle" class="reveal-init delay-200 text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl font-normal">
+              Bukan bisnis Anda yang dipaksa mengikuti sistem kaku. Kami merancang ERP kustom, aplikasi operasional, dan otomasi alur kerja yang presisi dan siap berkembang.
             </p>
 
-            <div class="reveal-init delay-400 flex flex-wrap items-center gap-4 pt-2">
-              <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-6 py-3 rounded-full flex items-center gap-2 shadow-lg shadow-blue-600/40 hover:shadow-blue-500/60 transition-all hover:scale-105 active:scale-95">
-                <span id="hero-cta-text">Konsultasikan Kebutuhan Anda</span>
+            <div class="reveal-init delay-300 flex flex-wrap items-center gap-4 pt-3">
+              <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-7 py-3.5 rounded-full flex items-center gap-2 shadow-lg shadow-blue-600/30 hover:scale-105 transition-all active:scale-95">
+                <span id="hero-cta-text">Jadwalkan Konsultasi</span>
                 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </button>
 
-              <button onclick="goToSlide(3);" class="glass-panel text-white hover:bg-white/10 font-semibold text-sm px-6 py-3 rounded-full border border-white/20 transition-all hover:scale-105 active:scale-95">
-                <span id="hero-secondary-cta-text">Lihat Project Kami</span>
+              <a href="/portofolio" class="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-6 py-3.5 rounded-full border border-white/20 transition-all flex items-center gap-2 hover:scale-105 active:scale-95">
+                <span id="hero-secondary-cta-text">Lihat Portofolio</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 text-blue-400"></i>
+              </a>
+
+              <div class="inline-flex items-center gap-2 text-xs text-slate-400 pl-2">
+                <i data-lucide="check" class="w-4 h-4 text-emerald-400"></i>
+                <span>Garansi Source Code Mandiri</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column (Hero Transparent Cutout) -->
+          <div class="lg:col-span-5 relative flex justify-center lg:justify-end items-end">
+            <div class="relative w-full max-w-lg flex flex-col items-center lg:items-end">
+              <!-- Soft ambient blue glow behind the team -->
+              <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+              <!-- Transparent Cutout Image (Clean, No Card, No Black Box) -->
+              <img id="hero-preview-img" src="/assets/images/expressa-hero-team.png" alt="Tim Expressa Engineering" class="relative z-10 w-full h-auto max-h-[420px] lg:max-h-[460px] object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.6)] hover:scale-105 transition-transform duration-500">
+
+              <!-- Floating badge: Dedicated Engineering Team -->
+              <div class="relative -mt-6 z-20 w-full max-w-sm bg-slate-900/80 dark:bg-slate-900/90 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/15 shadow-2xl flex items-center gap-3">
+                <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-md shadow-blue-600/40">
+                  <i data-lucide="code-2" class="w-4 h-4"></i>
+                </div>
+                <div class="overflow-hidden">
+                  <div class="text-xs font-bold text-white tracking-wide truncate">Dedicated Engineering Team</div>
+                  <div class="text-[10px] text-blue-300 truncate">Solusi digital dibangun presisi untuk alur kerja Anda</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- OVERLAPPING FLOATING PILLARS (3 CORE CAPABILITIES)       -->
+    <!-- ======================================================== -->
+    <div class="max-w-7xl mx-auto px-6 md:px-12 overlap-shift-up">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        
+        <!-- Pillar 1 -->
+        <div onclick="openConsultationModal('ERP & Business System')" class="clean-card p-6 bg-white dark:bg-[#182238] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-blue-500 transition-all cursor-pointer group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i data-lucide="database" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30 px-2.5 py-1 rounded-full">Sistem Inti</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Enterprise ERP & Bisnis</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+              Multi-gudang, stok ber-serial number, purchase order, dan laporan laba rugi otomatis tanpa selisih.
+            </p>
+          </div>
+          <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+            <span>Pelajari Solusi</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div onclick="openConsultationModal('Mobile Application')" class="clean-card p-6 bg-white dark:bg-[#182238] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-indigo-500 transition-all cursor-pointer group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                <i data-lucide="smartphone" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2.5 py-1 rounded-full">Mobile & Web</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Custom Web & Mobile App</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+              Aplikasi iOS & Android untuk tim lapangan, kurir, dan sales, tersinkronisasi real-time ke dasbor pusat.
+            </p>
+          </div>
+          <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+            <span>Pelajari Solusi</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div onclick="openConsultationModal('AI & Automation')" class="clean-card p-6 bg-white dark:bg-[#182238] border border-slate-200/90 dark:border-slate-700 shadow-xl rounded-2xl flex flex-col justify-between hover:border-cyan-500 transition-all cursor-pointer group">
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-cyan-50 dark:bg-cyan-900/40 text-cyan-600 dark:text-cyan-400 flex items-center justify-center group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                <i data-lucide="cpu" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[11px] font-bold text-cyan-600 dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/30 px-2.5 py-1 rounded-full">Otomasi & AI</span>
+            </div>
+            <h3 class="text-base font-bold text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Workflow AI & API Gateway</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+              Integrasi WhatsApp, payment gateway, OCR invoice instan, dan pertukaran data antar sistem tanpa kendala.
+            </p>
+          </div>
+          <div class="pt-4 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs font-semibold text-cyan-600 dark:text-cyan-400">
+            <span>Pelajari Solusi</span>
+            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 02: FRAMEWORK EXPRESSA SOLUTION (PIPELINE FLOW)   -->
+    <!-- ======================================================== -->
+    <section id="framework" class="py-20 px-4 sm:px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+      <div class="max-w-7xl mx-auto w-full">
+        
+        <!-- Header -->
+        <div class="text-center max-w-3xl mx-auto mb-10 sm:mb-12">
+          <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            Framework Expressa <span class="text-blue-600 dark:text-blue-400">Solution.</span>
+          </h2>
+          <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm mt-2 leading-relaxed">
+            Alur terintegrasi dari registrasi awal hingga pemeliharaan jangka panjang, memastikan adopsi sistem berhasil tanpa disrupsi operasional.
+          </p>
+        </div>
+
+        <!-- Pipeline Showcase Container with modern ambient backdrop (Clean Borderless) -->
+        <div class="relative bg-slate-50/70 dark:bg-[#151F33]/80 rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm overflow-hidden">
+          
+          <!-- Ambient soft aura -->
+          <div class="absolute -top-24 -left-24 w-72 h-72 bg-blue-500/10 dark:bg-blue-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-indigo-500/10 dark:bg-indigo-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+          <!-- Controls Header -->
+          <div class="flex items-center justify-between gap-4 mb-4 sm:mb-6 px-2">
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+              <span class="flex h-2 w-2 relative">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
+              </span>
+              <span>11 Tahap Terkoneksi • Klik kartu untuk melihat detail</span>
+            </div>
+
+            <!-- Navigation Arrow Buttons (Clean Borderless) -->
+            <div class="flex items-center gap-2">
+              <button id="framework-prev-btn" aria-label="Geser ke kiri" class="w-9 h-9 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <button id="framework-next-btn" aria-label="Geser ke kanan" class="w-9 h-9 rounded-full bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 flex items-center justify-center shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 transition-all">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
               </button>
             </div>
           </div>
 
-          <!-- Right Column: Borderless Clean Image with Vignette & Bottom Blend -->
-          <div class="lg:col-span-6 relative flex items-center justify-center reveal-scale delay-200">
-            <!-- Ambient Soft Glow Behind Image -->
-            <div class="absolute w-80 h-80 sm:w-[420px] sm:h-[420px] bg-blue-600/25 rounded-full blur-3xl pointer-events-none"></div>
-
-            <!-- Frameless, Borderless Image with Soft Vignette Blend -->
-            <div class="relative w-full flex items-center justify-center py-4 hero-image-blend">
-              <img id="hero-preview-img" 
-                   src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" 
-                   alt="Expressa Digital System" 
-                   class="hero-vignette-mask max-h-[460px] md:max-h-[520px] w-auto max-w-full object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
-              
-              <!-- Soft Vignette Radial Overlay -->
-              <div class="hero-radial-vignette-overlay"></div>
-              <!-- Subtle Bottom Dissolve Fade into Section Background -->
-              <div class="hero-bottom-fade"></div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Bottom Bar: Trusted Partners & Statistics -->
-        <div class="relative z-10 border-t border-slate-800/80 pt-4 pb-2 max-w-7xl mx-auto w-full flex flex-col md:flex-row items-center justify-between gap-6 text-xs text-slate-400">
-          
-          <div class="flex items-center gap-2 text-slate-400 text-xs font-semibold tracking-wider uppercase">
-            <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-            <span>Solusi Teknologi Untuk Pertumbuhan Bisnis</span>
-          </div>
-
-          <!-- Right: Key Numbers -->
-          <div class="flex items-center gap-6 sm:gap-8 divide-x divide-slate-800">
-            <div class="text-center sm:text-left">
-              <div id="stat1-number" class="text-lg md:text-xl font-black text-white">200+</div>
-              <div id="stat1-label" class="text-[10px] text-slate-400">Project Selesai</div>
-            </div>
-            <div class="pl-6 text-center sm:text-left">
-              <div id="stat2-number" class="text-lg md:text-xl font-black text-white">50+</div>
-              <div id="stat2-label" class="text-[10px] text-slate-400">Klien Perusahaan</div>
-            </div>
-            <div class="pl-6 text-center sm:text-left">
-              <div id="stat3-number" class="text-lg md:text-xl font-black text-white">15+</div>
-              <div id="stat3-label" class="text-[10px] text-slate-400">Industri</div>
-            </div>
-            <div class="pl-6 text-center sm:text-left">
-              <div id="stat4-number" class="text-lg md:text-xl font-black text-blue-400">98%</div>
-              <div id="stat4-label" class="text-[10px] text-slate-400">Kepuasan Klien</div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- SECTION 02: SETIAP BISNIS ITU UNIK         -->
-      <!-- ========================================== -->
-      <section id="tentang-kami" class="section-layer bg-slate-50 text-slate-800 pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between overflow-hidden">
-
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          
-          <!-- Top Section: Header & Copywriting -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div class="lg:col-span-8 space-y-3">
-              <!-- Main Title -->
-              <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight">
-                Setiap Bisnis Punya <br>
-                <span class="text-blue-600">Cara Kerja</span> yang Berbeda.
-              </h2>
-
-              <p class="reveal-init delay-300 text-slate-600 text-sm md:text-base max-w-2xl leading-relaxed">
-                Dari proses operasional hingga laporan, setiap perusahaan memiliki alur dan kebutuhan yang berbeda.
-              </p>
-            </div>
-
-            <!-- Right Script Accent & Side Label & Photo -->
-            <div class="lg:col-span-4 flex flex-col items-end justify-between self-stretch space-y-3 reveal-scale delay-200">
-              <div class="font-handwriting text-3xl md:text-4xl text-blue-600 transform -rotate-3 text-right">
-                Different Business <br>
-                <span class="text-blue-500">Different Solution</span>
-              </div>
-              <div class="relative rounded-2xl overflow-hidden shadow-md border border-slate-200/80 max-w-[240px]">
-                <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=800&q=80" alt="Expressa Professional" class="w-full h-28 object-cover">
-                <div class="absolute bottom-2 left-2 right-2 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-white flex items-center justify-between text-[10px]">
-                  <span class="font-bold text-blue-400">EXPRESSA</span>
-                  <span class="text-slate-300">Custom Systems</span>
-                </div>
-              </div>
-              <div class="hidden lg:block text-[11px] tracking-widest text-slate-400 uppercase font-semibold text-right">
-                SOLUSI TEKNOLOGI UNTUK PERTUMBUHAN BISNIS
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle Section: 6 Connected Process Flow Cards -->
-          <div class="py-6">
-            <div class="reveal-init delay-100 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center justify-between">
-              <span>Alur Operasional Yang Terhubung Secara Seamless:</span>
-              <span class="text-[11px] text-blue-600 font-normal italic">Klik kartu untuk melihat detail</span>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-6 gap-3 relative">
-              
-              <!-- Step 1: Order -->
-              <div class="reveal-scale delay-100 workflow-step-card bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer text-center group">
-                <div class="w-11 h-11 mx-auto rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <i data-lucide="file-text" class="w-5 h-5"></i>
-                </div>
-                <div class="font-bold text-slate-900 text-sm">Order</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Penerimaan & Validasi</div>
-              </div>
-
-              <!-- Step 2: Approval -->
-              <div class="reveal-scale delay-200 workflow-step-card bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer text-center group">
-                <div class="w-11 h-11 mx-auto rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <i data-lucide="user-check" class="w-5 h-5"></i>
-                </div>
-                <div class="font-bold text-slate-900 text-sm">Approval</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Otorisasi Berjenjang</div>
-              </div>
-
-              <!-- Step 3: Produksi -->
-              <div class="reveal-scale delay-300 workflow-step-card bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer text-center group">
-                <div class="w-11 h-11 mx-auto rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <i data-lucide="settings" class="w-5 h-5"></i>
-                </div>
-                <div class="font-bold text-slate-900 text-sm">Produksi</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Jadwal & Pabrikasi</div>
-              </div>
-
-              <!-- Step 4: Warehouse -->
-              <div class="reveal-scale delay-400 workflow-step-card bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer text-center group">
-                <div class="w-11 h-11 mx-auto rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <i data-lucide="package" class="w-5 h-5"></i>
-                </div>
-                <div class="font-bold text-slate-900 text-sm">Warehouse</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Stok & Mutasi Barang</div>
-              </div>
-
-              <!-- Step 5: Finance -->
-              <div class="reveal-scale delay-500 workflow-step-card bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer text-center group">
-                <div class="w-11 h-11 mx-auto rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <i data-lucide="database" class="w-5 h-5"></i>
-                </div>
-                <div class="font-bold text-slate-900 text-sm">Finance</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Faktur & Arus Kas</div>
-              </div>
-
-              <!-- Step 6: Reporting -->
-              <div class="reveal-scale delay-600 workflow-step-card bg-white rounded-xl p-4 border border-slate-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer text-center group">
-                <div class="w-11 h-11 mx-auto rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                  <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-                </div>
-                <div class="font-bold text-slate-900 text-sm">Reporting</div>
-                <div class="text-[11px] text-slate-500 mt-0.5">Analitik Real-Time</div>
-              </div>
-
-            </div>
-
-            <!-- Dynamic Workflow Step Detail Bar -->
-            <div id="workflow-detail-box" class="reveal-init delay-300 mt-4 p-3.5 bg-blue-50/70 border border-blue-200/80 rounded-xl flex items-center justify-between transition-all duration-300 opacity-90">
-              <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
-                  <i data-lucide="check" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <div id="workflow-detail-title" class="font-bold text-slate-900 text-xs">Sistem Terkoneksi Penuh</div>
-                  <div id="workflow-detail-desc" class="text-[11px] text-slate-600">Semua tahapan dari Order hingga Reporting saling bertukar data otomatis tanpa input berulang.</div>
-                </div>
-              </div>
-              <button onclick="goToSlide(3);" class="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1">
-                <span>Pelajari Solusi</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Bottom Section: Callout & Footer -->
-          <div class="space-y-4 pt-2">
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <!-- Left Statement -->
-              <div class="md:col-span-6">
-                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">KARENA ITU,</div>
-                <div class="text-lg md:text-xl font-bold text-slate-900 leading-snug mt-1">
-                  Sistem yang digunakan harus mampu <br>
-                  <span class="text-blue-600">menyesuaikan kebutuhan bisnis Anda.</span>
-                </div>
-              </div>
-
-              <!-- Right Callout Card -->
-              <div class="md:col-span-6">
-                <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex items-center justify-between gap-4">
-                  <div class="flex items-center gap-3.5">
-                    <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                      <i data-lucide="lightbulb" class="w-5 h-5"></i>
-                    </div>
-                    <p class="text-xs md:text-sm text-slate-700 font-medium leading-relaxed">
-                      Satu proses yang tepat, dapat membawa perubahan besar untuk efisiensi dan pertumbuhan bisnis.
-                    </p>
-                  </div>
-
-                  <button onclick="goToSlide(3);" class="shrink-0 flex items-center gap-2 text-xs font-bold text-slate-800 hover:text-blue-600 group transition-colors">
-                    <span class="hidden sm:inline text-right leading-tight">Lihat Bagaimana<br>Kami Membantu</span>
-                    <div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-md shadow-blue-600/30">
-                      <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </div>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Slide Footer -->
-            <div class="border-t border-slate-200 pt-3 flex items-center justify-between text-xs text-slate-500">
-              <div class="font-medium">
-                <span class="font-bold text-slate-900">EXPRESSA</span> &nbsp;|&nbsp; Technology That Works Your Way.
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      <!-- ========================================== -->
-      <!-- SECTION 03: TANTANGAN BISNIS               -->
-      <!-- ========================================== -->
-      <section id="tantangan" class="section-layer bg-[#070B14] text-white pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between overflow-hidden">
-        <!-- Clean Soft Ambient Glow (No Distracting Photo Background) -->
-        <div class="absolute top-1/4 -right-40 w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
-        <div class="absolute bottom-1/4 -left-40 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[120px] pointer-events-none"></div>
-
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          
-          <!-- Top Section: Header & Copywriting -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div class="lg:col-span-7 space-y-4">
-              <!-- Main Title -->
-              <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold leading-tight">
-                Banyak Hambatan <br>
-                di <span class="text-blue-500">Setiap Proses.</span>
-              </h2>
-
-              <p class="reveal-init delay-300 text-slate-300 text-sm md:text-base max-w-xl leading-relaxed">
-                Proses yang tidak terhubung sering kali membuat pekerjaan lebih lambat dan peluang terlewat.
-              </p>
-
-              <div class="reveal-init delay-400">
-                <button onclick="goToSlide(3);" class="inline-flex items-center gap-3 text-sm font-semibold text-white hover:text-blue-400 transition-colors group">
-                  <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center group-hover:scale-110 shadow-lg shadow-blue-600/40 transition-transform">
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                  </div>
-                  <span>Lihat Solusinya</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Right Column: Vertical Label -->
-            <div class="hidden lg:flex lg:col-span-5 flex-col items-end justify-between self-stretch reveal-init delay-300">
-              <div class="text-[11px] tracking-widest text-slate-400 uppercase font-semibold text-right">
-                PROSES YANG LEBIH BAIK
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle Section: 5 Floating Problem Cards (Glassmorphism) -->
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-4 items-center">
+          <!-- Horizontal Connected Pipeline Track with Direct Card Popovers -->
+          <div id="framework-track" class="pipeline-track flex items-start overflow-x-auto no-scrollbar scroll-smooth pt-4 pb-36 sm:pb-40 px-6 sm:px-12">
             
-            <!-- Stack of Manual Papers Graphic Hint -->
-            <div class="md:col-span-4 space-y-2">
-              <div class="glass-card-dark p-3.5 rounded-xl border border-slate-700/60 flex items-center gap-3">
-                <div class="w-8 h-8 rounded bg-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
-                  <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+            <!-- 01. Order -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0 active" data-step-index="0">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="file-text" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
                 </div>
-                <div class="text-xs">
-                  <div class="font-bold text-white">Manual Process Overload</div>
-                  <div class="text-[10px] text-slate-400">Pekerjaan administrasi berulang memakan 40% waktu tim.</div>
-                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Order</span>
               </div>
 
-              <div class="glass-card-dark p-3.5 rounded-xl border border-slate-700/60 flex items-center gap-3">
-                <div class="w-8 h-8 rounded bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-0 sm:left-1/2 sm:-translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-10 sm:left-1/2 sm:-translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">01 • Order</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Registrasi kebutuhan awal, pemetaan target bisnis, dan penentuan ruang lingkup proyek.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 1 -> 2 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 02. Assesmen -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="1">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="clipboard-check" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Assesmen</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">02 • Assesmen</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Evaluasi alur kerja eksisting dan audit infrastruktur teknologi perusahaan saat ini.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 2 -> 3 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 03. POV Stakeholder -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="2">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="users" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">POV Stakeholder</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">03 • POV Stakeholder</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Menjaring kebutuhan riil dari jajaran manajemen hingga operator staf lapangan.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 3 -> 4 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 04. Blueprint -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="3">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="compass" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Blueprint</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">04 • Blueprint</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Cetak biru arsitektur sistem, skema basis data, dan rancangan prototipe UI/UX.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 4 -> 5 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 05. Development -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="4">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="code" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Development</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">05 • Development</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Penulisan kode program modular, aman, scalable, dan berstandar modern.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 5 -> 6 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 06. QC -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="5">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="shield-check" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">QC</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">06 • QC</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Pengujian performa sistem, akurasi fungsional, stress test beban, dan audit keamanan.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 6 -> 7 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 07. UAT -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="6">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="check-square" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">UAT</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">07 • UAT</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Simulasi alur dan validasi langsung oleh tim Anda sebelum sistem digunakan nyata.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 7 -> 8 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 08. Training -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="7">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="graduation-cap" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Training</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">08 • Training</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Pelatihan komprehensif bagi seluruh pengguna lengkap dengan video panduan & SOP.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 8 -> 9 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 09. Pre Go-Live -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="8">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="server" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Pre Go-Live</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">09 • Pre Go-Live</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Migrasi data riil, uji coba koneksi jaringan, dan verifikasi server produksi.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 9 -> 10 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 10. Launching -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="9">
+              <div class="framework-card w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="rocket" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Launching</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 left-1/2 -translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">10 • Launching</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Peluncuran resmi sistem operasional dengan pengawalan teknis langsung di lokasi.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Connector 10 -> 11 -->
+            <div class="flex items-center justify-center relative shrink-0 w-8 sm:w-12 md:w-14 self-start mt-16 sm:mt-18 md:mt-20">
+              <div class="w-full h-[2px] bg-blue-500/80 dark:bg-blue-400/80"></div>
+              <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/40 shrink-0">
+                <i data-lucide="arrow-right" class="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[2.5]"></i>
+              </div>
+            </div>
+
+            <!-- 11. Support & Maintenance -->
+            <div class="step-wrapper relative flex flex-col items-center shrink-0" data-step-index="10">
+              <div class="framework-card w-36 h-32 sm:w-40 sm:h-36 md:w-44 md:h-40 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#182238] shadow-[0_4px_20px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.25)] flex flex-col items-center justify-center p-3 text-center cursor-pointer select-none group">
+                <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
+                  <i data-lucide="headphones" class="w-7 h-7 sm:w-8 sm:h-8 stroke-[2]"></i>
+                </div>
+                <span class="text-xs sm:text-sm font-bold text-slate-800 dark:text-white leading-tight">Support &amp; Maintenance</span>
+              </div>
+
+              <!-- Popover Kecil -->
+              <div class="step-popover absolute top-full mt-3 right-0 left-auto sm:left-1/2 sm:right-auto sm:-translate-x-1/2 w-60 sm:w-64 p-3.5 bg-white dark:bg-[#1E293B] rounded-2xl shadow-xl shadow-slate-900/10 dark:shadow-black/40 z-30 pointer-events-none">
+                <div class="absolute -top-1.5 right-10 sm:left-1/2 sm:-translate-x-1/2 w-3.5 h-3.5 bg-white dark:bg-[#1E293B] rotate-45 rounded-xs"></div>
+                <div class="relative z-10 text-center">
+                  <div class="text-[11px] font-mono font-bold text-blue-600 dark:text-blue-400 mb-0.5">11 • Support &amp; Maintenance</div>
+                  <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    Pemeliharaan server berkala, backup harian otomatis, dan jaminan respon cepat SLA.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Summary Strip -->
+          <div class="mt-2 flex flex-wrap items-center justify-between gap-3 px-2 text-xs text-slate-500 dark:text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+              Transparan, terukur, dan didampingi langsung oleh tim ahli teknis Expressa.
+            </span>
+            <a href="#konsultasi" class="inline-flex items-center gap-1 font-bold text-blue-600 dark:text-blue-400 hover:underline">
+              Konsultasikan alur implementasi Anda <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 03: CLIENT TRUST STRIP (RUNNING MARQUEE TICKER)  -->
+    <!-- ======================================================== -->
+    <section class="py-10 px-6 md:px-12 bg-slate-50 dark:bg-[#182238] border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200 overflow-hidden">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-6">
+          <span class="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest">
+            Dipercaya Oleh Berbagai Perusahaan Nasional
+          </span>
+        </div>
+        
+        <!-- Infinite Running Marquee -->
+        <div class="marquee-container marquee-fade-edges py-2">
+          <div class="marquee-track">
+            <div id="client-marquee-1" class="flex items-center gap-12 sm:gap-16 pr-12 sm:pr-16 shrink-0">
+              <!-- Default items, hydrated dynamically from CMS -->
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="building" class="w-4 h-4"></i>
+                </div>
+                <span>COBRA DENTAL</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="activity" class="w-4 h-4"></i>
+                </div>
+                <span>PETROKIMIA GRESIK</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+                <span>FOKUS JASA MITRA</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="database" class="w-4 h-4"></i>
+                </div>
+                <span>WHOLESALE ID</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                   <i data-lucide="layers" class="w-4 h-4"></i>
                 </div>
-                <div class="text-xs">
-                  <div class="font-bold text-white">Data Terpisah (Siloed Data)</div>
-                  <div class="text-[10px] text-slate-400">Informasi tercecer di WhatsApp, Excel, dan dokumen cetak.</div>
+                <span>FMCG LOGISTICS</span>
+              </div>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="shield-check" class="w-4 h-4"></i>
                 </div>
+                <span>MEDIKA UTAMA</span>
               </div>
             </div>
 
-            <!-- Floating 5 Cards Array -->
-            <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              
-              <!-- Card 1 -->
-              <div class="reveal-scale delay-100 problem-card glass-card-dark p-4 rounded-xl border border-slate-700/80 hover:border-blue-500 transition-all cursor-pointer">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                    <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-                  </div>
-                  <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>
+            <!-- Duplicate for Seamless Infinite Loop -->
+            <div id="client-marquee-2" aria-hidden="true" class="flex items-center gap-12 sm:gap-16 pr-12 sm:pr-16 shrink-0">
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="building" class="w-4 h-4"></i>
                 </div>
-                <div class="font-bold text-white text-xs">Data tersebar di berbagai file</div>
-                <div class="text-[10px] text-slate-400 mt-1">Sulit mencari versi dokumen terakhir dan rawan duplikasi.</div>
+                <span>COBRA DENTAL</span>
               </div>
-
-              <!-- Card 2 -->
-              <div class="reveal-scale delay-200 problem-card glass-card-dark p-4 rounded-xl border border-slate-700/80 hover:border-blue-500 transition-all cursor-pointer">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                    <i data-lucide="clock" class="w-4 h-4"></i>
-                  </div>
-                  <span class="text-[9px] bg-rose-500/20 text-rose-400 px-1.5 py-0.5 rounded font-bold">Delay</span>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="activity" class="w-4 h-4"></i>
                 </div>
-                <div class="font-bold text-white text-xs">Approval memakan waktu</div>
-                <div class="text-[10px] text-slate-400 mt-1">Persetujuan tertunda karena penanggung jawab sedang di luar.</div>
+                <span>PETROKIMIA GRESIK</span>
               </div>
-
-              <!-- Card 3 -->
-              <div class="reveal-scale delay-300 problem-card glass-card-dark p-4 rounded-xl border border-slate-700/80 hover:border-blue-500 transition-all cursor-pointer">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                    <i data-lucide="message-square" class="w-4 h-4"></i>
-                  </div>
-                  <span class="text-[9px] bg-blue-500 text-white font-bold w-4 h-4 rounded-full flex items-center justify-center">12</span>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="users" class="w-4 h-4"></i>
                 </div>
-                <div class="font-bold text-white text-xs">Komunikasi tidak terstruktur</div>
-                <div class="text-[10px] text-slate-400 mt-1">Instruksi kerja hilang di riwayat chat grup yang padat.</div>
+                <span>FOKUS JASA MITRA</span>
               </div>
-
-              <!-- Card 4 -->
-              <div class="reveal-scale delay-400 problem-card glass-card-dark p-4 rounded-xl border border-slate-700/80 hover:border-blue-500 transition-all cursor-pointer">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                    <i data-lucide="refresh-cw" class="w-4 h-4"></i>
-                  </div>
-                  <i data-lucide="repeat" class="w-3.5 h-3.5 text-slate-500"></i>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="database" class="w-4 h-4"></i>
                 </div>
-                <div class="font-bold text-white text-xs">Proses manual dan berulang</div>
-                <div class="text-[10px] text-slate-400 mt-1">Entri data berulang meningkatkan potensi human error.</div>
+                <span>WHOLESALE ID</span>
               </div>
-
-              <!-- Card 5 -->
-              <div class="reveal-scale delay-500 problem-card glass-card-dark p-4 rounded-xl border border-slate-700/80 hover:border-blue-500 transition-all cursor-pointer sm:col-span-2 lg:col-span-2">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center">
-                    <i data-lucide="trending-down" class="w-4 h-4"></i>
-                  </div>
-                  <span class="text-[9px] bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-semibold">Bukan Real-time</span>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="layers" class="w-4 h-4"></i>
                 </div>
-                <div class="font-bold text-white text-xs">Laporan tidak real-time</div>
-                <div class="text-[10px] text-slate-400 mt-1">Rekap keuangan dan operasional selesai berhari-hari setelah periode berakhir.</div>
+                <span>FMCG LOGISTICS</span>
               </div>
-
-            </div>
-          </div>
-
-          <!-- Bottom Section: Solution Transition Banner -->
-          <div class="reveal-scale delay-300 glass-card-dark border border-blue-500/30 rounded-2xl p-6 shadow-2xl relative overflow-hidden mb-12">
-            <div class="absolute -right-20 -bottom-20 w-60 h-60 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center relative z-10">
-              <div class="md:col-span-3">
-                <span class="text-[10px] tracking-widest font-extrabold uppercase text-blue-400">SETIAP TANTANGAN PUNYA SOLUSI.</span>
-              </div>
-              <div class="md:col-span-5 text-sm font-semibold text-slate-200">
-                Saatnya beralih ke sistem yang <span class="text-blue-400 font-extrabold">lebih terintegrasi dan efisien.</span>
-              </div>
-              <div class="md:col-span-4 flex items-center justify-between gap-3">
-                <span class="text-[11px] text-slate-400 leading-tight">Mari diskusikan bagaimana Expressa membantu bisnis Anda.</span>
-                <button data-action="open-consultation" class="shrink-0 w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center shadow-lg shadow-blue-600/40 hover:scale-105 transition-transform">
-                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+              <div class="flex items-center gap-2.5 text-slate-700 dark:text-slate-300 font-bold text-sm tracking-wide">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="shield-check" class="w-4 h-4"></i>
+                </div>
+                <span>MEDIKA UTAMA</span>
               </div>
             </div>
           </div>
-
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ========================================== -->
-      <!-- SECTION 04: WHAT WE BUILD / SOLUSI DIGITAL -->
-      <!-- ========================================== -->
-      <section id="solusi" class="section-layer bg-slate-50 text-slate-900 pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between">
-        <!-- Futuristic Soft Tech Background (Clean, Text-Free) -->
-        <div class="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
-        <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <!-- ======================================================== -->
+    <!-- SECTION 04: VALUE CHECKLIST + QUICK CONSULTATION BOX     -->
+    <!-- ======================================================== -->
+    <section class="py-16 md:py-24 px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left: Bold Value Checklist (7 cols) -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Prinsip Kerja Expressa</span>
+          </div>
 
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          
-          <!-- Top Section: Header & Copywriting -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            <div class="lg:col-span-8 space-y-3">
-              <!-- Main Title -->
-              <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight">
-                Dari Proses Bisnis <br>
-                Menjadi <span class="text-blue-600">Solusi Digital.</span>
-              </h2>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            Solusi Presisi, <br>
+            <span class="text-blue-600 dark:text-blue-400">Bukan Software Template Kaku.</span>
+          </h2>
 
-              <p class="reveal-init delay-300 text-slate-600 text-sm md:text-base max-w-2xl leading-relaxed">
-                Kami membangun solusi teknologi yang disesuaikan dengan kebutuhan bisnis Anda, dari sistem hingga integrasi, untuk menciptakan operasional yang lebih efisien dan siap berkembang.
-              </p>
+          <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl">
+            Banyak perusahaan terpaksa mengubah cara kerja demi menyesuaikan software jadi. Di Expressa, arsitektur sistem kami rancang presisi mengikuti alur bisnis unik Anda.
+          </p>
+
+          <!-- 3 Value Rows -->
+          <div class="space-y-3.5 pt-2">
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Audit Alur Kerja Riil</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Kami mendalami SOP lapangan dan hierarki otoritas tim sebelum membuat rancangan kode program.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Arsitektur Modular & Keamanan Tinggi</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Mudah diperluas seiring pertumbuhan cabang bisnis dengan enkripsi dan proteksi data ketat.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800">
+              <div class="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+                <i data-lucide="headphones" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 dark:text-white text-sm">Pendampingan Sampai Berhasil</h4>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Training intensif staf, modul SOP pengguna, dan SLA bantuan teknis responsif bergaransi.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Metrics Bar -->
+          <div class="grid grid-cols-3 gap-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+            <div>
+              <div id="stat1-number" class="text-2xl font-extrabold text-slate-900 dark:text-white">200+</div>
+              <div id="stat1-label" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Proyek Selesai</div>
+            </div>
+            <div>
+              <div id="stat2-number" class="text-2xl font-extrabold text-slate-900 dark:text-white">50+</div>
+              <div id="stat2-label" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Klien Perusahaan</div>
+            </div>
+            <div>
+              <div id="stat4-number" class="text-2xl font-extrabold text-blue-600 dark:text-blue-400">98%</div>
+              <div id="stat4-label" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium">Tingkat Kepuasan</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Floating Quick Consultation Card (5 cols) -->
+        <div class="lg:col-span-5">
+          <div class="clean-card p-6 sm:p-8 bg-white dark:bg-[#182238] border-2 border-blue-500/30 dark:border-blue-500/40 rounded-3xl shadow-2xl relative">
+            <div class="absolute -top-3 right-6 bg-blue-600 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow">
+              Respon &lt; 24 Jam
+            </div>
+
+            <div class="mb-5">
+              <h3 class="text-lg font-bold text-slate-900 dark:text-white">Konsultasi Kebutuhan Bisnis</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Dapatkan analisis awal arsitektur solusi langsung dari tim konsultan Expressa.</p>
+            </div>
+
+            <form id="quick-consultation-form" class="space-y-3.5">
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap *</label>
+                <input type="text" id="quick-name" required placeholder="Budi Santoso" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0E1729] transition-colors">
+              </div>
 
               <div>
-                <button data-action="open-consultation" class="inline-flex items-center gap-3 text-sm font-semibold text-slate-900 hover:text-blue-600 transition-colors group">
-                  <div class="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center group-hover:scale-110 shadow-lg shadow-blue-600/30 transition-transform">
-                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                  </div>
-                  <span>Diskusikan Kebutuhan Anda</span>
-                </button>
+                <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor WhatsApp *</label>
+                <input type="tel" id="quick-phone" required placeholder="081234567890" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0E1729] transition-colors">
               </div>
-            </div>
 
-            <!-- Right Handwritten Note -->
-            <div class="lg:col-span-4 text-right">
-              <div class="font-handwriting text-3xl md:text-4xl text-blue-600 transform -rotate-2">
-                Solusi Nyata <br>
-                <span class="text-blue-500">untuk Bisnis Berkembang</span>
+              <div>
+                <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilihan Kebutuhan Solusi</label>
+                <select id="quick-service" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0E1729] transition-colors">
+                  <option value="ERP & Business System">ERP & Manajemen Stok Multi-Gudang</option>
+                  <option value="Mobile Application">Aplikasi Mobile Operasional (iOS & Android)</option>
+                  <option value="Custom Software">Custom Web Dashboard & Software</option>
+                  <option value="System Integration">Integrasi API & Payment Gateway</option>
+                  <option value="AI & Automation">AI & Otomasi Alur Kerja Dokumen</option>
+                  <option value="Lainnya">Diskusi Solusi Lainnya</option>
+                </select>
               </div>
+
+              <button type="submit" id="quick-submit-btn" class="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm py-3 rounded-xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all">
+                <span id="quick-btn-text">Dapatkan Rekomendasi Solusi</span>
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+            </form>
+
+            <div class="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+              <i data-lucide="shield" class="w-3.5 h-3.5 text-blue-600 dark:text-blue-400"></i>
+              <span>Data Anda aman & dilindungi kerahasiaannya (NDA)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 05: LAYANAN WITH INTERACTIVE TAB SWITCHER        -->
+    <!-- ======================================================== -->
+    <section id="layanan" class="py-20 px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+      <div class="max-w-7xl mx-auto w-full">
+        
+        <!-- Header -->
+        <div class="text-center max-w-2xl mx-auto mb-12">
+          <div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">Katalog Solusi</div>
+          <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            Layanan Solusi Digital
+          </h2>
+          <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm mt-2">
+            Solusi teknologi terintegrasi untuk mendukung efisiensi operasional dan akselerasi bisnis Anda.
+          </p>
+        </div>
+
+        <!-- 6 Interactive Service Cards Grid -->
+        <div id="service-cards-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          
+          <!-- Card 1: ERP -->
+          <div data-category="erp" onclick="openConsultationModal('ERP & Business System')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i data-lucide="database" class="w-5 h-5"></i>
+              </div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">ERP & Bisnis</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">ERP & Business System</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Integrasi persediaan barang multi-gudang, purchasing, invoice, dan laporan keuangan komprehensif.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
             </div>
           </div>
 
-          <!-- Middle Section: 3D Holographic Cube & Orbiting Solution Cards -->
-          <div id="cube-container" class="reveal-scale delay-200 relative py-4 flex items-center justify-center min-h-[300px]">
-            
-            <!-- Orbit Ring -->
-            <div class="orbit-ring"></div>
-
-            <!-- Center 3D Glowing Glass Cube -->
-            <div class="cube-viewport z-20">
-              <div id="interactive-cube" class="cube-3d">
-                <div class="cube-face cube-front">
-                  <span class="text-base font-black tracking-wider text-white">EXPRESSA</span>
-                  <span class="text-[8px] font-semibold text-cyan-200 mt-1 uppercase">Tech Partner</span>
-                </div>
-                <div class="cube-face cube-back">
-                  <span class="text-xs font-bold text-white">INNOVATION</span>
-                </div>
-                <div class="cube-face cube-right">
-                  <span class="text-xs font-bold text-cyan-100">SCALE UP</span>
-                </div>
-                <div class="cube-face cube-left">
-                  <span class="text-xs font-bold text-cyan-100">INTEGRITY</span>
-                </div>
-                <div class="cube-face cube-top"></div>
-                <div class="cube-face cube-bottom"></div>
+          <!-- Card 2: Custom Web -->
+          <div data-category="app" onclick="openConsultationModal('Custom Software')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                <i data-lucide="code" class="w-5 h-5"></i>
               </div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded">Web & Mobile</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Custom Software & Web</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Aplikasi web kustom berkinerja tinggi, disesuaikan dengan alur approval dan hak akses unik tim Anda.</p>
             </div>
-
-            <!-- Orbiting 6 Solution Cards (Surrounding the Cube) -->
-            <div class="absolute inset-0 grid grid-cols-1 md:grid-cols-3 gap-3 pointer-events-none items-center justify-between">
-              
-              <!-- Card 1: Custom Software (Top Left) -->
-              <div onclick="openConsultationModal('Custom Software')" class="reveal-scale delay-100 pointer-events-auto bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-200/90 shadow-lg hover:shadow-xl hover:border-blue-500 transition-all cursor-pointer group w-64 justify-self-start">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="code" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-slate-900 text-xs truncate">Custom Software</div>
-                    <div class="text-[10px] text-slate-500 truncate">Sistem web sesuai kebutuhan bisnis.</div>
-                  </div>
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600"></i>
-                </div>
-              </div>
-
-              <!-- Spacer for Cube in Middle -->
-              <div class="hidden md:block"></div>
-
-              <!-- Card 2: Mobile Application (Top Right) -->
-              <div onclick="openConsultationModal('Mobile Application')" class="reveal-scale delay-200 pointer-events-auto bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-200/90 shadow-lg hover:shadow-xl hover:border-blue-500 transition-all cursor-pointer group w-64 justify-self-end">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="smartphone" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-slate-900 text-xs truncate">Mobile Application</div>
-                    <div class="text-[10px] text-slate-500 truncate">Aplikasi mobile pendukung operasional.</div>
-                  </div>
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600"></i>
-                </div>
-              </div>
-
-              <!-- Card 3: ERP & Business System (Mid Left) -->
-              <div onclick="openConsultationModal('ERP & Business System')" class="reveal-scale delay-300 pointer-events-auto bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-200/90 shadow-lg hover:shadow-xl hover:border-blue-500 transition-all cursor-pointer group w-64 justify-self-start">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="database" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-slate-900 text-xs truncate">ERP & Business System</div>
-                    <div class="text-[10px] text-slate-500 truncate">Mengintegrasikan seluruh proses bisnis.</div>
-                  </div>
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600"></i>
-                </div>
-              </div>
-
-              <!-- Spacer for Cube in Middle -->
-              <div class="hidden md:block"></div>
-
-              <!-- Card 4: System Integration (Mid Right) -->
-              <div onclick="openConsultationModal('System Integration')" class="reveal-scale delay-400 pointer-events-auto bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-200/90 shadow-lg hover:shadow-xl hover:border-blue-500 transition-all cursor-pointer group w-64 justify-self-end">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="network" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-slate-900 text-xs truncate">System Integration</div>
-                    <div class="text-[10px] text-slate-500 truncate">Menghubungkan sistem eksisting.</div>
-                  </div>
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600"></i>
-                </div>
-              </div>
-
-              <!-- Card 5: AI & Automation (Bottom Left) -->
-              <div onclick="openConsultationModal('AI & Automation')" class="reveal-scale delay-500 pointer-events-auto bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-200/90 shadow-lg hover:shadow-xl hover:border-blue-500 transition-all cursor-pointer group w-64 justify-self-start">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="cpu" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-slate-900 text-xs truncate">AI & Automation</div>
-                    <div class="text-[10px] text-slate-500 truncate">Otomatisasi proses kerja berulang.</div>
-                  </div>
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600"></i>
-                </div>
-              </div>
-
-              <!-- Spacer for Cube in Middle -->
-              <div class="hidden md:block"></div>
-
-              <!-- Card 6: IT & Digital Consulting (Bottom Right) -->
-              <div onclick="openConsultationModal('IT & Digital Consulting')" class="reveal-scale delay-600 pointer-events-auto bg-white/95 backdrop-blur-md p-3.5 rounded-xl border border-slate-200/90 shadow-lg hover:shadow-xl hover:border-blue-500 transition-all cursor-pointer group w-64 justify-self-end">
-                <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="messages-square" class="w-4 h-4"></i>
-                  </div>
-                  <div class="flex-1 min-w-0">
-                    <div class="font-bold text-slate-900 text-xs truncate">IT Consulting</div>
-                    <div class="text-[10px] text-slate-500 truncate">Menentukan arsitektur & strategi IT.</div>
-                  </div>
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-slate-400 group-hover:text-blue-600"></i>
-                </div>
-              </div>
-
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
             </div>
-
           </div>
 
-          <!-- Bottom Bar: Value Props & Scroll Action -->
-          <div class="reveal-init delay-200 border-t border-slate-200 pt-6 flex flex-col md:flex-row items-center justify-between gap-6 text-xs">
-            <!-- Left Header -->
-            <div class="font-bold text-slate-400 uppercase tracking-wider text-[11px]">
-              TEKNOLOGI YANG MENYESUAIKAN DENGAN BISNIS ANDA
+          <!-- Card 3: Mobile App -->
+          <div data-category="app" onclick="openConsultationModal('Mobile Application')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-cyan-50 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 flex items-center justify-center mb-4 group-hover:bg-cyan-600 group-hover:text-white transition-colors">
+                <i data-lucide="smartphone" class="w-5 h-5"></i>
+              </div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider bg-cyan-50 dark:bg-cyan-900/30 px-2 py-0.5 rounded">Web & Mobile</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Mobile Application (iOS & Android)</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Aplikasi mobile tim lapangan dengan presensi geofencing GPS, penginputan nota, dan mode offline.</p>
             </div>
-
-            <!-- 3 Pillars -->
-            <div class="flex items-center gap-6 sm:gap-10">
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                  <i data-lucide="target" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-900 text-xs">Lebih Efisien</div>
-                  <div class="text-[10px] text-slate-500">Proses berjalan lebih cepat</div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                  <i data-lucide="bar-chart-2" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-900 text-xs">Lebih Terintegrasi</div>
-                  <div class="text-[10px] text-slate-500">Semua terhubung satu ekosistem</div>
-                </div>
-              </div>
-
-              <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                  <i data-lucide="lightbulb" class="w-4 h-4"></i>
-                </div>
-                <div>
-                  <div class="font-bold text-slate-900 text-xs">Lebih Siap Berkembang</div>
-                  <div class="text-[10px] text-slate-500">Solusi mengikuti langkah bisnis</div>
-                </div>
-              </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
             </div>
+          </div>
 
-            <!-- Back to top / Navigation -->
-            <div class="flex items-center gap-2 text-blue-600 font-semibold cursor-pointer hover:underline" onclick="goToSlide(0);">
-              <span>Kembali Ke Atas</span>
-              <i data-lucide="arrow-up" class="w-4 h-4"></i>
+          <!-- Card 4: API Integration -->
+          <div data-category="automation" onclick="openConsultationModal('System Integration')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i data-lucide="network" class="w-5 h-5"></i>
+              </div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded">API & Otomasi</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Integrasi Sistem & API</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Sinkronisasi data otomatis dengan WhatsApp Gateway, payment gateway, perbankan, dan kurir logistik.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Card 5: AI & Automation -->
+          <div data-category="automation" onclick="openConsultationModal('AI & Automation')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors">
+                <i data-lucide="cpu" class="w-5 h-5"></i>
+              </div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-purple-600 dark:text-purple-400 uppercase tracking-wider bg-purple-50 dark:bg-purple-900/30 px-2 py-0.5 rounded">API & Otomasi</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">AI & Otomasi Alur Kerja</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Ekstraksi data invoice otomatis (OCR), chatbot interaktif layanan pelanggan, dan validasi dokumen cerdas.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+
+          <!-- Card 6: IT Consulting -->
+          <div data-category="erp" onclick="openConsultationModal('IT & Digital Consulting')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                <i data-lucide="messages-square" class="w-5 h-5"></i>
+              </div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded">ERP & Bisnis</span>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Konsultasi IT & Strategi Digital</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Penyusunan arsitektur infrastruktur cloud, rencana migrasi basis data, dan audit keamanan sistem.</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
             </div>
           </div>
 
         </div>
-      </section>
 
-      <!-- ========================================== -->
-      <!-- SECTION 05: TRANSFORMASI (BEFORE & AFTER)  -->
-      <!-- ========================================== -->
-      <section id="transformasi" class="section-layer bg-[#070B14] text-white pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between overflow-hidden">
-        <!-- Clean, Soft Ambient Lighting (No Noisy Photo Backgrounds) -->
-        <div class="absolute top-1/4 -left-32 w-[500px] h-[500px] bg-rose-500/5 rounded-full blur-[140px] pointer-events-none"></div>
-        <div class="absolute top-1/3 -right-32 w-[500px] h-[500px] bg-cyan-500/5 rounded-full blur-[140px] pointer-events-none"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[450px] bg-blue-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+      </div>
+    </section>
 
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          <!-- Top Header -->
-          <div class="text-center max-w-3xl mx-auto space-y-3">
-            <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold leading-tight">
-              Dari Proses yang Rumit <br>
-              <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-cyan-300">Menjadi Sistem yang Terintegrasi.</span>
+    <!-- ======================================================== -->
+    <!-- SECTION 06: MENGAPA KAMI (ASYMMETRICAL FEATURETTE)      -->
+    <!-- ======================================================== -->
+    <section class="py-20 px-6 md:px-12 bg-slate-50 dark:bg-[#182238] border-t border-b border-slate-200/80 dark:border-slate-800 transition-colors duration-200">
+      <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        
+        <!-- Left: Rounded Tech Collage with Badges -->
+        <div class="lg:col-span-6 relative">
+          <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-700 bg-slate-900">
+            <img id="whyus-preview-img" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80" alt="Expressa Technology" class="w-full h-80 sm:h-96 object-cover opacity-90 hover:scale-105 transition-transform duration-500">
+            
+            <!-- Floating Badge 1 (Top Left) -->
+            <div class="absolute top-4 left-4 bg-white/95 dark:bg-[#182238]/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-3 animate-float-slow">
+              <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                <i data-lucide="trending-up" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="font-extrabold text-slate-900 dark:text-white text-xs">+45% Kecepatan Alur</div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400">Efisiensi operasional terbukti</div>
+              </div>
+            </div>
+
+            <!-- Floating Badge 2 (Bottom Right) -->
+            <div class="absolute bottom-4 right-4 bg-white/95 dark:bg-[#182238]/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200/80 dark:border-slate-700 shadow-lg flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <div class="font-extrabold text-slate-900 dark:text-white text-xs">100% Milik Anda</div>
+                <div class="text-[10px] text-slate-500 dark:text-slate-400">Source code & data mandiri</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: 3 Value Impact Cards -->
+        <div class="lg:col-span-6 space-y-6">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-xs font-bold uppercase tracking-wider">
+            <i data-lucide="award" class="w-3.5 h-3.5"></i>
+            <span>Mengapa Memilih Expressa</span>
+          </div>
+
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            Dampak Terukur untuk <br>
+            <span class="text-blue-600 dark:text-blue-400">Pertumbuhan Perusahaan Anda.</span>
+          </h2>
+
+          <div class="space-y-4 pt-2">
+            <div class="clean-card p-5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
+              <div class="flex items-center gap-3 mb-1.5">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">01</div>
+                <h3 class="font-bold text-slate-900 dark:text-white text-sm">Bukan Template Massal</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 pl-11 leading-relaxed">
+                Setiap modul dirancang presisi mengikuti aturan bisnis dan wewenang tim Anda, tanpa memaksakan cara kerja template kaku.
+              </p>
+            </div>
+
+            <div class="clean-card p-5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
+              <div class="flex items-center gap-3 mb-1.5">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">02</div>
+                <h3 class="font-bold text-slate-900 dark:text-white text-sm">Terkoneksi Menyeluruh Tanpa Silo</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 pl-11 leading-relaxed">
+                Data penjualan, multi-gudang, dan finansial terhubung langsung secara real-time tanpa perlu rekap excel manual berulang.
+              </p>
+            </div>
+
+            <div class="clean-card p-5 bg-white dark:bg-[#131B2E] border border-slate-200 dark:border-slate-700/80 rounded-2xl">
+              <div class="flex items-center gap-3 mb-1.5">
+                <div class="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-xs">03</div>
+                <h3 class="font-bold text-slate-900 dark:text-white text-sm">Pendampingan Jangka Panjang</h3>
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 pl-11 leading-relaxed">
+                Tim teknis Expressa siap mengawal pemeliharaan berkala, backup server, dan pengembangan fitur baru di masa mendatang.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- SECTION 07: STUDI KASUS PILIHAN & TEASER TIM            -->
+    <!-- ======================================================== -->
+    <section id="project" class="py-20 px-6 md:px-12 bg-white dark:bg-[#131B2E] transition-colors duration-200">
+      <div class="max-w-7xl mx-auto w-full">
+        
+        <!-- Header -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+          <div>
+            <div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider mb-2">Studi Kasus Klien</div>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">
+              Transformasi Nyata Mitra Kami
             </h2>
-            <p class="reveal-init delay-300 text-slate-300 text-sm md:text-base leading-relaxed">
-              Ubah pekerjaan manual yang tercecer di berbagai aplikasi terpisah menjadi satu sistem terpadu yang cepat, akurat, dan siap mendorong akselerasi bisnis Anda.
+          </div>
+
+          <div>
+            <a href="/portofolio" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400 hover:text-blue-700 bg-slate-50 dark:bg-[#182238] border border-slate-300 dark:border-slate-700 hover:border-slate-400 px-5 py-2.5 rounded-full transition-all shadow-sm">
+              <span>Buka Portofolio Lengkap</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- 3 Case Study Cards with Outcome Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Cobra Dental -->
+          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#182238]">
+            <div class="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
+              <img id="cs-img-0" src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="Cobra Dental" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute top-3 left-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+                Cobra Dental Indonesia
+              </div>
+              <div class="absolute bottom-3 right-3 bg-emerald-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-full shadow">
+                0% Selisih Stok
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Alat Kesehatan & Dental</div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mt-1">Sistem ERP Multi-Cabang</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Pengelolaan stok medis ber-serial number dan distribusi logistik nasional terintegrasi.</p>
+              </div>
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                <a href="/portofolio" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                  <span>Lihat Detail Studi Kasus</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Petrokimia Gresik -->
+          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#182238]">
+            <div class="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
+              <img id="cs-img-1" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Petrokimia Gresik" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute top-3 left-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+                Petrokimia Gresik
+              </div>
+              <div class="absolute bottom-3 right-3 bg-emerald-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-full shadow">
+                100% Digital Shift
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Pupuk & Manufaktur</div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mt-1">Monitoring Shift Pabrikasi</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Pencatatan shift produksi digital dan dasbor pemantauan kinerja mesin pabrik.</p>
+              </div>
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                <a href="/portofolio" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                  <span>Lihat Detail Studi Kasus</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fokus Jasa Mitra -->
+          <div class="clean-card overflow-hidden flex flex-col justify-between group bg-white dark:bg-[#182238]">
+            <div class="h-48 overflow-hidden bg-slate-100 dark:bg-slate-800 relative">
+              <img id="cs-img-2" src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" alt="Fokus Jasa Mitra" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute top-3 left-3 bg-white/95 dark:bg-slate-800/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+                Fokus Jasa Mitra
+              </div>
+              <div class="absolute bottom-3 right-3 bg-emerald-600 text-white font-bold text-[10px] px-2.5 py-1 rounded-full shadow">
+                5.000+ Tenaga Kerja
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-[10px] font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider">Manpower & Outsourcing</div>
+                <h3 class="text-base font-bold text-slate-900 dark:text-white mt-1">Manajemen Tenaga Kerja</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">Presensi mobile berbasis GPS geofencing dan otomatisasi penagihan invoice mitra.</p>
+              </div>
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
+                <a href="/portofolio" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+                  <span>Lihat Detail Studi Kasus</span>
+                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Teaser Tim Kami Banner -->
+        <div class="mt-12 clean-card p-8 rounded-3xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-[#182238] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="max-w-xl space-y-1.5 text-center md:text-left">
+            <div class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Tim Spesialis Expressa</div>
+            <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 dark:text-white">
+              Sistem Terbaik Dibangun oleh Orang yang Memahami Bisnis.
+            </h3>
+            <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+              Kenali tim software engineer, system architect, dan business analyst kami di halaman Tim.
             </p>
           </div>
-
-          <!-- Transformation Split Grid (BEFORE -> CORE -> AFTER) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 my-8 items-center">
-            
-            <!-- LEFT COLUMN: BEFORE (Manual & Terpecah) -->
-            <div class="lg:col-span-5 reveal-scale delay-100">
-              <div class="bg-slate-900/90 border border-rose-500/30 rounded-2xl p-6 shadow-2xl shadow-black/50 relative overflow-hidden group hover:border-rose-500/60 transition-all">
-                <!-- Soft Glow Accent in Corner (No Bookshelf Photo) -->
-                <div class="absolute -top-16 -right-16 w-40 h-40 bg-rose-500/10 rounded-full blur-2xl pointer-events-none"></div>
-                
-                <div class="relative z-10 space-y-4">
-                  <!-- Header Tag -->
-                  <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-black tracking-widest uppercase px-3 py-1 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30">
-                      BEFORE
-                    </span>
-                    <span class="text-[10px] text-slate-400 font-mono">Proses Manual & Terfragmentasi</span>
-                  </div>
-
-                  <p class="text-xs text-slate-300 leading-relaxed">
-                    Data tersebar di WhatsApp, spreadsheet Excel lokal, dan berkas fisik, memperlambat proses persetujuan dan rawan kesalahan manusia.
-                  </p>
-
-                  <!-- 4 Pain Point Cards -->
-                  <div class="space-y-2.5 pt-1">
-                    <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs hover:border-slate-700 transition-colors">
-                      <div class="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
-                        <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <div class="font-bold text-white text-xs">Spreadsheet Terpisah-pisah</div>
-                        <div class="text-[10px] text-slate-400 truncate">Versi file berulang kali tertimpa dan tidak sinkron.</div>
-                      </div>
-                    </div>
-
-                    <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs hover:border-slate-700 transition-colors">
-                      <div class="w-8 h-8 rounded-lg bg-emerald-600/20 text-emerald-400 flex items-center justify-center font-bold text-xs shrink-0">
-                        <i data-lucide="message-circle" class="w-4 h-4"></i>
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <div class="font-bold text-white text-xs">Instruksi Tercecer di Chat</div>
-                        <div class="text-[10px] text-slate-400 truncate">PO dan arahan kerja tertimbun di riwayat grup pesan.</div>
-                      </div>
-                    </div>
-
-                    <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs hover:border-slate-700 transition-colors">
-                      <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs shrink-0">
-                        <i data-lucide="mail" class="w-4 h-4"></i>
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <div class="font-bold text-white text-xs">Approval Berhari-hari di Email</div>
-                        <div class="text-[10px] text-slate-400 truncate">Otorisasi tertunda karena dokumen tersangkut di inbox.</div>
-                      </div>
-                    </div>
-
-                    <div class="flex items-center gap-3.5 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs hover:border-slate-700 transition-colors">
-                      <div class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs shrink-0">
-                        <i data-lucide="files" class="w-4 h-4"></i>
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <div class="font-bold text-white text-xs">Rekapitulasi Manual Memakan Waktu</div>
-                        <div class="text-[10px] text-slate-400 truncate">Laporan keuangan & operasional terlambat disusun.</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="pt-1 flex items-center gap-2 text-[10px] text-rose-400 font-semibold">
-                    <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
-                    <span>Dampak: Potensi human error tinggi & produktivitas tim terbuang 40%.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CENTER COLUMN: THE EXPRESSA DIGITAL CORE -->
-            <div class="lg:col-span-2 flex flex-col items-center justify-center py-4 lg:py-0 reveal-scale delay-200">
-              <!-- Glowing Animated Core -->
-              <div class="relative flex flex-col items-center">
-                <!-- Glowing Aura -->
-                <div class="w-24 h-24 rounded-2xl bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-400 p-0.5 shadow-2xl shadow-blue-500/50 animate-pulse">
-                  <div class="w-full h-full bg-slate-950/90 rounded-[14px] flex flex-col items-center justify-center p-2 text-center">
-                    <span class="text-xs font-black tracking-wider text-white">EXPRESSA</span>
-                    <span class="text-[8px] font-mono text-cyan-400 font-bold uppercase mt-0.5">Core Engine</span>
-                  </div>
-                </div>
-
-                <!-- Animated Data Connectors -->
-                <div class="hidden lg:flex items-center gap-1.5 mt-3 text-cyan-400 text-[10px] font-mono font-semibold">
-                  <span>TRANSFORM</span>
-                  <i data-lucide="arrow-right" class="w-3.5 h-3.5 animate-pulse"></i>
-                </div>
-                <div class="flex lg:hidden items-center gap-1.5 mt-2 text-cyan-400 text-[10px] font-mono font-semibold">
-                  <span>TRANSFORM</span>
-                  <i data-lucide="arrow-down" class="w-3.5 h-3.5 animate-pulse"></i>
-                </div>
-              </div>
-            </div>
-
-            <!-- RIGHT COLUMN: AFTER (Sistem Terintegrasi & Otomatis) -->
-            <div class="lg:col-span-5 reveal-scale delay-300">
-              <div class="bg-slate-900/90 border border-cyan-500/40 rounded-2xl p-6 shadow-2xl shadow-cyan-950/30 relative overflow-hidden group hover:border-cyan-400 transition-all">
-                <!-- Soft Glow Accent in Corner (No Dashboard Photo) -->
-                <div class="absolute -top-16 -right-16 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
-
-                <div class="relative z-10 space-y-4">
-                  <!-- Header Tag -->
-                  <div class="flex items-center justify-between">
-                    <span class="text-[11px] font-black tracking-widest uppercase px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                      AFTER
-                    </span>
-                    <span class="text-[10px] text-cyan-300 font-mono font-semibold">Expressa Integrated System</span>
-                  </div>
-
-                  <p class="text-xs text-slate-200 leading-relaxed">
-                    Seluruh aliran operasional, data stok, keuangan, dan persetujuan otomatis terhubung dalam satu dasbor kendali yang cepat dan terpusat.
-                  </p>
-
-                  <!-- 4 Live Metric Pills -->
-                  <div class="grid grid-cols-2 gap-2.5 pt-1">
-                    <div class="bg-slate-950/70 border border-slate-800/80 p-3 rounded-xl hover:border-emerald-500/50 transition-colors">
-                      <div class="flex items-center gap-1.5 text-emerald-400 text-xs font-bold">
-                        <i data-lucide="trending-up" class="w-3.5 h-3.5"></i>
-                        <span>+32%</span>
-                      </div>
-                      <div class="text-[11px] font-bold text-white mt-1">Operational Efficiency</div>
-                      <div class="text-[9px] text-slate-400 mt-0.5">Proses eksekusi jauh lebih cepat.</div>
-                    </div>
-
-                    <div class="bg-slate-950/70 border border-slate-800/80 p-3 rounded-xl hover:border-blue-500/50 transition-colors">
-                      <div class="flex items-center gap-1.5 text-blue-400 text-xs font-bold">
-                        <i data-lucide="database" class="w-3.5 h-3.5"></i>
-                        <span>100%</span>
-                      </div>
-                      <div class="text-[11px] font-bold text-white mt-1">Connected Data</div>
-                      <div class="text-[9px] text-slate-400 mt-0.5">Satu sumber data terpercaya.</div>
-                    </div>
-
-                    <div class="bg-slate-950/70 border border-slate-800/80 p-3 rounded-xl hover:border-cyan-500/50 transition-colors">
-                      <div class="flex items-center gap-1.5 text-cyan-400 text-xs font-bold">
-                        <i data-lucide="zap" class="w-3.5 h-3.5"></i>
-                        <span>Real-Time</span>
-                      </div>
-                      <div class="text-[11px] font-bold text-white mt-1">Information Stream</div>
-                      <div class="text-[9px] text-slate-400 mt-0.5">Status dan approval tanpa delay.</div>
-                    </div>
-
-                    <div class="bg-slate-950/70 border border-slate-800/80 p-3 rounded-xl hover:border-purple-500/50 transition-colors">
-                      <div class="flex items-center gap-1.5 text-purple-400 text-xs font-bold">
-                        <i data-lucide="bar-chart-3" class="w-3.5 h-3.5"></i>
-                        <span>Better Decision</span>
-                      </div>
-                      <div class="text-[11px] font-bold text-white mt-1">Executive Analytics</div>
-                      <div class="text-[9px] text-slate-400 mt-0.5">Analisis akurat dalam 1 klik.</div>
-                    </div>
-                  </div>
-
-                  <div class="pt-1 flex items-center gap-2 text-[10px] text-emerald-400 font-semibold">
-                    <i data-lucide="check-circle" class="w-3.5 h-3.5"></i>
-                    <span>Hasil: Tim fokus pada pertumbuhan bisnis, bukan urusan administrasi berulang.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom CTA Banner -->
-          <div class="reveal-init delay-200 border-t border-slate-800/80 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-            <div class="flex items-center gap-3 text-slate-400">
-              <span class="w-2 h-2 rounded-full bg-cyan-400"></span>
-              <span>Siap mentransformasikan alur bisnis Anda menjadi lebih efisien?</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold px-5 py-2.5 rounded-full flex items-center gap-2 shadow-lg shadow-blue-600/40 hover:scale-105 transition-transform">
-                <span>Konsultasikan Transformasi Anda</span>
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </button>
-            </div>
+          <div>
+            <a href="/tim" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm px-6 py-3.5 rounded-full inline-flex items-center gap-2 shadow-sm hover:shadow-md transition-all hover:scale-105 shrink-0">
+              <span>Lihat Profil Tim Kami</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </a>
           </div>
         </div>
-      </section>
 
-      <!-- ========================================== -->
-      <!-- SECTION 06: HOW WE WORK (METODE KERJA)     -->
-      <!-- ========================================== -->
-      <section id="cara-kerja" class="section-layer bg-slate-50 text-slate-900 pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between">
-        <!-- Subtle Pattern Background -->
-        <div class="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none"></div>
+      </div>
+    </section>
 
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          
-          <!-- Top Section: Header & Copywriting -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div class="lg:col-span-8 space-y-3">
-              <!-- Main Title -->
-              <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight">
-                Kami Tidak Langsung Membuat Sistem. <br>
-                Kami <span class="text-blue-600">Memahami Bisnisnya</span> Terlebih Dahulu.
-              </h2>
-            </div>
-
-            <!-- Right Column Note -->
-            <div class="lg:col-span-4 reveal-init delay-300">
-              <div class="bg-white/80 backdrop-blur-sm border border-slate-200 p-4 rounded-2xl shadow-sm">
-                <p class="text-xs text-slate-600 leading-relaxed font-medium">
-                  "Setiap solusi dimulai dari pemahaman yang mendalam, agar teknologi benar-benar memberikan dampak bagi bisnis Anda."
-                </p>
-                <div class="text-[10px] text-blue-600 font-bold uppercase tracking-widest mt-2">
-                  Prinsip Pengembangan Expressa
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle Section: 5 Step Milestone Journey with Photos & Continuous Curve -->
-          <div class="py-8">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative">
-              
-              <!-- STEP 01: PAHAMI -->
-              <div class="reveal-scale delay-100 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500 transition-all group cursor-pointer flex flex-col justify-between">
-                <!-- Hardcoded Business Interview Photo -->
-                <div class="relative h-40 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&q=80" alt="Pahami Proses Bisnis" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white">
-                    <span class="text-xl font-black text-blue-400">01</span>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider bg-blue-600/80 px-2 py-0.5 rounded">Discovery</span>
-                  </div>
-                </div>
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">PAHAMI</h3>
-                    <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                      Memahami proses kerja, kebutuhan riil, dan titik-titik tantangan bisnis Anda di lapangan.
-                    </p>
-                  </div>
-                  <div class="pt-3 border-t border-slate-100 mt-3 text-[10px] text-slate-400 font-medium">
-                    Analisis Alur & Regulasi
-                  </div>
-                </div>
-              </div>
-
-              <!-- STEP 02: RANCANG -->
-              <div class="reveal-scale delay-200 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500 transition-all group cursor-pointer flex flex-col justify-between">
-                <!-- Hardcoded Blueprint Architecture Photo -->
-                <div class="relative h-40 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80" alt="Rancang Arsitektur Sistem" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white">
-                    <span class="text-xl font-black text-blue-400">02</span>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider bg-blue-600/80 px-2 py-0.5 rounded">Architecture</span>
-                  </div>
-                </div>
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">RANCANG</h3>
-                    <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                      Menerjemahkan kebutuhan menjadi cetak biru solusi, arsitektur data, dan user flow yang mudah diadopsi.
-                    </p>
-                  </div>
-                  <div class="pt-3 border-t border-slate-100 mt-3 text-[10px] text-slate-400 font-medium">
-                    Wireframe & Skema Database
-                  </div>
-                </div>
-              </div>
-
-              <!-- STEP 03: BANGUN -->
-              <div class="reveal-scale delay-300 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500 transition-all group cursor-pointer flex flex-col justify-between">
-                <!-- Hardcoded Code Development Photo -->
-                <div class="relative h-40 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=600&q=80" alt="Bangun Sistem Digital" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white">
-                    <span class="text-xl font-black text-blue-400">03</span>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider bg-blue-600/80 px-2 py-0.5 rounded">Development</span>
-                  </div>
-                </div>
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">BANGUN</h3>
-                    <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                      Mengembangkan sistem dengan standar teknologi modern yang cepat, aman, dan siap menampung skala besar.
-                    </p>
-                  </div>
-                  <div class="pt-3 border-t border-slate-100 mt-3 text-[10px] text-slate-400 font-medium">
-                    Clean Code & Robust Testing
-                  </div>
-                </div>
-              </div>
-
-              <!-- STEP 04: IMPLEMENTASIKAN -->
-              <div class="reveal-scale delay-400 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500 transition-all group cursor-pointer flex flex-col justify-between">
-                <!-- Hardcoded Implementation & Training Photo -->
-                <div class="relative h-40 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" alt="Implementasi & Pelatihan" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white">
-                    <span class="text-xl font-black text-blue-400">04</span>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider bg-blue-600/80 px-2 py-0.5 rounded">Deployment</span>
-                  </div>
-                </div>
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">IMPLEMENTASIKAN</h3>
-                    <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                      Membantu proses migrasi data, penerapan langsung di lapangan, serta pelatihan menyeluruh untuk tim Anda.
-                    </p>
-                  </div>
-                  <div class="pt-3 border-t border-slate-100 mt-3 text-[10px] text-slate-400 font-medium">
-                    Onboarding & User Guidance
-                  </div>
-                </div>
-              </div>
-
-              <!-- STEP 05: KEMBANGKAN -->
-              <div class="reveal-scale delay-500 bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-blue-500 transition-all group cursor-pointer flex flex-col justify-between">
-                <!-- Hardcoded Growth Analytics Photo -->
-                <div class="relative h-40 overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=80" alt="Kembangkan & Scale Up" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                  <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                  <div class="absolute bottom-2 left-3 right-3 flex items-center justify-between text-white">
-                    <span class="text-xl font-black text-blue-400">05</span>
-                    <span class="text-[10px] font-semibold uppercase tracking-wider bg-blue-600/80 px-2 py-0.5 rounded">Scale Up</span>
-                  </div>
-                </div>
-                <div class="p-4 flex-1 flex flex-col justify-between">
-                  <div>
-                    <h3 class="text-base font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">KEMBANGKAN</h3>
-                    <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                      Terus menyempurnakan fitur dan kapasitas sistem seiring dengan berkembangnya cakupan bisnis masa depan.
-                    </p>
-                  </div>
-                  <div class="pt-3 border-t border-slate-100 mt-3 text-[10px] text-slate-400 font-medium">
-                    Continuous Support & Scale
-                  </div>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Bottom Footer Bar -->
-          <div class="reveal-init delay-200 border-t border-slate-200 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-            <div class="font-medium tracking-wide uppercase text-[11px] text-slate-600">
-              PARTNER DALAM SETIAP LANGKAH PERTUMBUHAN ANDA
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="text-[11px] text-slate-500 italic">Langkah kecil menuju dampak yang besar</span>
-              <button onclick="goToSlide(6);" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors">
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </button>
-            </div>
-          </div>
-
+    <!-- ======================================================== -->
+    <!-- SECTION 08: HIGH-IMPACT CTA BANNER                       -->
+    <!-- ======================================================== -->
+    <section class="py-16 md:py-20 px-6 md:px-12 bg-[#0B132B] dark:bg-[#0E1729] text-white relative overflow-hidden transition-colors duration-200">
+      <div class="max-w-4xl mx-auto text-center space-y-4 relative z-10">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-900/50 border border-blue-700/60 text-blue-300 text-xs font-bold uppercase tracking-wider">
+          <i data-lucide="zap" class="w-3.5 h-3.5 text-blue-400"></i>
+          <span>Langkah Mudah Menuju Digitalisasi</span>
         </div>
-      </section>
 
-      <!-- ========================================== -->
-      <!-- SECTION 07: CASE STUDIES / CLIENT PROJECTS -->
-      <!-- ========================================== -->
-      <section id="project" class="section-layer bg-[#0A0F1D] text-white pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between overflow-hidden">
-        <!-- Ambient Glow -->
-        <div class="absolute top-1/4 -right-40 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        <h2 class="text-2xl md:text-4xl font-extrabold text-white leading-tight">
+          Siap Membangun Sistem yang Mengikuti Cara Kerja Bisnis Anda?
+        </h2>
 
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          
-          <!-- Top Section: Header & Copywriting -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div class="lg:col-span-8 space-y-3">
-              <!-- Main Title -->
-              <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold leading-tight">
-                Kami Membangun <br>
-                untuk <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-blue-200 to-cyan-300">Bisnis Nyata.</span>
-              </h2>
+        <p class="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
+          Diskusikan tantangan operasional Anda bersama konsultan Expressa. Kami siap memberikan rekomendasi solusi tepat sasaran tanpa kewajiban.
+        </p>
 
-              <p class="reveal-init delay-300 text-slate-300 text-sm md:text-base max-w-2xl leading-relaxed">
-                Setiap bisnis memiliki tantangan yang unik. Berikut adalah sebagian dari perjalanan kami bersama klien dalam membangun solusi yang memberikan dampak nyata.
-              </p>
-            </div>
-
-            <!-- Right Column Note -->
-            <div class="lg:col-span-4 text-right reveal-init delay-200 flex flex-col items-end justify-between self-stretch">
-              <div class="font-handwriting text-3xl text-blue-300 transform -rotate-2">
-                Lebih dari sistem, <br>
-                <span class="text-white">ini tentang pertumbuhan.</span>
-              </div>
-              <div class="hidden lg:block text-[10px] tracking-widest text-slate-400 uppercase font-semibold mt-4">
-                PROVEN RESULTS ACROSS INDUSTRIES
-              </div>
-            </div>
-          </div>
-
-          <!-- Middle Section: 3 Featured Case Study Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-            
-            <!-- CARD 1: COBRA DENTAL INDONESIA -->
-            <div class="reveal-scale delay-100 glass-card-dark rounded-2xl overflow-hidden border border-slate-700/80 hover:border-blue-500 transition-all group flex flex-col justify-between">
-              <!-- Hardcoded Modern Clinical Equipment Photo -->
-              <div class="relative h-48 overflow-hidden">
-                <img id="cs-img-0" src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="Cobra Dental Case Study" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                
-                <!-- Client Badge Overlay -->
-                <div class="absolute top-4 left-4 flex items-center gap-2 bg-slate-950/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-blue-500/30 shadow-lg">
-                  <div class="w-5 h-5 rounded bg-blue-600 flex items-center justify-center text-white text-xs font-black">C</div>
-                  <span class="font-black text-xs tracking-wider text-white">COBRA <span class="text-blue-400">DENTAL</span></span>
-                </div>
-              </div>
-
-              <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                <div>
-                  <div class="text-[10px] font-bold text-blue-400 tracking-wider uppercase">INDUSTRI: ALAT KESEHATAN & DENTAL CARE</div>
-                  <h3 class="text-lg font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">Cobra Dental Indonesia</h3>
-                  <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Sistem terintegrasi untuk mendukung operasional multi-cabang, pelacakan inventaris, dan alur distribusi alat kesehatan yang lebih efisien.
-                  </p>
-                </div>
-
-                <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
-                  <button onclick="openConsultationModal('Case Study: Cobra Dental')" class="text-xs font-semibold text-blue-400 hover:text-white flex items-center gap-1.5 transition-colors">
-                    <span>Lihat Detail Project</span>
-                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CARD 2: PETROKIMIA GRESIK -->
-            <div class="reveal-scale delay-200 glass-card-dark rounded-2xl overflow-hidden border border-slate-700/80 hover:border-blue-500 transition-all group flex flex-col justify-between">
-              <!-- Hardcoded Petrochemical Plant Photo -->
-              <div class="relative h-48 overflow-hidden">
-                <img id="cs-img-1" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Petrokimia Gresik Case Study" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                
-                <!-- Client Badge Overlay -->
-                <div class="absolute top-4 left-4 flex items-center gap-2 bg-slate-950/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-emerald-500/30 shadow-lg">
-                  <div class="w-5 h-5 rounded bg-emerald-600 flex items-center justify-center text-white text-[10px] font-black">PG</div>
-                  <span class="font-black text-xs tracking-wider text-white">PETROKIMIA <span class="text-emerald-400">GRESIK</span></span>
-                </div>
-              </div>
-
-              <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                <div>
-                  <div class="text-[10px] font-bold text-emerald-400 tracking-wider uppercase">INDUSTRI: PUPUK & KIMIA</div>
-                  <h3 class="text-lg font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">Petrokimia Gresik</h3>
-                  <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Solusi digital untuk mendukung proses operasional pabrikasi, pencatatan otomatis shift produksi, dan pelaporan terintegrasi skala enterprise.
-                  </p>
-                </div>
-
-                <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
-                  <button onclick="openConsultationModal('Case Study: Petrokimia Gresik')" class="text-xs font-semibold text-blue-400 hover:text-white flex items-center gap-1.5 transition-colors">
-                    <span>Lihat Detail Project</span>
-                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CARD 3: FOKUS JASA MITRA -->
-            <div class="reveal-scale delay-300 glass-card-dark rounded-2xl overflow-hidden border border-slate-700/80 hover:border-blue-500 transition-all group flex flex-col justify-between">
-              <!-- Hardcoded Modern Business Management Photo -->
-              <div class="relative h-48 overflow-hidden">
-                <img id="cs-img-2" src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" alt="Fokus Jasa Mitra Case Study" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
-                
-                <!-- Client Badge Overlay -->
-                <div class="absolute top-4 left-4 flex items-center gap-2 bg-slate-950/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-cyan-500/30 shadow-lg">
-                  <div class="w-5 h-5 rounded bg-blue-600 flex items-center justify-center text-white text-[10px] font-black">F</div>
-                  <span class="font-black text-xs tracking-wider text-white">FOKUS <span class="text-cyan-400">JASA MITRA</span></span>
-                </div>
-              </div>
-
-              <div class="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                <div>
-                  <div class="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">INDUSTRI: MANPOWER & BUSINESS SERVICES</div>
-                  <h3 class="text-lg font-bold text-white mt-1 group-hover:text-blue-400 transition-colors">Fokus Jasa Mitra</h3>
-                  <p class="text-xs text-slate-300 mt-2 leading-relaxed">
-                    Sistem manajemen operasional dan presensi untuk memantau penempatan ribuan tenaga kerja profesional di berbagai mitra perusahaan klien.
-                  </p>
-                </div>
-
-                <div class="pt-4 border-t border-slate-800 flex items-center justify-between">
-                  <button onclick="openConsultationModal('Case Study: Fokus Jasa Mitra')" class="text-xs font-semibold text-blue-400 hover:text-white flex items-center gap-1.5 transition-colors">
-                    <span>Lihat Detail Project</span>
-                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                  </button>
-                  <div class="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                    <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Bottom Footer Bar -->
-          <div class="reveal-init delay-200 border-t border-slate-800/80 pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            <div class="font-bold tracking-widest uppercase text-[11px]">
-              SOLUSI NYATA UNTUK PERTUMBUHAN BISNIS
-            </div>
-            <div class="flex items-center gap-3">
-              <span class="text-white font-semibold">Lebih banyak cerita sukses lainnya</span>
-              <button onclick="goToSlide(7);" class="w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors">
-                <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              </button>
-            </div>
-          </div>
-
+        <div class="pt-4 flex flex-wrap items-center justify-center gap-4">
+          <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-8 py-3.5 rounded-full inline-flex items-center gap-2 shadow-lg shadow-blue-600/30 transition-transform hover:scale-105 active:scale-95">
+            <span>Jadwalkan Konsultasi Gratis</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+          <a href="https://wa.me/6281234567890?text=Halo%20Expressa%2C%20saya%20tertarik%20untuk%20konsultasi%20sistem" target="_blank" class="bg-white/10 hover:bg-white/20 text-white font-semibold text-sm px-6 py-3.5 rounded-full border border-white/20 transition-all inline-flex items-center gap-2 hover:scale-105 active:scale-95">
+            <i data-lucide="message-circle" class="w-4 h-4 text-emerald-400"></i>
+            <span>Chat via WhatsApp</span>
+          </a>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- ========================================== -->
-      <!-- SECTION 08: BEHIND THE SYSTEM (TIM KAMI)   -->
-      <!-- ========================================== -->
-      <section id="tim" class="section-layer bg-slate-50 text-slate-900 pt-24 pb-16 px-6 md:px-12 relative flex flex-col justify-between">
-        <!-- Subtle Pattern Background -->
-        <div class="absolute inset-0 bg-[radial-gradient(#3b82f6_1px,transparent_1px)] [background-size:28px_28px] opacity-10 pointer-events-none"></div>
+  </main>
 
-        <div class="relative z-10 max-w-7xl mx-auto w-full flex-1 flex flex-col justify-between">
-          
-          <!-- Top Section: Header & Copywriting -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div class="lg:col-span-8 space-y-3">
-              <!-- Main Title -->
-              <h2 class="reveal-init delay-200 text-3xl md:text-5xl font-extrabold text-slate-900 leading-tight">
-                Sistem yang Baik Dibangun <br>
-                oleh <span class="text-blue-600">Orang yang Memahami Bisnis.</span>
-              </h2>
+  <!-- ======================================================== -->
+  <!-- FOOTER (DARK NAVY LIKE REFERENCE IMAGE)                  -->
+  <!-- ======================================================== -->
+  <footer class="bg-[#0B132B] text-slate-400 py-12 px-6 md:px-12 text-xs">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+      
+      <!-- Brand Col -->
+      <div class="space-y-3 md:col-span-1">
+        <div class="text-xl font-black text-white">EXPRESSA</div>
+        <p class="text-slate-400 text-xs leading-relaxed">
+          Technology That Works Your Way. Mitra pengembangan sistem digital dan integrasi bisnis terpercaya di Indonesia.
+        </p>
+      </div>
 
-              <p class="reveal-init delay-300 text-slate-600 text-sm md:text-base max-w-2xl leading-relaxed">
-                Kami tidak hanya menulis kode. Kami memahami alur proses, dinamika lapangan, dan tujuan strategis yang ada di baliknya.
-              </p>
-            </div>
+      <!-- Links Col 1 -->
+      <div class="space-y-2">
+        <div class="text-white font-bold text-xs uppercase tracking-wider mb-3">Navigasi</div>
+        <div><a href="#beranda" class="hover:text-white transition-colors">Beranda</a></div>
+        <div><a href="#framework" class="hover:text-white transition-colors">Framework Expressa</a></div>
+        <div><a href="#layanan" class="hover:text-white transition-colors">Layanan</a></div>
+        <div><a href="/portofolio" class="hover:text-white transition-colors">Portofolio</a></div>
+        <div><a href="/tim" class="hover:text-white transition-colors">Tim Kami</a></div>
+      </div>
 
-            <!-- Right Column Note -->
-            <div class="lg:col-span-4 text-right reveal-init delay-200">
-              <div class="text-xs font-bold uppercase tracking-widest text-blue-600">
-                Expressa People.
-              </div>
-              <div class="font-handwriting text-3xl text-slate-800 mt-1">
-                Real Impact.
-              </div>
-            </div>
-          </div>
+      <!-- Links Col 2 -->
+      <div class="space-y-2">
+        <div class="text-white font-bold text-xs uppercase tracking-wider mb-3">Portofolio & Solusi</div>
+        <div><a href="/portofolio" class="hover:text-white transition-colors">Katalog Portofolio</a></div>
+        <div><a href="/portofolio" class="hover:text-white transition-colors">Studi Kasus Klien</a></div>
+        <div><a href="/admin" class="hover:text-white transition-colors flex items-center gap-1.5">
+          <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+          <span>CMS Admin</span>
+        </a></div>
+      </div>
 
-          <!-- Middle Section 1: 7 Professional Team Roles Grid -->
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-3 my-6">
-            
-            <!-- 1. Business Analyst -->
-            <div class="reveal-scale delay-100 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-0" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80" alt="Business Analyst" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="users" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">Business Analyst</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Analisis Proses</div>
-            </div>
+      <!-- Links Col 3: Contact / Action -->
+      <div class="space-y-3">
+        <div class="text-white font-bold text-xs uppercase tracking-wider mb-3">Hubungi Kami</div>
+        <p class="text-xs text-slate-400">Siap berkonsultasi mengenai kebutuhan digitalisasi perusahaan Anda.</p>
+        <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs px-4 py-2 rounded-full flex items-center gap-1.5 transition-colors">
+          <span>Mulai Konsultasi</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
 
-            <!-- 2. Project Manager -->
-            <div class="reveal-scale delay-200 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-1" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="Project Manager" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="clipboard-list" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">Project Manager</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Manajemen Proyek</div>
-            </div>
+    </div>
 
-            <!-- 3. Developer -->
-            <div class="reveal-scale delay-300 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-2" src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80" alt="Developer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="code" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">Developer</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Arsitektur & Kode</div>
-            </div>
-
-            <!-- 4. UI/UX Designer -->
-            <div class="reveal-scale delay-400 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-3" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80" alt="UI/UX Designer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="pen-tool" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">UI/UX</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Desain Pengalaman</div>
-            </div>
-
-            <!-- 5. Implementator -->
-            <div class="reveal-scale delay-500 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-4" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" alt="Implementator" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="settings" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">Implementator</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Adopsi Lapangan</div>
-            </div>
-
-            <!-- 6. Network Engineer -->
-            <div class="reveal-scale delay-600 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-5" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80" alt="Network Engineer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="server" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">Network Eng.</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Cloud & Jaringan</div>
-            </div>
-
-            <!-- 7. Support Specialist -->
-            <div class="reveal-scale delay-700 bg-white rounded-xl p-3 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-500 transition-all text-center group col-span-2 sm:col-span-1">
-              <div class="w-full h-24 rounded-lg overflow-hidden mb-2 relative">
-                <img id="team-img-6" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" alt="Support Specialist" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-              </div>
-              <div class="w-7 h-7 mx-auto -mt-5 mb-1.5 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-md relative z-10">
-                <i data-lucide="headphones" class="w-3.5 h-3.5"></i>
-              </div>
-              <div class="font-bold text-slate-900 text-xs">Support</div>
-              <div class="text-[9px] text-slate-500 mt-0.5">Pendampingan 24/7</div>
-            </div>
-
-          </div>
-
-          <!-- Middle Section 2: Large Team Collaboration Panoramic Banner -->
-          <div class="reveal-scale delay-200 relative rounded-2xl overflow-hidden shadow-lg border border-slate-200 my-2 h-56 md:h-64">
-            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80" alt="Expressa Collaborative Team" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/60 to-transparent"></div>
-            
-            <div class="absolute inset-0 p-6 md:p-8 flex flex-col justify-center max-w-lg text-white space-y-2">
-              <div class="text-2xl md:text-3xl font-black text-blue-400">Expressa</div>
-              <div class="text-base md:text-lg font-bold text-white leading-tight">People Build Better Systems.</div>
-              <p class="text-xs text-slate-300 leading-relaxed">
-                Kekuatan kami bertumpu pada kolaborasi tim ahli multidisiplin yang berdedikasi membangun sistem teknologi yang relevan dan bernilai jangka panjang bagi operasional Anda.
-              </p>
-              <div class="pt-2">
-                <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold px-4 py-2 rounded-full inline-flex items-center gap-2 transition-transform hover:scale-105">
-                  <span>Mulai Kolaborasi Bersama Kami</span>
-                  <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Bottom Footer Bar -->
-          <div class="reveal-init delay-200 border-t border-slate-200 pt-6 mt-4 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-            <div>
-              <span class="font-bold text-blue-600">EXPRESSA</span> &nbsp;|&nbsp; Technology That Works Your Way &copy; 2024. All rights reserved.
-            </div>
-            <div class="flex items-center gap-6">
-              <span class="cursor-pointer hover:text-blue-600 transition-colors" onclick="goToSlide(0)">Beranda</span>
-              <span class="cursor-pointer hover:text-blue-600 transition-colors" onclick="goToSlide(3)">Solusi</span>
-              <span class="cursor-pointer hover:text-blue-600 transition-colors" onclick="goToSlide(6)">Project</span>
-              <a href="/admin" class="hover:text-blue-600 transition-colors flex items-center gap-1 font-medium">
-                <i data-lucide="shield" class="w-3 h-3"></i>
-                <span>CMS Admin</span>
-              </a>
-              <span class="text-blue-600 font-bold cursor-pointer hover:underline flex items-center gap-1" onclick="goToSlide(0)">
-                <span>Kembali Ke Atas</span>
-                <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
-              </span>
-            </div>
-          </div>
-
-        </div>
-      </section>
+    <div class="max-w-7xl mx-auto border-t border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500">
+      <div>&copy; 2024 Expressa. All rights reserved.</div>
+      <div class="flex items-center gap-4">
+        <a href="#beranda" class="hover:text-white transition-colors">Kembali ke Atas</a>
+      </div>
+    </div>
+  </footer>
 
   <!-- ========================================== -->
-  <!-- INTERACTIVE CONSULTATION MODAL (POPUP)     -->
+  <!-- INTERACTIVE CONSULTATION MODAL             -->
   <!-- ========================================== -->
   <div id="consultation-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <!-- Backdrop Blur Overlay -->
-    <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md opacity-0 transition-opacity duration-300"></div>
+    <div id="modal-backdrop" class="fixed inset-0 bg-slate-950/60 backdrop-blur-sm opacity-0 transition-opacity duration-300"></div>
 
-    <!-- Modal Box Content -->
-    <div id="modal-content" class="relative z-10 w-full max-w-lg bg-[#0E1526] border border-slate-700/80 rounded-2xl shadow-2xl p-6 sm:p-8 text-white opacity-0 scale-95 translate-y-4 transition-all duration-300">
+    <div id="modal-content" class="relative z-10 w-full max-w-lg bg-white dark:bg-[#1E293B] border border-slate-200 dark:border-slate-700 rounded-3xl shadow-2xl p-6 sm:p-8 text-slate-900 dark:text-white opacity-0 scale-95 translate-y-4 transition-all duration-300">
       
-      <!-- Close Button -->
-      <button id="close-modal-btn" class="absolute top-4 right-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors">
+      <button id="close-modal-btn" class="absolute top-5 right-5 text-slate-400 hover:text-slate-700 dark:hover:text-white p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
 
-      <!-- Form Content -->
       <form id="consultation-form" class="space-y-4">
         <div>
-          <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">KONSULTASI GRATIS</span>
-          <h3 class="text-xl font-extrabold text-white mt-0.5">Diskusikan Kebutuhan Digital Anda</h3>
-          <p class="text-xs text-slate-400 mt-1">Isi formulir singkat di bawah ini, konsultan teknologi Expressa akan segera menghubungi Anda.</p>
+          <span class="text-[10px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest">KONSULTASI GRATIS</span>
+          <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mt-0.5">Diskusikan Kebutuhan Digital Anda</h3>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Isi formulir singkat di bawah ini, konsultan Expressa akan segera menghubungi Anda.</p>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Nama Lengkap *</label>
-            <input type="text" id="consultation-name" required placeholder="Contoh: Budi Santoso" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap *</label>
+            <input type="text" id="consultation-name" required placeholder="Contoh: Budi Santoso" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Nomor WhatsApp *</label>
-            <input type="tel" id="consultation-phone" required placeholder="Contoh: 081234567890" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Nomor WhatsApp *</label>
+            <input type="tel" id="consultation-phone" required placeholder="Contoh: 081234567890" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Perusahaan / Usaha</label>
-            <input type="text" id="consultation-company" placeholder="Nama Perusahaan" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Perusahaan / Usaha</label>
+            <input type="text" id="consultation-company" placeholder="Nama Perusahaan" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
           <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Email Bisnis</label>
-            <input type="email" id="consultation-email" placeholder="budi@company.com" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500">
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Email Bisnis</label>
+            <input type="email" id="consultation-email" placeholder="budi@company.com" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
           </div>
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Pilihan Layanan / Solusi</label>
-          <select id="consultation-service" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500">
+          <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Pilihan Layanan / Solusi</label>
+          <select id="consultation-service" class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors">
             <option value="Custom Software">Custom Software / Web Application</option>
             <option value="Mobile Application">Mobile Application (Android & iOS)</option>
             <option value="ERP & Business System">ERP & Business Management System</option>
-            <option value="System Integration">System Integration & API Connecting</option>
-            <option value="AI & Automation">AI & Workflow Automation</option>
-            <option value="IT & Digital Consulting">IT & Digital Strategy Consulting</option>
+            <option value="System Integration">Integrasi Sistem & API</option>
+            <option value="AI & Automation">AI & Otomasi Alur Kerja</option>
+            <option value="IT & Digital Consulting">Konsultasi IT & Strategi Digital</option>
+            <option value="Framework Expressa Solution">Asesmen 11 Tahap Framework Expressa</option>
             <option value="Case Study: Cobra Dental">Case Study: Cobra Dental (Alat Kesehatan)</option>
             <option value="Case Study: Petrokimia Gresik">Case Study: Petrokimia Gresik (Pupuk & Kimia)</option>
             <option value="Case Study: Fokus Jasa Mitra">Case Study: Fokus Jasa Mitra (Manpower)</option>
@@ -1504,11 +1322,11 @@
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Ceritakan Singkat Tantangan Bisnis Anda</label>
-          <textarea id="consultation-message" rows="3" placeholder="Misal: Saat ini proses rekap stok gudang kami masih manual menggunakan spreadsheet dan butuh diintegrasikan..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 resize-none"></textarea>
+          <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">Ceritakan Singkat Kebutuhan Anda</label>
+          <textarea id="consultation-message" rows="3" placeholder="Misal: Kami ingin mengintegrasikan stok barang multi-gudang dan otomatisasi pembuatan invoice..." class="w-full bg-slate-50 dark:bg-[#131B2E] border border-slate-300 dark:border-slate-700 rounded-xl px-3.5 py-2 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:bg-white dark:focus:bg-[#0F172A] transition-colors resize-none"></textarea>
         </div>
 
-        <button type="submit" id="submit-consultation-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm py-2.5 rounded-lg shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 flex items-center justify-center gap-2 transition-all">
+        <button type="submit" id="submit-consultation-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm py-3 rounded-xl shadow-md hover:shadow-lg flex items-center justify-center gap-2 transition-all">
           <i data-lucide="loader-2" id="submit-spinner" class="w-4 h-4 animate-spin hidden"></i>
           <span id="submit-btn-text">Kirim Pengajuan Konsultasi</span>
         </button>
@@ -1516,21 +1334,21 @@
 
       <!-- Success State -->
       <div id="form-success" class="hidden text-center py-6 space-y-4">
-        <div class="w-14 h-14 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto animate-bounce-slow">
+        <div class="w-14 h-14 rounded-full bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 flex items-center justify-center mx-auto">
           <i data-lucide="check" class="w-8 h-8"></i>
         </div>
         <div>
-          <h4 class="text-lg font-bold text-white">Terima Kasih, <span id="success-client-name">Klien</span>!</h4>
-          <p class="text-xs text-slate-300 mt-1 max-w-sm mx-auto">
-            Pengajuan konsultasi Anda telah berhasil kami terima. Tim konsultan teknologi Expressa akan segera menghubungi Anda dalam 1x24 jam kerja.
+          <h4 class="text-lg font-bold text-slate-900 dark:text-white">Terima Kasih, <span id="success-client-name">Klien</span>!</h4>
+          <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 max-w-sm mx-auto">
+            Pengajuan konsultasi Anda telah berhasil kami terima. Tim Expressa akan segera menghubungi Anda dalam 1x24 jam kerja.
           </p>
         </div>
         <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a id="wa-direct-btn" href="#" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold px-4 py-2.5 rounded-lg flex items-center justify-center gap-2 transition-colors">
+          <a id="wa-direct-btn" href="#" target="_blank" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-xl flex items-center justify-center gap-2 transition-colors">
             <i data-lucide="message-circle" class="w-4 h-4"></i>
             <span>Chat Langsung via WhatsApp</span>
           </a>
-          <button onclick="closeConsultationModal()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors">
+          <button onclick="closeConsultationModal()" class="w-full sm:w-auto bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors">
             Tutup
           </button>
         </div>
