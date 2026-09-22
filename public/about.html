@@ -6,7 +6,7 @@
   <title>About Us | Expressa - Technology That Works Your Way</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230066FF'/><text x='50%' y='68%' font-size='60' font-family='sans-serif' font-weight='900' fill='white' text-anchor='middle'>E</text></svg>">
+  <link rel="icon" type="image/png" href="/logo.png">
   
   <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,9 +56,8 @@
   <!-- ========================================== -->
   <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between backdrop-blur-md bg-white/95 dark:bg-[#131B2E]/95 border-b border-slate-200/80 dark:border-slate-800 shadow-sm">
     <!-- Brand Logo -->
-    <a href="/" class="flex flex-col group">
-      <div class="text-xl font-extrabold tracking-wider leading-tight text-blue-600 nav-logo-text">EXPRESSA</div>
-      <div class="nav-subtitle text-[10px] tracking-widest text-slate-500 dark:text-slate-400 font-medium -mt-0.5">Technology That Works Your Way</div>
+    <a href="/" class="flex items-center group">
+      <img src="/logo.png" alt="Expressa" class="h-9 w-auto object-contain">
     </a>
 
     <!-- Center Navigation Links -->
@@ -99,11 +98,11 @@
       <div class="mb-16 text-center max-w-3xl mx-auto">
 
         <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight">
-          Teknologi yang Mengikuti <br>
-          <span class="text-blue-600 dark:text-blue-400">Cara Kerja Bisnis Anda.</span>
+          <span id="about-hero-title">Teknologi yang Mengikuti</span> <br>
+          <span id="about-hero-title-highlight" class="text-blue-600 dark:text-blue-400">Cara Kerja Bisnis Anda.</span>
         </h1>
 
-        <p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm md:text-base mt-4 leading-relaxed max-w-2xl mx-auto">
+        <p id="about-hero-subtitle" class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm md:text-base mt-4 leading-relaxed max-w-2xl mx-auto">
           Expressa didirikan dengan keyakinan bahwa sistem terbaik adalah sistem yang beradaptasi dengan keunikan proses bisnis Anda, mempermudah kerja tim lapangan, dan mendorong pertumbuhan tanpa kompromi.
         </p>
 
@@ -166,15 +165,17 @@
           <!-- Right: Narrative Content -->
           <div class="lg:col-span-6 space-y-4">
             <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Perjalanan Kami</span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+            <h2 id="about-story-title" class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
               Menjembatani Celah Antara Kebutuhan Nyata &amp; Kompleksitas Teknologi
             </h2>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Banyak perusahaan di Indonesia menghadapi dilema digitalisasi: memilih software massal yang kaku dan memaksa tim mengubah kebiasaan kerja efektif mereka, atau mengembangkan sistem kustom yang seringkali berlarut-larut tanpa pemahaman bisnis yang mendalam.
-            </p>
-            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-              Expressa hadir membawa terobosan baru. Kami memadukan metodologi <strong class="text-slate-900 dark:text-white">Business Analysis First</strong> dengan arsitektur rekayasa software modern. Kami tidak sekadar mengetik baris kode, kami membedah alur operasional, menemukan hambatan, dan merancang sistem digital yang benar-benar dirasakan manfaatnya dari jajaran direksi hingga staf lapangan.
-            </p>
+            <div id="about-story-text" class="space-y-4">
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Banyak perusahaan di Indonesia menghadapi dilema digitalisasi: memilih software massal yang kaku dan memaksa tim mengubah kebiasaan kerja efektif mereka, atau mengembangkan sistem kustom yang seringkali berlarut-larut tanpa pemahaman bisnis yang mendalam.
+              </p>
+              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Expressa hadir membawa terobosan baru. Kami memadukan metodologi <strong class="text-slate-900 dark:text-white">Business Analysis First</strong> dengan arsitektur rekayasa software modern. Kami tidak sekadar mengetik baris kode, kami membedah alur operasional, menemukan hambatan, dan merancang sistem digital yang benar-benar dirasakan manfaatnya dari jajaran direksi hingga staf lapangan.
+              </p>
+            </div>
             <div class="pt-2 flex flex-wrap items-center gap-3">
               <div class="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
                 <i data-lucide="check" class="w-4 h-4 text-emerald-500"></i>
@@ -213,10 +214,10 @@
                 <i data-lucide="compass" class="w-6 h-6"></i>
               </div>
               <span class="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">Visi Perusahaan</span>
-              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1 mb-4">
+              <h3 id="about-vision-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1 mb-4">
                 Mitra Transformasi Digital Terpercaya No. 1
               </h3>
-              <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p id="about-vision-text" class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
                 Menjadi katalis transformasi teknologi pilihan utama di Asia Tenggara yang mendemokratisasikan sistem enterprise kustom, sehingga setiap bisnis dapat memiliki infrastruktur digital berkelas dunia yang efisien, transparan, dan terukur.
               </p>
             </div>
@@ -234,10 +235,10 @@
                 <i data-lucide="flag" class="w-6 h-6"></i>
               </div>
               <span class="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">Misi Perusahaan</span>
-              <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1 mb-4">
+              <h3 id="about-mission-title" class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mt-1 mb-4">
                 3 Pilar Aksi Nyata Kami
               </h3>
-              <div class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
+              <div id="about-missions-list" class="space-y-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300">
                 <div class="flex items-start gap-3">
                   <div class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">1</div>
                   <p class="leading-relaxed"><strong class="text-slate-900 dark:text-white">Presisi Operasional:</strong> Merancang sistem perangkat lunak yang selaras dengan SOP riil tanpa membebani tim dengan birokrasi sistem berlebih.</p>
@@ -271,7 +272,7 @@
           <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Komitmen moral dan teknis yang memandu setiap keputusan rekayasa sistem yang kami bangun.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div id="about-core-values-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
           <div class="clean-card bg-white dark:bg-[#131B2E] p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between">
             <div>
@@ -538,6 +539,7 @@
 
   <!-- Scripts -->
   <script src="/js/consultation.js"></script>
+  <script src="/js/app.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) {

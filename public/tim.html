@@ -6,7 +6,7 @@
   <title>Tim Kami | Expressa - Technology That Works Your Way</title>
   
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230066FF'/><text x='50%' y='68%' font-size='60' font-family='sans-serif' font-weight='900' fill='white' text-anchor='middle'>E</text></svg>">
+  <link rel="icon" type="image/png" href="/logo.png">
   
   <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,9 +56,8 @@
   <!-- ========================================== -->
   <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between backdrop-blur-md bg-white/95 dark:bg-[#131B2E]/95 border-b border-slate-200/80 dark:border-slate-800 shadow-sm">
     <!-- Brand Logo -->
-    <a href="/" class="flex flex-col group">
-      <div class="text-xl font-extrabold tracking-wider leading-tight text-blue-600 nav-logo-text">EXPRESSA</div>
-      <div class="nav-subtitle text-[10px] tracking-widest text-slate-500 dark:text-slate-400 font-medium -mt-0.5">Technology That Works Your Way</div>
+    <a href="/" class="flex items-center group">
+      <img src="/logo.png" alt="Expressa" class="h-9 w-auto object-contain">
     </a>
 
     <!-- Center Navigation Links -->
@@ -136,7 +135,7 @@
           <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2">Setiap peran memiliki fokus presisi demi kesuksesan implementasi sistem Anda.</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div id="team-members-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           
           <!-- Role 1: Business Analyst -->
           <div class="clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 flex flex-col justify-between group">
@@ -452,6 +451,7 @@
 
   <!-- Scripts -->
   <script src="/js/consultation.js"></script>
+  <script src="/js/app.js"></script>
   <script src="/js/team.js"></script>
 </body>
 </html>

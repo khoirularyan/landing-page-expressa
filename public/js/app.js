@@ -246,12 +246,110 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 6. Team Images
+    // 6. Team — render nama, jabatan, bio, foto dari CMS
     if (data.team && Array.isArray(data.team)) {
-      data.team.forEach((tm, idx) => {
-        const imgEl = document.getElementById(`team-img-${idx}`);
-        if (imgEl && tm.imageUrl) imgEl.src = tm.imageUrl;
+      const teamGrid = document.getElementById('team-grid-cms');
+      if (teamGrid) {
+        teamGrid.innerHTML = data.team.map((tm) => `
+          <div class="group flex flex-col items-center text-center p-5 bg-white dark:bg-[#1E293B] rounded-2xl border border-slate-200/80 dark:border-slate-800 hover:border-blue-500/40 dark:hover:border-blue-500/40 shadow-sm hover:shadow-lg transition-all duration-300">
+            <div class="w-20 h-20 rounded-2xl overflow-hidden mb-3 ring-2 ring-slate-200 dark:ring-slate-700 group-hover:ring-blue-500/50 transition-all">
+              <img src="${tm.imageUrl || ''}" alt="${tm.name || tm.role}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+            </div>
+            <div class="font-bold text-slate-900 dark:text-white text-sm">${tm.name || ''}</div>
+            <div class="text-blue-600 dark:text-blue-400 text-xs font-semibold mt-0.5">${tm.role || ''}</div>
+            ${tm.bio ? `<div class="text-slate-500 dark:text-slate-400 text-[11px] mt-2 leading-relaxed line-clamp-2">${tm.bio}</div>` : ''}
+          </div>
+        `).join('');
+        if (window.lucide) window.lucide.createIcons();
+      } else {
+        // Fallback: update by index (old behavior)
+        data.team.forEach((tm, idx) => {
+          const imgEl = document.getElementById(`team-img-${idx}`);
+          if (imgEl && tm.imageUrl) imgEl.src = tm.imageUrl;
+        });
+      }
+    }
+
+    // 7. Settings — Update semua link WhatsApp secara dinamis
+    if (data.settings && data.settings.whatsappNumber) {
+      const waNum = data.settings.whatsappNumber.replace(/\D/g, '');
+      const waDefaultText = encodeURIComponent(data.settings.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem');
+      // Update semua anchor yang menuju wa.me
+      document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+        const href = link.getAttribute('href') || '';
+        const textPart = href.includes('?text=') ? '?text=' + href.split('?text=')[1] : `?text=${waDefaultText}`;
+        link.setAttribute('href', `https://wa.me/${waNum}${textPart}`);
       });
+      // Simpan ke window untuk digunakan oleh form consultation
+      window.expressaWaNumber = waNum;
+      window.expressaWaText = data.settings.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem';
+    }
+
+    // 8. Services — render kartu layanan dari CMS
+    if (data.services && Array.isArray(data.services) && data.services.length > 0) {
+      const servicesGrid = document.getElementById('services-grid-cms') || document.getElementById('service-cards-container');
+      if (servicesGrid) {
+        servicesGrid.innerHTML = data.services.map((svc) => `
+          <div onclick="if(typeof openConsultationModal === 'function') openConsultationModal('${(svc.title || 'Layanan').replace(/'/g, "\\'")}')" class="service-item clean-card p-6 flex flex-col justify-between cursor-pointer group bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl hover:border-blue-500/50 dark:hover:border-blue-500/50 shadow-sm hover:shadow-lg transition-all">
+            <div>
+              <div class="w-11 h-11 rounded-2xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                <i data-lucide="${svc.icon || 'layers'}" class="w-5 h-5"></i>
+              </div>
+              <h3 class="font-bold text-slate-900 dark:text-white text-base group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">${svc.title || ''}</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${svc.description || ''}</p>
+            </div>
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 mt-4 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+              <span>Konsultasi Solusi</span>
+              <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+            </div>
+          </div>
+        `).join('');
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+
+    // 9. About Us page dynamic content
+    if (data.about) {
+      const ab = data.about;
+      const setEl = (id, val) => { const el = document.getElementById(id); if (el && val) el.textContent = val; };
+      setEl('about-hero-title', ab.heroTitle);
+      setEl('about-hero-title-highlight', ab.heroTitleHighlight);
+      setEl('about-hero-subtitle', ab.heroSubtitle);
+      setEl('about-story-title', ab.storyTitle);
+      // Story text with newlines
+      const storyEl = document.getElementById('about-story-text');
+      if (storyEl && ab.storyText) {
+        storyEl.innerHTML = ab.storyText.split('\n\n').map(p => `<p class="text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">${p}</p>`).join('');
+      }
+      setEl('about-vision-title', ab.visionTitle);
+      setEl('about-vision-text', ab.visionText);
+      setEl('about-mission-title', ab.missionTitle);
+      // Missions list
+      const missionList = document.getElementById('about-missions-list');
+      if (missionList && ab.missions && Array.isArray(ab.missions)) {
+        missionList.innerHTML = ab.missions.map((m, i) => `
+          <div class="flex items-start gap-3">
+            <div class="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">${i + 1}</div>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${m}</p>
+          </div>
+        `).join('');
+      }
+      // Core values
+      if (ab.coreValues && Array.isArray(ab.coreValues)) {
+        const cvGrid = document.getElementById('about-core-values-grid');
+        if (cvGrid) {
+          cvGrid.innerHTML = ab.coreValues.map(cv => `
+            <div class="p-5 bg-slate-50 dark:bg-[#182238] rounded-2xl border border-slate-200/80 dark:border-slate-800">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 flex items-center justify-center mb-3">
+                <i data-lucide="${cv.icon || 'star'}" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm mb-1">${cv.title || ''}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">${cv.description || ''}</p>
+            </div>
+          `).join('');
+          if (window.lucide) window.lucide.createIcons();
+        }
+      }
     }
   }
 

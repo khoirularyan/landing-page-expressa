@@ -1,4 +1,10 @@
 {
+  "settings": {
+    "whatsappNumber": "6281234567890",
+    "whatsappText": "Halo Expressa, saya tertarik untuk konsultasi sistem",
+    "companyEmail": "hello@expressa.id",
+    "companyName": "Expressa"
+  },
   "hero": {
     "headlinePart1": "Sistem Digital",
     "headlinePart2": "yang Mengikuti",
@@ -9,21 +15,84 @@
     "imageUrl": "/assets/images/expressa-hero-team.png",
     "imageCaption": "Tim Engineering Expressa"
   },
+  "services": [
+    {
+      "id": "svc-1",
+      "title": "ERP & Sistem Bisnis",
+      "description": "Sistem manajemen terintegrasi yang dirancang presisi mengikuti alur bisnis, aturan stok, dan hierarki otoritas perusahaan Anda.",
+      "icon": "server"
+    },
+    {
+      "id": "svc-2",
+      "title": "Aplikasi Web & Mobile",
+      "description": "Aplikasi web dan mobile operasional lapangan yang terhubung real-time ke server pusat, offline-first, dan mudah digunakan tim.",
+      "icon": "smartphone"
+    },
+    {
+      "id": "svc-3",
+      "title": "API & Otomasi Sistem",
+      "description": "Integrasi antar sistem, otomasi alur kerja, OCR dokumen, notifikasi WhatsApp otomatis, dan pipeline data bisnis.",
+      "icon": "zap"
+    },
+    {
+      "id": "svc-4",
+      "title": "Industrial & IoT",
+      "description": "Solusi monitoring mesin produksi, pencatatan shift pabrik, sensor IoT real-time, dan dashboard quality control.",
+      "icon": "cpu"
+    }
+  ],
   "whyUs": {
     "imageUrl": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80"
+  },
+  "about": {
+    "heroTitle": "Teknologi yang Mengikuti",
+    "heroTitleHighlight": "Cara Kerja Bisnis Anda.",
+    "heroSubtitle": "Expressa didirikan dengan keyakinan bahwa sistem terbaik adalah sistem yang beradaptasi dengan keunikan proses bisnis Anda, mempermudah kerja tim lapangan, dan mendorong pertumbuhan tanpa kompromi.",
+    "storyTitle": "Cerita & Filosofi Kami",
+    "storyText": "Expressa lahir dari pengamatan langsung di lapangan — bagaimana perusahaan-perusahaan dengan proses bisnis yang kompleks dan unik justru dipaksa mengubah cara kerjanya demi mengikuti batasan software jadi yang kaku.\n\nKami hadir untuk membalik paradigma itu. Dengan metodologi Business Analysis First, kami selalu memulai dari pemahaman mendalam terhadap alur kerja riil tim lapangan, bukan dari fitur-fitur generik yang sudah ada di pasaran.",
+    "visionTitle": "Visi",
+    "visionText": "Menjadi mitra transformasi digital terpercaya yang membantu bisnis Indonesia berkembang melalui sistem yang benar-benar mengikuti cara kerja mereka — bukan sebaliknya.",
+    "missionTitle": "Misi",
+    "missions": [
+      "Membangun sistem yang presisi mengikuti alur kerja dan aturan bisnis unik setiap klien.",
+      "Mengintegrasikan seluruh data operasional menjadi satu sumber kebenaran yang real-time dan akurat.",
+      "Memastikan adopsi teknologi yang berkelanjutan melalui pelatihan, pendampingan, dan dukungan teknis jangka panjang."
+    ],
+    "coreValues": [
+      {
+        "title": "Pragmatisme Solusi",
+        "description": "Setiap keputusan teknis kami dasarkan pada nilai bisnis nyata, bukan tren teknologi semata.",
+        "icon": "target"
+      },
+      {
+        "title": "Transparansi Mutlak",
+        "description": "Tidak ada biaya tersembunyi, timeline terbuka, dan laporan progres reguler ke seluruh stakeholder.",
+        "icon": "eye"
+      },
+      {
+        "title": "Kedaulatan Klien",
+        "description": "Anda adalah pemilik penuh source code dan data sistem yang kami bangun.",
+        "icon": "shield"
+      },
+      {
+        "title": "Kemitraan Sejati",
+        "description": "Kami hadir jauh setelah proyek selesai — sebagai mitra teknis jangka panjang yang responsif.",
+        "icon": "handshake"
+      }
+    ]
   },
   "clients": [
     {
       "id": "client-1",
       "name": "COBRA DENTAL",
       "icon": "building",
-      "logoUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZExMEhd_7hsaqNPZ4sKS8nLKPX1kcJZ085IBAe5qrvw&s=10"
+      "logoUrl": ""
     },
     {
       "id": "client-2",
       "name": "PETROKIMIA GRESIK",
       "icon": "activity",
-      "logoUrl": "https://hems.jpp-petrokimia-gresik.com/gambar/img/JPP.png"
+      "logoUrl": ""
     },
     {
       "id": "client-3",
@@ -93,38 +162,52 @@
   ],
   "team": [
     {
+      "id": "tm-1",
+      "name": "Nama Anggota",
       "role": "Business Analyst",
-      "subtitle": "Analisis Proses",
+      "bio": "Spesialis analisis proses bisnis dan alur kerja operasional.",
       "imageUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
     },
     {
+      "id": "tm-2",
+      "name": "Nama Anggota",
       "role": "Project Manager",
-      "subtitle": "Manajemen Proyek",
+      "bio": "Memastikan setiap tahap proyek berjalan tepat waktu dan sesuai ekspektasi klien.",
       "imageUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80"
     },
     {
-      "role": "Developer",
-      "subtitle": "Arsitektur & Kode",
+      "id": "tm-3",
+      "name": "Nama Anggota",
+      "role": "Lead Developer",
+      "bio": "Merancang arsitektur sistem dan memimpin pengembangan kode berkualitas tinggi.",
       "imageUrl": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
     },
     {
-      "role": "UI/UX",
-      "subtitle": "Desain Pengalaman",
+      "id": "tm-4",
+      "name": "Nama Anggota",
+      "role": "UI/UX Designer",
+      "bio": "Merancang antarmuka yang intuitif dan pengalaman pengguna yang menyenangkan.",
       "imageUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80"
     },
     {
+      "id": "tm-5",
+      "name": "Nama Anggota",
       "role": "Implementator",
-      "subtitle": "Adopsi Lapangan",
+      "bio": "Memimpin adopsi sistem di lapangan dan pelatihan tim operasional klien.",
       "imageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
     },
     {
-      "role": "Network Eng.",
-      "subtitle": "Cloud & Jaringan",
+      "id": "tm-6",
+      "name": "Nama Anggota",
+      "role": "Network Engineer",
+      "bio": "Mengelola infrastruktur cloud, keamanan jaringan, dan performa server.",
       "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
     },
     {
-      "role": "Support",
-      "subtitle": "Pendampingan 24/7",
+      "id": "tm-7",
+      "name": "Nama Anggota",
+      "role": "Support Specialist",
+      "bio": "Memberikan pendampingan teknis responsif dan pemeliharaan sistem 24/7.",
       "imageUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
     }
   ],
@@ -172,5 +255,5 @@
       "description": "Portal pemesanan grosir tiering harga khusus distributor dengan plafon piutang otomatis."
     }
   ],
-  "_lastUpdated": 1790043190845
+  "_lastUpdated": 1790061755671
 }

@@ -16,6 +16,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentContent = null;
   let consultationsList = [];
 
+  function escapeHtml(str) {
+    if (!str && str !== 0) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   // DOM Elements
   const toast = document.getElementById('toast');
   const adminUserDisplay = document.getElementById('admin-user-display');
@@ -83,9 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (targetTabId === 'tab-leads') {
         loadConsultations();
       }
-
+      if (targetTabId === 'tab-services') {
+        if (currentContent) populateServicesTab(currentContent);
+      }
       if (targetTabId === 'tab-gallery') {
         if (currentContent) populateGalleryTab(currentContent);
+      }
+      if (targetTabId === 'tab-about') {
+        if (currentContent) populateAboutTab(currentContent);
+      }
+      if (targetTabId === 'tab-general') {
+        if (currentContent) populateGeneralTab(currentContent);
       }
 
       if (window.lucide) lucide.createIcons();
@@ -125,8 +143,11 @@ document.addEventListener('DOMContentLoaded', () => {
         localData = JSON.parse(cached);
         currentContent = localData;
         populateHeroForm(currentContent);
+        populateServicesTab(currentContent);
         populateImagesTab(currentContent);
         populateGalleryTab(currentContent);
+        populateAboutTab(currentContent);
+        populateGeneralTab(currentContent);
       }
     } catch (e) {}
 
@@ -143,8 +164,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentContent = json.data;
         populateHeroForm(currentContent);
+        populateServicesTab(currentContent);
         populateImagesTab(currentContent);
         populateGalleryTab(currentContent);
+        populateAboutTab(currentContent);
+        populateGeneralTab(currentContent);
         try {
           localStorage.setItem('expr_saved_content', JSON.stringify(currentContent));
         } catch (e) {}
@@ -518,21 +542,35 @@ document.addEventListener('DOMContentLoaded', () => {
       teamContainer.innerHTML = '';
       data.team.forEach((tm, idx) => {
         const item = document.createElement('div');
-        item.className = 'bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-center space-y-2';
+        item.className = 'team-admin-card bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3';
+        item.dataset.teamId = tm.id || `tm-${idx + 1}`;
         item.innerHTML = `
-          <div class="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-950">
-            <img id="team-img-preview-${idx}" src="${tm.imageUrl}" alt="${tm.role}" class="w-full h-full object-cover">
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
+            <img id="team-img-preview-${idx}" src="${tm.imageUrl || ''}" alt="${escapeHtml(tm.role || 'Role')}" class="w-full h-full object-cover">
           </div>
-          <div>
-            <div class="text-[11px] font-bold text-white truncate">${tm.role}</div>
-            <div class="text-[9px] text-slate-400 truncate">${tm.subtitle}</div>
+          <div class="space-y-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Role / Jabatan</label>
+              <input type="text" class="team-role-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(tm.role || '')}" placeholder="Business Analyst">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Anggota</label>
+              <input type="text" class="team-name-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(tm.name && tm.name !== 'Nama Anggota' ? tm.name : '')}" placeholder="Nama Lengkap">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Bio / Spesialisasi</label>
+              <textarea rows="2" class="team-bio-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300 focus:outline-none focus:border-blue-500 resize-none" placeholder="Deskripsi peran/keahlian...">${escapeHtml(tm.bio || tm.subtitle || '')}</textarea>
+            </div>
           </div>
-          <div class="space-y-1">
-            <input type="file" id="team-file-${idx}" accept="image/*" class="hidden">
-            <button type="button" onclick="document.getElementById('team-file-${idx}').click()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-semibold py-1 rounded border border-slate-700">
-              Upload
-            </button>
-            <input type="text" id="team-url-${idx}" value="${tm.imageUrl}" class="w-full bg-slate-950 border border-slate-800 rounded px-1.5 py-1 text-[9px] text-slate-300 font-mono">
+          <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
+            <div class="flex items-center gap-2">
+              <input type="file" id="team-file-${idx}" accept="image/*" class="hidden">
+              <button type="button" onclick="document.getElementById('team-file-${idx}').click()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-1.5 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5">
+                <i data-lucide="upload" class="w-3.5 h-3.5 text-blue-400"></i>
+                <span>Ganti Foto</span>
+              </button>
+            </div>
+            <input type="text" id="team-url-${idx}" value="${escapeHtml(tm.imageUrl || '')}" class="team-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-300 font-mono" placeholder="https://...">
           </div>
         `;
         teamContainer.appendChild(item);
@@ -543,17 +581,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         urlInput.addEventListener('input', () => {
           imgPreview.src = urlInput.value;
+          tm.imageUrl = urlInput.value;
         });
 
         fileInput.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
           try {
-            const compressed = await compressImage(file, 500, 0.82);
+            const compressed = await compressImage(file, 600, 0.85);
             const uploadedUrl = await uploadImageFile(compressed);
             if (uploadedUrl) {
               urlInput.value = uploadedUrl;
               imgPreview.src = uploadedUrl;
+              tm.imageUrl = uploadedUrl;
 
               // AUTO-SAVE IMMEDIATELY
               if (!currentContent) currentContent = {};
@@ -763,6 +803,228 @@ document.addEventListener('DOMContentLoaded', () => {
           btnSaveGallery.disabled = false;
           if (btnSaveGalleryText) btnSaveGalleryText.textContent = 'Simpan Perubahan';
         }, 1200);
+      });
+    }
+  }
+
+  // Populate Tab: Layanan Solusi
+  function populateServicesTab(data) {
+    const container = document.getElementById('services-admin-container');
+    const btnAddService = document.getElementById('btn-add-service');
+    const btnSaveServices = document.getElementById('btn-save-services');
+    const btnSaveServicesText = document.getElementById('btn-save-services-text');
+    if (!container) return;
+
+    if (!currentContent) currentContent = {};
+    if (!currentContent.services || !Array.isArray(currentContent.services)) {
+      currentContent.services = (data && data.services) ? [...data.services] : [];
+    }
+
+    function renderServiceCards() {
+      container.innerHTML = '';
+      if (!currentContent.services || currentContent.services.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 bg-slate-950/40 rounded-2xl border border-dashed border-slate-800">
+            <i data-lucide="layers" class="w-8 h-8 mx-auto mb-2 text-slate-600"></i>
+            <p class="text-sm font-semibold">Belum ada data layanan</p>
+            <p class="text-xs text-slate-500 mt-1">Klik tombol "+ Tambah Layanan Baru" untuk menambahkan kartu solusi.</p>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      currentContent.services.forEach((svc, idx) => {
+        const card = document.createElement('div');
+        card.className = 'service-admin-card bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-5 space-y-3.5';
+        card.dataset.serviceId = svc.id || `svc-${idx + 1}`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+            <span class="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              <span>Layanan #${idx + 1}</span>
+            </span>
+            <button type="button" class="btn-delete-service text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors" title="Hapus Layanan Ini">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Judul Layanan</label>
+            <input type="text" class="svc-title-input w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(svc.title || '')}" placeholder="Misal: ERP & Sistem Bisnis">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Nama Ikon Lucide (server, smartphone, zap, cpu, database, code, network)</label>
+            <div class="flex items-center gap-2">
+              <div class="w-8 h-8 rounded-lg bg-blue-950 border border-blue-800/60 text-blue-400 flex items-center justify-center shrink-0">
+                <i data-lucide="${svc.icon || 'layers'}" class="w-4 h-4"></i>
+              </div>
+              <input type="text" class="svc-icon-input w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-blue-500" value="${escapeHtml(svc.icon || 'layers')}" placeholder="server">
+            </div>
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-400 mb-1">Deskripsi Layanan</label>
+            <textarea rows="3" class="svc-desc-input w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500 resize-none" placeholder="Penjelasan ringkas solusi...">${escapeHtml(svc.description || '')}</textarea>
+          </div>
+        `;
+        container.appendChild(card);
+
+        const titleIn = card.querySelector('.svc-title-input');
+        const iconIn = card.querySelector('.svc-icon-input');
+        const descIn = card.querySelector('.svc-desc-input');
+        const delBtn = card.querySelector('.btn-delete-service');
+
+        titleIn.addEventListener('input', () => { svc.title = titleIn.value; });
+        iconIn.addEventListener('input', () => {
+          svc.icon = iconIn.value.trim();
+          const iconPreview = card.querySelector('.w-8 i');
+          if (iconPreview) iconPreview.setAttribute('data-lucide', svc.icon || 'layers');
+          if (window.lucide) lucide.createIcons();
+        });
+        descIn.addEventListener('input', () => { svc.description = descIn.value; });
+
+        if (delBtn) {
+          delBtn.addEventListener('click', async () => {
+            if (confirm(`Hapus layanan "${svc.title || 'ini'}"?`)) {
+              currentContent.services.splice(idx, 1);
+              renderServiceCards();
+              await saveContentToServer(currentContent, 'Layanan berhasil dihapus.');
+            }
+          });
+        }
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    renderServiceCards();
+
+    if (btnAddService && !btnAddService.dataset.listenerAttached) {
+      btnAddService.dataset.listenerAttached = 'true';
+      btnAddService.addEventListener('click', async () => {
+        if (!currentContent.services) currentContent.services = [];
+        currentContent.services.push({
+          id: `svc-${Date.now()}`,
+          title: 'Layanan Solusi Baru',
+          icon: 'layers',
+          description: 'Solusi sistem perangkat lunak yang dirancang kustom mengikuti kebutuhan unik bisnis Anda.'
+        });
+        renderServiceCards();
+        await saveContentToServer(currentContent, 'Layanan baru ditambahkan.');
+      });
+    }
+
+    if (btnSaveServices && !btnSaveServices.dataset.listenerAttached) {
+      btnSaveServices.dataset.listenerAttached = 'true';
+      btnSaveServices.addEventListener('click', async () => {
+        btnSaveServices.disabled = true;
+        if (btnSaveServicesText) btnSaveServicesText.textContent = 'Menyimpan...';
+
+        const cards = container.querySelectorAll('.service-admin-card');
+        currentContent.services = [];
+        cards.forEach((c, i) => {
+          currentContent.services.push({
+            id: c.dataset.serviceId || `svc-${i + 1}`,
+            title: c.querySelector('.svc-title-input')?.value.trim() || 'Layanan',
+            icon: c.querySelector('.svc-icon-input')?.value.trim() || 'layers',
+            description: c.querySelector('.svc-desc-input')?.value.trim() || ''
+          });
+        });
+
+        const ok = await saveContentToServer(currentContent, 'Daftar layanan berhasil disimpan & langsung aktif!');
+        btnSaveServices.disabled = false;
+        if (btnSaveServicesText) btnSaveServicesText.textContent = 'Simpan Layanan';
+      });
+    }
+  }
+
+  // Populate Tab: About Us
+  function populateAboutTab(data) {
+    if (!data) return;
+    const a = data.about || {};
+    const heroTitle = document.getElementById('about-hero-title-input');
+    const heroHighlight = document.getElementById('about-hero-highlight-input');
+    const heroSubtitle = document.getElementById('about-hero-subtitle-input');
+    const storyTitle = document.getElementById('about-story-title-input');
+    const storyText = document.getElementById('about-story-text-input');
+    const visionTitle = document.getElementById('about-vision-title-input');
+    const visionText = document.getElementById('about-vision-text-input');
+    const m1 = document.getElementById('about-mission-1-input');
+    const m2 = document.getElementById('about-mission-2-input');
+    const m3 = document.getElementById('about-mission-3-input');
+    const btnSaveAbout = document.getElementById('btn-save-about');
+    const btnSaveAboutText = document.getElementById('btn-save-about-text');
+
+    if (heroTitle) heroTitle.value = a.heroTitle || 'Teknologi yang Mengikuti';
+    if (heroHighlight) heroHighlight.value = a.heroTitleHighlight || 'Cara Kerja Bisnis Anda.';
+    if (heroSubtitle) heroSubtitle.value = a.heroSubtitle || '';
+    if (storyTitle) storyTitle.value = a.storyTitle || 'Cerita & Filosofi Kami';
+    if (storyText) storyText.value = a.storyText || '';
+    if (visionTitle) visionTitle.value = a.visionTitle || 'Visi Perusahaan';
+    if (visionText) visionText.value = a.visionText || '';
+    if (a.missions && Array.isArray(a.missions)) {
+      if (m1) m1.value = a.missions[0] || '';
+      if (m2) m2.value = a.missions[1] || '';
+      if (m3) m3.value = a.missions[2] || '';
+    }
+
+    if (btnSaveAbout && !btnSaveAbout.dataset.listenerAttached) {
+      btnSaveAbout.dataset.listenerAttached = 'true';
+      btnSaveAbout.addEventListener('click', async () => {
+        btnSaveAbout.disabled = true;
+        if (btnSaveAboutText) btnSaveAboutText.textContent = 'Menyimpan...';
+
+        if (!currentContent.about) currentContent.about = {};
+        currentContent.about.heroTitle = heroTitle?.value || '';
+        currentContent.about.heroTitleHighlight = heroHighlight?.value || '';
+        currentContent.about.heroSubtitle = heroSubtitle?.value || '';
+        currentContent.about.storyTitle = storyTitle?.value || '';
+        currentContent.about.storyText = storyText?.value || '';
+        currentContent.about.visionTitle = visionTitle?.value || '';
+        currentContent.about.visionText = visionText?.value || '';
+        currentContent.about.missions = [
+          m1?.value || '',
+          m2?.value || '',
+          m3?.value || ''
+        ].filter(Boolean);
+
+        const ok = await saveContentToServer(currentContent, 'Konten About Us berhasil diperbarui!');
+        btnSaveAbout.disabled = false;
+        if (btnSaveAboutText) btnSaveAboutText.textContent = 'Simpan Konten About Us';
+      });
+    }
+  }
+
+  // Populate Tab: Pengaturan Umum
+  function populateGeneralTab(data) {
+    if (!data) return;
+    const s = data.settings || {};
+    const waNum = document.getElementById('setting-whatsapp-number');
+    const waText = document.getElementById('setting-whatsapp-text');
+    const email = document.getElementById('setting-company-email');
+    const company = document.getElementById('setting-company-name');
+    const btnSaveGeneral = document.getElementById('btn-save-general');
+    const btnSaveGeneralText = document.getElementById('btn-save-general-text');
+
+    if (waNum) waNum.value = s.whatsappNumber || '6281234567890';
+    if (waText) waText.value = s.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem';
+    if (email) email.value = s.companyEmail || 'hello@expressa.id';
+    if (company) company.value = s.companyName || 'Expressa';
+
+    if (btnSaveGeneral && !btnSaveGeneral.dataset.listenerAttached) {
+      btnSaveGeneral.dataset.listenerAttached = 'true';
+      btnSaveGeneral.addEventListener('click', async () => {
+        btnSaveGeneral.disabled = true;
+        if (btnSaveGeneralText) btnSaveGeneralText.textContent = 'Menyimpan...';
+
+        if (!currentContent.settings) currentContent.settings = {};
+        currentContent.settings.whatsappNumber = waNum?.value.trim() || '6281234567890';
+        currentContent.settings.whatsappText = waText?.value.trim() || 'Halo Expressa, saya tertarik untuk konsultasi sistem';
+        currentContent.settings.companyEmail = email?.value.trim() || 'hello@expressa.id';
+        currentContent.settings.companyName = company?.value.trim() || 'Expressa';
+
+        const ok = await saveContentToServer(currentContent, 'Pengaturan kontak & WhatsApp berhasil disimpan!');
+        btnSaveGeneral.disabled = false;
+        if (btnSaveGeneralText) btnSaveGeneralText.textContent = 'Simpan Pengaturan';
       });
     }
   }
@@ -1118,7 +1380,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       // Team
-      if (currentContent.team) {
+      const teamCards = document.querySelectorAll('.team-admin-card');
+      if (teamCards.length > 0) {
+        currentContent.team = [];
+        teamCards.forEach((card, idx) => {
+          const role = card.querySelector('.team-role-input')?.value.trim() || `Role ${idx + 1}`;
+          const name = card.querySelector('.team-name-input')?.value.trim() || 'Nama Anggota';
+          const bio = card.querySelector('.team-bio-input')?.value.trim() || '';
+          const imageUrl = card.querySelector('.team-url-input')?.value.trim() || '';
+          currentContent.team.push({
+            id: card.dataset.teamId || `tm-${idx + 1}`,
+            role,
+            name,
+            bio,
+            subtitle: bio,
+            imageUrl
+          });
+        });
+      } else if (currentContent.team) {
         currentContent.team.forEach((tm, idx) => {
           const urlInput = document.getElementById(`team-url-${idx}`);
           if (urlInput) tm.imageUrl = urlInput.value;

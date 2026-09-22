@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const waBtn = document.getElementById('wa-direct-btn');
             if (waBtn) {
               const waText = encodeURIComponent(`Halo Tim Expressa, saya ${name} dari ${company || '-'}. Saya tertarik untuk berdiskusi mengenai ${service || 'layanan Expressa'}.`);
-              waBtn.href = `https://wa.me/6281234567890?text=${waText}`;
+              waBtn.href = `https://wa.me/${window.expressaWaNumber || '6281234567890'}?text=${waText}`;
             }
 
             if (window.lucide) {
