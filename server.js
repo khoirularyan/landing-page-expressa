@@ -59,8 +59,13 @@ function writeJsonFile(filePath, data) {
 }
 
 function getContentFallback() {
+  const fileData = readJsonFile(CONTENT_FILE, null);
+  if (fileData && Object.keys(fileData).length > 0) {
+    memoryContent = fileData;
+    return fileData;
+  }
   if (memoryContent) return memoryContent;
-  memoryContent = readJsonFile(CONTENT_FILE, {});
+  memoryContent = {};
   return memoryContent;
 }
 
