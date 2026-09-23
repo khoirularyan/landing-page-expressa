@@ -468,143 +468,314 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Case Studies Container
-    const csContainer = document.getElementById('case-studies-container');
-    if (csContainer && data.caseStudies) {
+    // ── CASE STUDIES ──────────────────────────────────────────────
+    const csContainer  = document.getElementById('case-studies-container');
+    const btnAddCS     = document.getElementById('btn-add-case-study');
+    const csCountLabel = document.getElementById('case-studies-count-label');
+
+    if (!currentContent.caseStudies || !Array.isArray(currentContent.caseStudies)) {
+      currentContent.caseStudies = data.caseStudies ? [...data.caseStudies] : [];
+    }
+
+    function renderCaseStudyCards() {
+      if (!csContainer) return;
       csContainer.innerHTML = '';
-      data.caseStudies.forEach((cs, idx) => {
+
+      if (csCountLabel) csCountLabel.textContent = `${currentContent.caseStudies.length} Proyek`;
+
+      if (currentContent.caseStudies.length === 0) {
+        csContainer.innerHTML = `
+          <div class="col-span-full py-10 text-center text-slate-500 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800">
+            <i data-lucide="folder-open" class="w-7 h-7 mx-auto mb-2 opacity-50"></i>
+            <p class="text-xs">Belum ada studi kasus. Klik tombol "Tambah Studi Kasus".</p>
+          </div>`;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      currentContent.caseStudies.forEach((cs, idx) => {
         const card = document.createElement('div');
         card.className = 'bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3';
         card.innerHTML = `
-          <div class="relative aspect-[16/9] rounded-xl overflow-hidden bg-slate-950">
-            <img id="cs-img-preview-${idx}" src="${cs.imageUrl}" alt="${cs.client}" class="w-full h-full object-cover">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-cyan-500"></span>
+              Studi Kasus #${idx + 1}
+            </span>
+            <button type="button" class="btn-delete-cs text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors" title="Hapus Studi Kasus">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
           </div>
-          <div>
-            <span class="text-[10px] font-bold text-blue-400 uppercase tracking-wider">${cs.industry}</span>
-            <div class="text-xs font-bold text-white mt-0.5">${cs.client}</div>
-          </div>
-          <div class="space-y-1.5 pt-1">
-            <div class="flex items-center gap-2">
-              <input type="file" id="cs-file-${idx}" accept="image/*" class="hidden">
-              <button type="button" onclick="document.getElementById('cs-file-${idx}').click()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5">
-                <i data-lucide="upload" class="w-3.5 h-3.5 text-blue-400"></i>
-                <span>Ganti File</span>
-              </button>
-              <span id="cs-status-${idx}" class="text-[10px] text-slate-400"></span>
+
+          <div class="relative aspect-[16/9] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center">
+            <img class="cs-img-preview w-full h-full object-cover ${cs.imageUrl ? '' : 'hidden'}" src="${escapeHtml(cs.imageUrl || '')}" alt="${escapeHtml(cs.client || '')}">
+            <div class="cs-img-placeholder text-slate-500 text-xs flex flex-col items-center gap-1 ${cs.imageUrl ? 'hidden' : ''}">
+              <i data-lucide="image" class="w-6 h-6"></i><span>Belum ada gambar</span>
             </div>
-            <input type="text" id="cs-url-${idx}" value="${cs.imageUrl}" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-200 font-mono">
+          </div>
+
+          <div class="space-y-2">
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Klien / Proyek</label>
+              <input type="text" class="cs-client-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(cs.client || '')}" placeholder="Contoh: Cobra Dental Indonesia">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Industri / Kategori</label>
+              <input type="text" class="cs-industry-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(cs.industry || '')}" placeholder="Contoh: Alat Kesehatan & Dental Care">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Deskripsi Singkat</label>
+              <textarea rows="2" class="cs-desc-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300 focus:outline-none focus:border-blue-500 resize-none" placeholder="Gambaran singkat solusi yang diimplementasikan...">${escapeHtml(cs.description || '')}</textarea>
+            </div>
+          </div>
+
+          <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
+            <div class="flex items-center gap-2">
+              <input type="file" class="cs-file-input hidden" accept="image/*">
+              <button type="button" class="btn-upload-cs bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5">
+                <i data-lucide="upload" class="w-3.5 h-3.5 text-blue-400"></i>
+                <span>Unggah Gambar</span>
+              </button>
+              <span class="cs-upload-status text-[10px] text-slate-400"></span>
+            </div>
+            <input type="text" class="cs-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-200 font-mono" value="${escapeHtml(cs.imageUrl || '')}" placeholder="https://...">
           </div>
         `;
         csContainer.appendChild(card);
 
-        // Events
-        const fileInput = document.getElementById(`cs-file-${idx}`);
-        const urlInput = document.getElementById(`cs-url-${idx}`);
-        const imgPreview = document.getElementById(`cs-img-preview-${idx}`);
-        const statusSpan = document.getElementById(`cs-status-${idx}`);
+        const imgPreview  = card.querySelector('.cs-img-preview');
+        const imgPH       = card.querySelector('.cs-img-placeholder');
+        const urlInput    = card.querySelector('.cs-url-input');
+        const fileInput   = card.querySelector('.cs-file-input');
+        const uploadBtn   = card.querySelector('.btn-upload-cs');
+        const statusSpan  = card.querySelector('.cs-upload-status');
+        const deleteBtn   = card.querySelector('.btn-delete-cs');
 
+        // URL preview
         urlInput.addEventListener('input', () => {
-          imgPreview.src = urlInput.value;
+          const v = urlInput.value.trim();
+          imgPreview.src = v;
+          imgPreview.classList.toggle('hidden', !v);
+          imgPH.classList.toggle('hidden', !!v);
+          currentContent.caseStudies[idx].imageUrl = v;
         });
 
+        // Upload file
+        uploadBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
-          statusSpan.textContent = 'Mengoptimasi & mengunggah...';
+          statusSpan.textContent = 'Mengoptimasi...';
           try {
-            const compressed = await compressImage(file, 900, 0.82);
+            const compressed  = await compressImage(file, 900, 0.82);
             const uploadedUrl = await uploadImageFile(compressed);
             if (uploadedUrl) {
               urlInput.value = uploadedUrl;
               imgPreview.src = uploadedUrl;
+              imgPreview.classList.remove('hidden');
+              imgPH.classList.add('hidden');
+              currentContent.caseStudies[idx].imageUrl = uploadedUrl;
               statusSpan.textContent = '✓ Tersimpan!';
-
-              // AUTO-SAVE IMMEDIATELY
-              if (!currentContent) currentContent = {};
-              if (currentContent.caseStudies && currentContent.caseStudies[idx]) {
-                currentContent.caseStudies[idx].imageUrl = uploadedUrl;
-                await saveContentToServer(currentContent, `✓ Gambar Case Study ${idx + 1} berhasil disimpan & aktif!`);
-                triggerImageSaveUIEffect('✓ Gambar Case Study Tersimpan!');
-              }
+              await saveContentToServer(currentContent, `✓ Gambar Studi Kasus ${idx + 1} berhasil disimpan!`);
+              triggerImageSaveUIEffect('✓ Gambar Studi Kasus Tersimpan!');
             } else {
               statusSpan.textContent = 'Gagal upload.';
             }
-          } catch (err) {
-            statusSpan.textContent = 'Gagal upload.';
-          }
+          } catch (err) { statusSpan.textContent = 'Gagal upload.'; }
         });
+
+        // Sync text inputs langsung ke currentContent
+        card.querySelector('.cs-client-input').addEventListener('input', (e) => {
+          currentContent.caseStudies[idx].client = e.target.value;
+        });
+        card.querySelector('.cs-industry-input').addEventListener('input', (e) => {
+          currentContent.caseStudies[idx].industry = e.target.value;
+        });
+        card.querySelector('.cs-desc-input').addEventListener('input', (e) => {
+          currentContent.caseStudies[idx].description = e.target.value;
+        });
+
+        // Hapus
+        deleteBtn.addEventListener('click', async () => {
+          const clientName = currentContent.caseStudies[idx]?.client || 'ini';
+          if (!confirm(`Hapus studi kasus "${clientName}"? Tindakan tidak bisa dibatalkan.`)) return;
+          currentContent.caseStudies.splice(idx, 1);
+          renderCaseStudyCards();
+          await saveContentToServer(currentContent, 'Studi kasus berhasil dihapus.');
+        });
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    renderCaseStudyCards();
+
+    if (btnAddCS && !btnAddCS.dataset.listenerAttached) {
+      btnAddCS.dataset.listenerAttached = 'true';
+      btnAddCS.addEventListener('click', async () => {
+        if (!currentContent.caseStudies) currentContent.caseStudies = [];
+        currentContent.caseStudies.push({
+          id:          `cs-${Date.now()}`,
+          client:      'Klien Baru',
+          industry:    'Industri',
+          description: '',
+          imageUrl:    '',
+        });
+        renderCaseStudyCards();
+        await saveContentToServer(currentContent, 'Studi kasus baru berhasil ditambahkan.');
       });
     }
 
-    // Team Container
-    const teamContainer = document.getElementById('team-container');
-    if (teamContainer && data.team) {
+    // ── TEAM ──────────────────────────────────────────────────────
+    const teamContainer  = document.getElementById('team-container');
+    const btnAddTeam     = document.getElementById('btn-add-team-member');
+    const teamCountLabel = document.getElementById('team-count-label');
+
+    if (!currentContent.team || !Array.isArray(currentContent.team)) {
+      currentContent.team = data.team ? [...data.team] : [];
+    }
+
+    function renderTeamCards() {
+      if (!teamContainer) return;
       teamContainer.innerHTML = '';
-      data.team.forEach((tm, idx) => {
+
+      if (teamCountLabel) teamCountLabel.textContent = `${currentContent.team.length} Anggota`;
+
+      if (currentContent.team.length === 0) {
+        teamContainer.innerHTML = `
+          <div class="col-span-full py-10 text-center text-slate-500 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800">
+            <i data-lucide="users" class="w-7 h-7 mx-auto mb-2 opacity-50"></i>
+            <p class="text-xs">Belum ada anggota tim. Klik tombol "Tambah Anggota".</p>
+          </div>`;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      currentContent.team.forEach((tm, idx) => {
         const item = document.createElement('div');
         item.className = 'team-admin-card bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3';
         item.dataset.teamId = tm.id || `tm-${idx + 1}`;
         item.innerHTML = `
-          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
-            <img id="team-img-preview-${idx}" src="${tm.imageUrl || ''}" alt="${escapeHtml(tm.role || 'Role')}" class="w-full h-full object-cover">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+              Anggota #${idx + 1}
+            </span>
+            <button type="button" class="btn-delete-team text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-rose-500/10 transition-colors" title="Hapus Anggota">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
           </div>
-          <div class="space-y-2">
-            <div>
-              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Role / Jabatan</label>
-              <input type="text" class="team-role-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(tm.role || '')}" placeholder="Business Analyst">
+
+          <div class="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center">
+            <img class="team-img-preview w-full h-full object-cover ${tm.imageUrl ? '' : 'hidden'}" src="${escapeHtml(tm.imageUrl || '')}" alt="${escapeHtml(tm.role || 'Role')}">
+            <div class="team-img-placeholder text-slate-500 text-xs flex flex-col items-center gap-1 ${tm.imageUrl ? 'hidden' : ''}">
+              <i data-lucide="user" class="w-6 h-6"></i><span>Belum ada foto</span>
             </div>
+          </div>
+
+          <div class="space-y-2">
             <div>
               <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Anggota</label>
               <input type="text" class="team-name-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(tm.name && tm.name !== 'Nama Anggota' ? tm.name : '')}" placeholder="Nama Lengkap">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Role / Jabatan</label>
+              <input type="text" class="team-role-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(tm.role || '')}" placeholder="Business Analyst">
             </div>
             <div>
               <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Bio / Spesialisasi</label>
               <textarea rows="2" class="team-bio-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300 focus:outline-none focus:border-blue-500 resize-none" placeholder="Deskripsi peran/keahlian...">${escapeHtml(tm.bio || tm.subtitle || '')}</textarea>
             </div>
           </div>
+
           <div class="space-y-1.5 pt-1 border-t border-slate-800/80">
             <div class="flex items-center gap-2">
-              <input type="file" id="team-file-${idx}" accept="image/*" class="hidden">
-              <button type="button" onclick="document.getElementById('team-file-${idx}').click()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-1.5 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5">
+              <input type="file" class="team-file-input hidden" accept="image/*">
+              <button type="button" class="btn-upload-team w-full bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold py-1.5 rounded-lg border border-slate-700 flex items-center justify-center gap-1.5">
                 <i data-lucide="upload" class="w-3.5 h-3.5 text-blue-400"></i>
                 <span>Ganti Foto</span>
               </button>
             </div>
-            <input type="text" id="team-url-${idx}" value="${escapeHtml(tm.imageUrl || '')}" class="team-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-300 font-mono" placeholder="https://...">
+            <input type="text" class="team-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2 py-1 text-[10px] text-slate-300 font-mono" value="${escapeHtml(tm.imageUrl || '')}" placeholder="https://...">
           </div>
         `;
         teamContainer.appendChild(item);
 
-        const fileInput = document.getElementById(`team-file-${idx}`);
-        const urlInput = document.getElementById(`team-url-${idx}`);
-        const imgPreview = document.getElementById(`team-img-preview-${idx}`);
+        const imgPreview  = item.querySelector('.team-img-preview');
+        const imgPH       = item.querySelector('.team-img-placeholder');
+        const urlInput    = item.querySelector('.team-url-input');
+        const fileInput   = item.querySelector('.team-file-input');
+        const uploadBtn   = item.querySelector('.btn-upload-team');
+        const deleteBtn   = item.querySelector('.btn-delete-team');
 
+        // URL preview
         urlInput.addEventListener('input', () => {
-          imgPreview.src = urlInput.value;
-          tm.imageUrl = urlInput.value;
+          const v = urlInput.value.trim();
+          imgPreview.src = v;
+          imgPreview.classList.toggle('hidden', !v);
+          imgPH.classList.toggle('hidden', !!v);
+          currentContent.team[idx].imageUrl = v;
         });
 
+        // Upload foto
+        uploadBtn.addEventListener('click', () => fileInput.click());
         fileInput.addEventListener('change', async (e) => {
           const file = e.target.files[0];
           if (!file) return;
           try {
-            const compressed = await compressImage(file, 600, 0.85);
+            const compressed  = await compressImage(file, 600, 0.85);
             const uploadedUrl = await uploadImageFile(compressed);
             if (uploadedUrl) {
               urlInput.value = uploadedUrl;
               imgPreview.src = uploadedUrl;
-              tm.imageUrl = uploadedUrl;
-
-              // AUTO-SAVE IMMEDIATELY
-              if (!currentContent) currentContent = {};
-              if (currentContent.team && currentContent.team[idx]) {
-                currentContent.team[idx].imageUrl = uploadedUrl;
-                await saveContentToServer(currentContent, `✓ Foto Tim (${tm.role}) berhasil disimpan & aktif!`);
-                triggerImageSaveUIEffect('✓ Foto Tim Tersimpan!');
-              }
+              imgPreview.classList.remove('hidden');
+              imgPH.classList.add('hidden');
+              currentContent.team[idx].imageUrl = uploadedUrl;
+              await saveContentToServer(currentContent, `✓ Foto ${currentContent.team[idx].role || 'Tim'} berhasil disimpan!`);
+              triggerImageSaveUIEffect('✓ Foto Tim Tersimpan!');
             }
           } catch (err) {}
         });
+
+        // Sync text inputs
+        item.querySelector('.team-name-input').addEventListener('input', (e) => {
+          currentContent.team[idx].name = e.target.value;
+        });
+        item.querySelector('.team-role-input').addEventListener('input', (e) => {
+          currentContent.team[idx].role = e.target.value;
+        });
+        item.querySelector('.team-bio-input').addEventListener('input', (e) => {
+          currentContent.team[idx].bio = e.target.value;
+        });
+
+        // Hapus anggota
+        deleteBtn.addEventListener('click', async () => {
+          const memberName = currentContent.team[idx]?.name || currentContent.team[idx]?.role || 'anggota ini';
+          if (!confirm(`Hapus anggota "${memberName}" dari tim? Tindakan tidak bisa dibatalkan.`)) return;
+          currentContent.team.splice(idx, 1);
+          renderTeamCards();
+          await saveContentToServer(currentContent, 'Anggota tim berhasil dihapus.');
+        });
+      });
+
+      if (window.lucide) lucide.createIcons();
+    }
+
+    renderTeamCards();
+
+    if (btnAddTeam && !btnAddTeam.dataset.listenerAttached) {
+      btnAddTeam.dataset.listenerAttached = 'true';
+      btnAddTeam.addEventListener('click', async () => {
+        if (!currentContent.team) currentContent.team = [];
+        currentContent.team.push({
+          id:       `tm-${Date.now()}`,
+          name:     '',
+          role:     'Anggota Baru',
+          bio:      '',
+          imageUrl: '',
+        });
+        renderTeamCards();
+        await saveContentToServer(currentContent, 'Anggota tim baru berhasil ditambahkan.');
       });
     }
 
@@ -1371,36 +1542,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
 
-      // Case Studies
-      if (currentContent.caseStudies) {
-        currentContent.caseStudies.forEach((cs, idx) => {
-          const urlInput = document.getElementById(`cs-url-${idx}`);
-          if (urlInput) cs.imageUrl = urlInput.value;
-        });
-      }
+      // Case Studies — sudah di-sync langsung ke currentContent via input events
+      // (tidak perlu re-collect, data sudah up-to-date)
 
-      // Team
+      // Team — collect dari DOM cards (field yang mungkin belum ter-trigger input event)
       const teamCards = document.querySelectorAll('.team-admin-card');
       if (teamCards.length > 0) {
         currentContent.team = [];
         teamCards.forEach((card, idx) => {
-          const role = card.querySelector('.team-role-input')?.value.trim() || `Role ${idx + 1}`;
-          const name = card.querySelector('.team-name-input')?.value.trim() || 'Nama Anggota';
-          const bio = card.querySelector('.team-bio-input')?.value.trim() || '';
-          const imageUrl = card.querySelector('.team-url-input')?.value.trim() || '';
+          const role     = card.querySelector('.team-role-input')?.value.trim()  || `Role ${idx + 1}`;
+          const name     = card.querySelector('.team-name-input')?.value.trim()  || 'Nama Anggota';
+          const bio      = card.querySelector('.team-bio-input')?.value.trim()   || '';
+          const imageUrl = card.querySelector('.team-url-input')?.value.trim()   || '';
           currentContent.team.push({
             id: card.dataset.teamId || `tm-${idx + 1}`,
-            role,
-            name,
-            bio,
-            subtitle: bio,
-            imageUrl
+            role, name, bio, subtitle: bio, imageUrl,
           });
-        });
-      } else if (currentContent.team) {
-        currentContent.team.forEach((tm, idx) => {
-          const urlInput = document.getElementById(`team-url-${idx}`);
-          if (urlInput) tm.imageUrl = urlInput.value;
         });
       }
 
