@@ -9,7 +9,6 @@ node_modules/
 # Dynamic Data & Sensitive Credentials
 consultations.json
 data/admin-config.json
-data/articles.json
 public/uploads/*
 !public/uploads/.gitkeep
 
