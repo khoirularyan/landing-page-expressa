@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artikel & Insight | Expressa - Technology That Works Your Way</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            handwriting: ['Caveat', 'cursive']
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#0066FF',
+              600: '#0052CC',
+              700: '#003d99',
+              dark: '#0A0F1D',
+              navy: '#0B132B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Immediate Theme Initializer -->
+  <script src="/js/theme.js"></script>
+</head>
+<body class="bg-white dark:bg-[#131B2E] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+  <!-- ========================================== -->
+  <!-- NAVBAR                                     -->
+  <!-- ========================================== -->
+  <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between backdrop-blur-md bg-white/95 dark:bg-[#131B2E]/95 border-b border-slate-200/80 dark:border-slate-800 shadow-sm">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center group">
+      <img src="/logo.png" alt="Expressa" class="h-9 w-auto object-contain">
+    </a>
+
+    <!-- Center Navigation Links -->
+    <div class="hidden md:flex items-center gap-7 lg:gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+      <a href="/" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Beranda</a>
+      <a href="/portofolio" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Portfolio</a>
+      <a href="/galeri" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Galeri Project</a>
+      <a href="/tim" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tim</a>
+      <a href="/about" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
+      <a href="/artikel" class="nav-anchor text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-0.5 transition-colors">Artikel</a>
+    </div>
+
+    <!-- Right Controls: Theme Toggle & CTA Button -->
+    <div class="flex items-center gap-3">
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" type="button" aria-label="Buka Menu" class="md:hidden p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="menu" id="mobile-menu-icon" class="w-5 h-5"></i>
+        <i data-lucide="x" id="mobile-close-icon" class="w-5 h-5 hidden"></i>
+      </button>
+
+      <!-- Dark / Light Mode Toggle Button -->
+      <button id="theme-toggle-btn" type="button" aria-label="Ganti Mode Tampilan" class="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
+        <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
+      </button>
+
+      <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-700 text-white text-xs md:text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 active:scale-95">
+        <span>Konsultasi</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Drawer -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 hidden">
+    <div id="mobile-menu-backdrop" class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"></div>
+    <div class="absolute top-0 left-0 w-72 h-full bg-white dark:bg-[#131B2E] border-r border-slate-200 dark:border-slate-800 shadow-2xl pt-20 pb-8 px-6 flex flex-col gap-2 overflow-y-auto">
+      <a href="/" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Beranda</a>
+      <a href="/portofolio" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Portfolio</a>
+      <a href="/galeri" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Galeri Project</a>
+      <a href="/tim" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Tim</a>
+      <a href="/about" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About Us</a>
+      <a href="/artikel" class="block py-3 px-4 rounded-xl text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 transition-colors">Artikel</a>
+      <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <button data-action="open-consultation" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-3 rounded-full transition-all flex items-center justify-center gap-2">
+          <span>Konsultasi Gratis</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- HERO SECTION                               -->
+  <!-- ========================================== -->
+  <section class="w-full bg-[#0B132B] pt-28 pb-16 px-6 md:px-12 relative overflow-hidden">
+    <!-- Ambient Glow -->
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-72 h-72 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto relative z-10 text-center">
+      <span class="inline-block text-xs font-bold text-blue-400 uppercase tracking-widest mb-4 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20">Blog & Insight</span>
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white leading-tight tracking-tight">
+        Artikel &amp; Insight
+      </h1>
+      <p class="text-slate-400 text-sm md:text-base mt-4 max-w-xl mx-auto leading-relaxed">
+        Wawasan teknologi, studi kasus, dan update terbaru dari tim Expressa.
+      </p>
+
+      <!-- Search Bar -->
+      <div class="mt-8 max-w-lg mx-auto relative">
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"></i>
+        <input
+          type="text"
+          id="articles-search"
+          placeholder="Cari artikel, topik, atau kategori..."
+          class="w-full bg-white/5 border border-white/10 rounded-full pl-11 pr-5 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:bg-white/10 transition-all"
+        >
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- MAIN CONTENT                               -->
+  <!-- ========================================== -->
+  <main class="flex-1 w-full py-12 px-6 md:px-12 bg-slate-50 dark:bg-[#0F172A]">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Category Filter Tabs -->
+      <div class="flex flex-wrap items-center gap-2 mb-10" id="category-filters">
+        <button data-category="semua" class="category-btn bg-blue-600 text-white text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:bg-blue-700">
+          Semua
+        </button>
+        <button data-category="insight" class="category-btn bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:bg-slate-200 dark:hover:bg-slate-700">
+          Insight
+        </button>
+        <button data-category="tutorial" class="category-btn bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:bg-slate-200 dark:hover:bg-slate-700">
+          Tutorial
+        </button>
+        <button data-category="studi-kasus" class="category-btn bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:bg-slate-200 dark:hover:bg-slate-700">
+          Studi Kasus
+        </button>
+        <button data-category="berita" class="category-btn bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:bg-slate-200 dark:hover:bg-slate-700">
+          Berita
+        </button>
+        <button data-category="update" class="category-btn bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:bg-slate-200 dark:hover:bg-slate-700">
+          Update
+        </button>
+      </div>
+
+      <!-- Articles Count Info -->
+      <div class="flex items-center justify-between mb-6">
+        <p id="articles-count-text" class="text-xs text-slate-500 dark:text-slate-400"></p>
+      </div>
+
+      <!-- Loading State: 6 Skeleton Cards -->
+      <div id="articles-loading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-5 space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-5 space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-5 space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-5 space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-5 space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700 animate-pulse">
+          <div class="h-48 bg-slate-200 dark:bg-slate-700"></div>
+          <div class="p-5 space-y-3">
+            <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-1/4"></div>
+            <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+            <div class="space-y-2">
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded"></div>
+              <div class="h-3 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Articles Grid (populated by artikel.js) -->
+      <div id="articles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <!-- Article cards will be injected here by artikel.js -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="articles-empty" class="hidden text-center py-24">
+        <div class="w-16 h-16 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="file-search" class="w-7 h-7 text-slate-400 dark:text-slate-500"></i>
+        </div>
+        <h3 class="text-lg font-bold text-slate-700 dark:text-slate-300">Artikel Tidak Ditemukan</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-sm mx-auto">
+          Tidak ada artikel yang cocok dengan filter atau pencarian Anda. Coba kategori lain.
+        </p>
+        <button data-category="semua" class="category-btn mt-6 bg-blue-600 text-white text-xs font-semibold px-5 py-2.5 rounded-full hover:bg-blue-700 transition-colors">
+          Tampilkan Semua Artikel
+        </button>
+      </div>
+
+      <!-- Load More Button -->
+      <div class="text-center mt-12 hidden" id="load-more-wrapper">
+        <button id="load-more-btn" class="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-200 text-sm font-semibold px-8 py-3 rounded-full hover:border-blue-500 dark:hover:border-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition-all flex items-center gap-2 mx-auto shadow-sm">
+          <i data-lucide="loader-2" id="load-more-spinner" class="w-4 h-4 animate-spin hidden"></i>
+          <span id="load-more-text">Muat Lebih Banyak</span>
+          <i data-lucide="chevron-down" id="load-more-chevron" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- CTA CONSULTATION SECTION                   -->
+  <!-- ========================================== -->
+  <section class="bg-slate-50 dark:bg-slate-900 border-t border-slate-200/80 dark:border-slate-800 py-16 px-6 md:px-12">
+    <div class="max-w-3xl mx-auto text-center">
+      <span class="inline-block text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-3">Tertarik Dengan Solusi Kami?</span>
+      <h2 class="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white leading-tight">
+        Mari Diskusikan Kebutuhan Digital Bisnis Anda
+      </h2>
+      <p class="text-slate-600 dark:text-slate-300 text-sm mt-4 leading-relaxed max-w-xl mx-auto">
+        Konsultan Expressa siap membantu Anda merancang sistem yang tepat sasaran. Gratis, tanpa komitmen.
+      </p>
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button data-action="open-consultation" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-8 py-3 rounded-full flex items-center justify-center gap-2 shadow-sm transition-all hover:scale-105 active:scale-95">
+          <span>Jadwalkan Konsultasi Gratis</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+        <a href="https://wa.me/6281234567890?text=Halo%20Expressa%2C%20saya%20tertarik%20mengenal%20lebih%20jauh%20dan%20ingin%20konsultasi%20sistem" target="_blank" class="w-full sm:w-auto px-6 py-3 rounded-full border border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600 bg-white dark:bg-[#1E293B] text-slate-700 dark:text-slate-200 text-sm font-semibold flex items-center justify-center gap-2 transition-colors">
+          <i data-lucide="message-circle" class="w-4 h-4 text-emerald-500"></i>
+          <span>Chat via WhatsApp</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- FOOTER                                     -->
+  <!-- ========================================== -->
+  <footer class="bg-[#0B132B] dark:bg-[#0B132B] text-slate-400 dark:text-slate-300 py-10 px-6 md:px-12 text-xs border-t border-transparent dark:border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="font-bold text-white">EXPRESSA</span> &nbsp;|&nbsp; Technology That Works Your Way &copy; 2026. All rights reserved.
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/" class="hover:text-white transition-colors">Beranda</a>
+        <a href="/portofolio" class="hover:text-white transition-colors">Portfolio</a>
+        <a href="/galeri" class="hover:text-white transition-colors">Galeri Project</a>
+        <a href="/tim" class="hover:text-white transition-colors">Tim</a>
+        <a href="/about" class="hover:text-white transition-colors">About Us</a>
+        <a href="/artikel" class="text-blue-400 font-semibold">Artikel</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/consultation.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/artikel.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+      const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+      const mobileCloseIcon = document.getElementById('mobile-close-icon');
+
+      function openMobileMenu() {
+        mobileMenu.classList.remove('hidden');
+        mobileMenuIcon.classList.add('hidden');
+        mobileCloseIcon.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.add('hidden');
+        mobileMenuIcon.classList.remove('hidden');
+        mobileCloseIcon.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+          if (mobileMenu.classList.contains('hidden')) {
+            openMobileMenu();
+          } else {
+            closeMobileMenu();
+          }
+        });
+      }
+
+      if (mobileMenuBackdrop) {
+        mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+      }
+    });
+  </script>
+</body>
+</html>

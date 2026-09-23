@@ -28,10 +28,12 @@ try {
 // File paths
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
 const ADMIN_FILE = path.join(DATA_DIR, 'admin-config.json');
+const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
 const DATA_FILE = path.join(__dirname, 'consultations.json');
 
 const TMP_CONTENT_FILE = path.join(TMP_DIR, 'content.json');
 const TMP_ADMIN_FILE = path.join(TMP_DIR, 'admin-config.json');
+const TMP_ARTICLES_FILE = path.join(TMP_DIR, 'articles.json');
 const TMP_DATA_FILE = path.join(TMP_DIR, 'consultations.json');
 
 // Memory storage for uploads to completely eliminate EROFS on Vercel / serverless
@@ -59,6 +61,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 let memoryContent = null;
 let memoryAdminConfig = null;
 let memoryConsultations = null;
+let memoryArticles = null;
 
 // Secret key for HMAC token signing (stateless for serverless / Vercel multi-instance environments)
 const AUTH_SECRET = process.env.ADMIN_SECRET || 'expressa_cms_jwt_secret_key_2026_fixed';
@@ -270,7 +273,74 @@ function saveConsultation(record) {
 }
 
 // =============================================
-// PUBLIC API ROUTES
+// ARTICLES HELPERS
+// =============================================
+
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[àáâãäå]/g, 'a')
+    .replace(/[èéêë]/g, 'e')
+    .replace(/[ìíîï]/g, 'i')
+    .replace(/[òóôõö]/g, 'o')
+    .replace(/[ùúûü]/g, 'u')
+    .replace(/[ñ]/g, 'n')
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '');
+}
+
+function getArticles() {
+  if (memoryArticles) return memoryArticles;
+
+  if (IS_SERVERLESS) {
+    try {
+      if (fs.existsSync(TMP_ARTICLES_FILE)) {
+        memoryArticles = JSON.parse(fs.readFileSync(TMP_ARTICLES_FILE, 'utf8'));
+        return memoryArticles;
+      }
+    } catch (e) {}
+  }
+
+  try {
+    if (fs.existsSync(ARTICLES_FILE)) {
+      const data = JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'));
+      memoryArticles = Array.isArray(data) ? { articles: data } : data;
+      if (!memoryArticles.articles) memoryArticles.articles = [];
+      return memoryArticles;
+    }
+  } catch (err) {
+    console.error('Error reading articles file:', err);
+  }
+
+  return { articles: [] };
+}
+
+function saveArticles(data) {
+  memoryArticles = data;
+
+  try {
+    fs.writeFileSync(ARTICLES_FILE, JSON.stringify(data, null, 2));
+    return true;
+  } catch (err) {
+    if (err.code === 'EROFS' || IS_SERVERLESS) {
+      try {
+        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
+        fs.writeFileSync(TMP_ARTICLES_FILE, JSON.stringify(data, null, 2));
+        return true;
+      } catch (tmpErr) {
+        return true;
+      }
+    }
+    console.error('Error saving articles file:', err);
+    return false;
+  }
+}
+
+
 // =============================================
 
 // Health Check
@@ -291,6 +361,34 @@ app.get('/api/content', (req, res) => {
     data: content
   });
 });
+
+// Public articles list
+app.get('/api/articles', (req, res) => {
+  const { category, tag, limit } = req.query;
+  const store = getArticles();
+  let articles = (store.articles || []).filter(a => a.status === 'published');
+
+  // Sort by publishedAt desc
+  articles.sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt));
+
+  if (category) articles = articles.filter(a => a.category === category);
+  if (tag) articles = articles.filter(a => Array.isArray(a.tags) && a.tags.includes(tag));
+  if (limit) articles = articles.slice(0, parseInt(limit, 10));
+
+  res.json({ success: true, data: articles });
+});
+
+// Public single article by slug
+app.get('/api/articles/:slug', (req, res) => {
+  const store = getArticles();
+  const article = (store.articles || []).find(
+    a => a.slug === req.params.slug && a.status === 'published'
+  );
+  if (!article) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+  res.json({ success: true, data: article });
+});
+
+
 
 // Backward-compatible stats endpoint
 app.get('/api/stats', (req, res) => {
@@ -473,6 +571,143 @@ app.delete('/api/admin/consultations/:id', authMiddleware, (req, res) => {
 });
 
 // =============================================
+// ADMIN ARTICLES API ROUTES
+// =============================================
+
+// Get all articles (admin sees draft + published)
+app.get('/api/admin/articles', authMiddleware, (req, res) => {
+  const store = getArticles();
+  const articles = (store.articles || []).sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+  res.json({ success: true, data: articles });
+});
+
+// Create new article
+app.post('/api/admin/articles', authMiddleware, (req, res) => {
+  const { title, excerpt, content, coverImage, category, tags, author, status, slug: customSlug } = req.body;
+
+  if (!title || !title.trim()) {
+    return res.status(400).json({ success: false, message: 'Judul artikel wajib diisi.' });
+  }
+
+  const store = getArticles();
+  const now = new Date().toISOString();
+  const id = 'art-' + Date.now();
+
+  // Generate unique slug
+  let baseSlug = customSlug ? slugify(customSlug) : slugify(title);
+  let slug = baseSlug;
+  let counter = 1;
+  while ((store.articles || []).some(a => a.slug === slug)) {
+    slug = `${baseSlug}-${counter++}`;
+  }
+
+  const article = {
+    id,
+    slug,
+    title: title.trim(),
+    excerpt: excerpt ? excerpt.trim() : '',
+    content: content || '',
+    coverImage: coverImage || '',
+    category: category || 'Insight',
+    tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
+    author: author || 'Tim Expressa',
+    status: status === 'published' ? 'published' : 'draft',
+    publishedAt: status === 'published' ? now : null,
+    createdAt: now,
+    updatedAt: now
+  };
+
+  store.articles = store.articles || [];
+  store.articles.unshift(article);
+  saveArticles(store);
+
+  console.log(`[Article Created] "${article.title}" (${article.status})`);
+  res.status(201).json({ success: true, message: 'Artikel berhasil dibuat!', data: article });
+});
+
+// Update article
+app.put('/api/admin/articles/:id', authMiddleware, (req, res) => {
+  const store = getArticles();
+  const idx = (store.articles || []).findIndex(a => a.id === req.params.id);
+
+  if (idx === -1) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+
+  const existing = store.articles[idx];
+  const { title, excerpt, content, coverImage, category, tags, author, status, slug: customSlug } = req.body;
+  const now = new Date().toISOString();
+
+  // Handle slug
+  let slug = existing.slug;
+  if (customSlug && slugify(customSlug) !== existing.slug) {
+    const newSlug = slugify(customSlug);
+    const conflict = (store.articles || []).some((a, i) => i !== idx && a.slug === newSlug);
+    if (!conflict) slug = newSlug;
+  }
+
+  // Handle publish timestamp
+  const wasPublished = existing.status === 'published';
+  const willPublish = status === 'published';
+  const publishedAt = willPublish ? (wasPublished ? existing.publishedAt : now) : null;
+
+  store.articles[idx] = {
+    ...existing,
+    slug,
+    title: title !== undefined ? title.trim() : existing.title,
+    excerpt: excerpt !== undefined ? excerpt.trim() : existing.excerpt,
+    content: content !== undefined ? content : existing.content,
+    coverImage: coverImage !== undefined ? coverImage : existing.coverImage,
+    category: category || existing.category,
+    tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : existing.tags),
+    author: author || existing.author,
+    status: willPublish ? 'published' : 'draft',
+    publishedAt,
+    updatedAt: now
+  };
+
+  saveArticles(store);
+  console.log(`[Article Updated] "${store.articles[idx].title}" (${store.articles[idx].status})`);
+  res.json({ success: true, message: 'Artikel berhasil diperbarui!', data: store.articles[idx] });
+});
+
+// Delete article
+app.delete('/api/admin/articles/:id', authMiddleware, (req, res) => {
+  const store = getArticles();
+  const initial = (store.articles || []).length;
+  store.articles = (store.articles || []).filter(a => a.id !== req.params.id);
+
+  if (store.articles.length === initial) {
+    return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+  }
+
+  saveArticles(store);
+  res.json({ success: true, message: 'Artikel berhasil dihapus.' });
+});
+
+// Upload article cover image
+app.post('/api/admin/articles/:id/upload-cover', authMiddleware, upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ success: false, message: 'Tidak ada file gambar.' });
+
+  const base64Data = req.file.buffer.toString('base64');
+  const mimeType = req.file.mimetype || 'image/png';
+  const dataUrl = `data:${mimeType};base64,${base64Data}`;
+
+  if (!IS_SERVERLESS) {
+    try {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const ext = path.extname(req.file.originalname).toLowerCase() || '.png';
+      const filename = 'cover-' + uniqueSuffix + ext;
+      fs.writeFileSync(path.join(UPLOADS_DIR, filename), req.file.buffer);
+    } catch (e) {}
+  }
+
+  res.json({ success: true, message: 'Cover berhasil diunggah!', url: dataUrl, filename: req.file.originalname });
+}, (error, req, res, next) => {
+  res.status(400).json({ success: false, message: error.message });
+});
+
+// =============================================
 // ADMIN & STATIC PAGE ROUTING
 // =============================================
 
@@ -499,6 +734,16 @@ app.get(['/galeri', '/gallery', '/galeri-project', '/gallery-project', '/galeri.
 // Route for /about & /about-us -> public/about.html
 app.get(['/about', '/about-us', '/tentang', '/tentang-kami', '/about.html', '/about-us.html'], (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'about.html'));
+});
+
+// Route for /artikel (blog listing)
+app.get(['/artikel', '/artikel.html', '/blog'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'artikel.html'));
+});
+
+// Route for /artikel-detail (single article)
+app.get(['/artikel-detail', '/artikel-detail.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'artikel-detail.html'));
 });
 
 // Route for /admin -> public/admin/index.html

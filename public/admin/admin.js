@@ -1593,6 +1593,309 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ================================================================
+  // ARTICLES MODULE
+  // ================================================================
+  let quillEditor = null;
+  let articlesList = [];
+
+  function slugify(text) {
+    return text.toString().toLowerCase().trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w-]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+  }
+
+  function formatDateShort(iso) {
+    if (!iso) return '-';
+    try { return new Date(iso).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }); }
+    catch { return '-'; }
+  }
+
+  function initQuill() {
+    if (quillEditor) return;
+    if (typeof Quill === 'undefined') return;
+    quillEditor = new Quill('#quill-editor', {
+      theme: 'snow',
+      placeholder: 'Tulis konten artikel di sini...',
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          ['blockquote', 'code-block'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image'],
+          ['clean']
+        ]
+      }
+    });
+  }
+
+  async function loadArticles() {
+    const tbody = document.getElementById('articles-tbody');
+    const badge = document.getElementById('articles-count-badge');
+    if (!tbody) return;
+
+    try {
+      const res = await fetch('/api/admin/articles', { headers: { 'Authorization': `Bearer ${token}` } });
+      if (!res.ok) { if (res.status === 401) handleUnauthorized(); return; }
+      const json = await res.json();
+      articlesList = json.data || [];
+
+      if (badge) badge.textContent = articlesList.length;
+
+      if (articlesList.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-10 text-center text-slate-500 text-sm">
+          <i data-lucide="newspaper" class="w-8 h-8 mx-auto mb-2 opacity-30"></i><br>Belum ada artikel. Klik "Artikel Baru" untuk membuat.</td></tr>`;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = articlesList.map(a => `
+        <tr class="hover:bg-slate-800/40 transition-colors">
+          <td class="px-4 py-3">
+            <div class="font-semibold text-white text-sm line-clamp-1">${escapeHtml(a.title)}</div>
+            <div class="text-xs text-slate-500 mt-0.5">${escapeHtml(a.slug)}</div>
+          </td>
+          <td class="px-4 py-3 hidden md:table-cell">
+            <span class="text-xs text-slate-400">${escapeHtml(a.category || '-')}</span>
+          </td>
+          <td class="px-4 py-3">
+            ${a.status === 'published'
+              ? '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Published</span>'
+              : '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-700/60 text-slate-400 border border-slate-600/40"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>Draft</span>'
+            }
+          </td>
+          <td class="px-4 py-3 hidden md:table-cell text-xs text-slate-500">${formatDateShort(a.publishedAt || a.createdAt)}</td>
+          <td class="px-4 py-3 text-right">
+            <button onclick="window._editArticle('${escapeHtml(a.id)}')" class="text-xs font-semibold text-blue-400 hover:text-blue-300 bg-blue-500/10 hover:bg-blue-500/20 px-3 py-1.5 rounded-lg transition-colors">Edit</button>
+          </td>
+        </tr>
+      `).join('');
+      if (window.lucide) lucide.createIcons();
+    } catch (e) {
+      tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-rose-400 text-sm">Gagal memuat artikel.</td></tr>`;
+    }
+  }
+
+  function openArticleModal(article = null) {
+    initQuill();
+    const modal = document.getElementById('article-modal');
+    const modalTitle = document.getElementById('article-modal-title');
+    const idInput = document.getElementById('article-id');
+    const titleInput = document.getElementById('article-title-input');
+    const slugInput = document.getElementById('article-slug-input');
+    const categoryInput = document.getElementById('article-category-input');
+    const authorInput = document.getElementById('article-author-input');
+    const statusInput = document.getElementById('article-status-input');
+    const tagsInput = document.getElementById('article-tags-input');
+    const excerptInput = document.getElementById('article-excerpt-input');
+    const coverValue = document.getElementById('article-cover-value');
+    const coverPreviewWrap = document.getElementById('cover-preview-wrap');
+    const coverPreviewImg = document.getElementById('cover-preview-img');
+    const btnDelete = document.getElementById('btn-delete-article');
+    const btnRemoveCover = document.getElementById('btn-remove-cover');
+    const coverUploadLabel = document.getElementById('cover-upload-label');
+
+    if (article) {
+      modalTitle.textContent = 'Edit Artikel';
+      idInput.value = article.id;
+      titleInput.value = article.title || '';
+      slugInput.value = article.slug || '';
+      categoryInput.value = article.category || 'Insight';
+      authorInput.value = article.author || 'Tim Expressa';
+      statusInput.value = article.status || 'draft';
+      tagsInput.value = Array.isArray(article.tags) ? article.tags.join(', ') : (article.tags || '');
+      excerptInput.value = article.excerpt || '';
+      coverValue.value = article.coverImage || '';
+      if (quillEditor) quillEditor.root.innerHTML = article.content || '';
+      btnDelete.classList.remove('hidden');
+      btnDelete.classList.add('flex');
+      // Show cover preview
+      if (article.coverImage) {
+        coverPreviewImg.src = article.coverImage;
+        coverPreviewWrap.classList.remove('hidden');
+        btnRemoveCover.classList.remove('hidden');
+        coverUploadLabel.textContent = 'Ganti Gambar';
+      } else {
+        coverPreviewWrap.classList.add('hidden');
+        btnRemoveCover.classList.add('hidden');
+        coverUploadLabel.textContent = 'Upload Gambar';
+      }
+    } else {
+      modalTitle.textContent = 'Artikel Baru';
+      idInput.value = '';
+      titleInput.value = '';
+      slugInput.value = '';
+      categoryInput.value = 'Insight';
+      authorInput.value = 'Tim Expressa';
+      statusInput.value = 'draft';
+      tagsInput.value = '';
+      excerptInput.value = '';
+      coverValue.value = '';
+      if (quillEditor) quillEditor.setText('');
+      btnDelete.classList.add('hidden');
+      btnDelete.classList.remove('flex');
+      coverPreviewWrap.classList.add('hidden');
+      btnRemoveCover.classList.add('hidden');
+      coverUploadLabel.textContent = 'Upload Gambar';
+    }
+
+    modal.classList.remove('hidden');
+    if (window.lucide) lucide.createIcons();
+
+    // Auto-generate slug from title
+    titleInput.oninput = () => {
+      if (!idInput.value) slugInput.value = slugify(titleInput.value);
+    };
+  }
+
+  function closeArticleModal() {
+    const modal = document.getElementById('article-modal');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  async function saveArticle(status) {
+    const id = document.getElementById('article-id').value;
+    const title = document.getElementById('article-title-input').value.trim();
+    const slug = document.getElementById('article-slug-input').value.trim();
+    const category = document.getElementById('article-category-input').value;
+    const author = document.getElementById('article-author-input').value.trim();
+    const tags = document.getElementById('article-tags-input').value;
+    const excerpt = document.getElementById('article-excerpt-input').value.trim();
+    const coverImage = document.getElementById('article-cover-value').value;
+    const content = quillEditor ? quillEditor.root.innerHTML : '';
+
+    if (!title) { showToast('Judul artikel wajib diisi!', 'error'); return; }
+
+    const payload = { title, slug, category, author, tags, excerpt, content, coverImage, status };
+    const isEdit = !!id;
+    const url = isEdit ? `/api/admin/articles/${id}` : '/api/admin/articles';
+    const method = isEdit ? 'PUT' : 'POST';
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) { if (res.status === 401) { handleUnauthorized(); return; } }
+      const json = await res.json();
+      if (json.success) {
+        showToast(json.message || 'Artikel berhasil disimpan!');
+        closeArticleModal();
+        loadArticles();
+      } else {
+        showToast(json.message || 'Gagal menyimpan artikel.', 'error');
+      }
+    } catch (e) {
+      showToast('Terjadi kesalahan koneksi.', 'error');
+    }
+  }
+
+  async function deleteArticle(id) {
+    if (!confirm('Yakin hapus artikel ini? Tindakan tidak bisa dibatalkan.')) return;
+    try {
+      const res = await fetch(`/api/admin/articles/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const json = await res.json();
+      if (json.success) {
+        showToast('Artikel berhasil dihapus.');
+        closeArticleModal();
+        loadArticles();
+      } else {
+        showToast(json.message || 'Gagal menghapus.', 'error');
+      }
+    } catch (e) {
+      showToast('Terjadi kesalahan.', 'error');
+    }
+  }
+
+  // Expose edit function globally (called from table rows onclick)
+  window._editArticle = (id) => {
+    const article = articlesList.find(a => a.id === id);
+    if (article) openArticleModal(article);
+  };
+
+  // Article modal event listeners
+  const btnNewArticle = document.getElementById('btn-new-article');
+  const btnCloseArticleModal = document.getElementById('btn-close-article-modal');
+  const btnSaveDraft = document.getElementById('btn-save-draft');
+  const btnPublishArticle = document.getElementById('btn-publish-article');
+  const btnDeleteArticle = document.getElementById('btn-delete-article');
+  const coverUploadInput = document.getElementById('cover-upload-input');
+  const btnRemoveCoverGlobal = document.getElementById('btn-remove-cover');
+
+  if (btnNewArticle) btnNewArticle.addEventListener('click', () => openArticleModal(null));
+  if (btnCloseArticleModal) btnCloseArticleModal.addEventListener('click', closeArticleModal);
+  if (btnSaveDraft) btnSaveDraft.addEventListener('click', () => saveArticle('draft'));
+  if (btnPublishArticle) btnPublishArticle.addEventListener('click', () => saveArticle('published'));
+  if (btnDeleteArticle) btnDeleteArticle.addEventListener('click', () => {
+    const id = document.getElementById('article-id').value;
+    if (id) deleteArticle(id);
+  });
+
+  // Cover image upload
+  if (coverUploadInput) {
+    coverUploadInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append('image', file);
+      const id = document.getElementById('article-id').value;
+      const uploadUrl = id ? `/api/admin/articles/${id}/upload-cover` : '/api/admin/upload';
+      try {
+        const res = await fetch(uploadUrl, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+        const json = await res.json();
+        if (json.success && json.url) {
+          document.getElementById('article-cover-value').value = json.url;
+          document.getElementById('cover-preview-img').src = json.url;
+          document.getElementById('cover-preview-wrap').classList.remove('hidden');
+          document.getElementById('btn-remove-cover').classList.remove('hidden');
+          document.getElementById('cover-upload-label').textContent = 'Ganti Gambar';
+          showToast('Cover berhasil diunggah!');
+        } else {
+          showToast(json.message || 'Gagal upload cover.', 'error');
+        }
+      } catch (e) {
+        showToast('Gagal upload cover.', 'error');
+      }
+    });
+  }
+
+  if (btnRemoveCoverGlobal) {
+    btnRemoveCoverGlobal.addEventListener('click', () => {
+      document.getElementById('article-cover-value').value = '';
+      document.getElementById('cover-preview-img').src = '';
+      document.getElementById('cover-preview-wrap').classList.add('hidden');
+      document.getElementById('btn-remove-cover').classList.add('hidden');
+      document.getElementById('cover-upload-label').textContent = 'Upload Gambar';
+      if (coverUploadInput) coverUploadInput.value = '';
+    });
+  }
+
+  // Close modal on backdrop click
+  document.getElementById('article-modal')?.addEventListener('click', (e) => {
+    if (e.target === document.getElementById('article-modal')) closeArticleModal();
+  });
+
+  // Load articles when tab is activated
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    if (btn.dataset.tab === 'tab-articles') {
+      btn.addEventListener('click', () => {
+        loadArticles();
+        setTimeout(() => { if (window.lucide) lucide.createIcons(); }, 100);
+      });
+    }
+  });
+
   // Run initial load
   loadContent();
   loadConsultations();

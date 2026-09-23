@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="id" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baca Artikel | Expressa - Technology That Works Your Way</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            handwriting: ['Caveat', 'cursive']
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#0066FF',
+              600: '#0052CC',
+              700: '#003d99',
+              dark: '#0A0F1D',
+              navy: '#0B132B'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!-- Prose / Article Body Styles (manual, Tailwind Typography not available via CDN) -->
+  <style>
+    #article-body h1, #article-body h2, #article-body h3 { font-weight: 700; margin: 1.5rem 0 0.75rem; }
+    #article-body h2 { font-size: 1.5rem; }
+    #article-body h3 { font-size: 1.25rem; }
+    #article-body p { margin-bottom: 1rem; line-height: 1.8; color: inherit; }
+    #article-body ul, #article-body ol { margin: 1rem 0; padding-left: 1.5rem; }
+    #article-body li { margin-bottom: 0.5rem; }
+    #article-body blockquote { border-left: 4px solid #3b82f6; padding: 0.5rem 1rem; margin: 1.5rem 0; background: rgba(59,130,246,0.07); border-radius: 0 0.5rem 0.5rem 0; font-style: italic; }
+    #article-body a { color: #2563eb; text-decoration: underline; }
+    #article-body img { max-width: 100%; border-radius: 1rem; margin: 1.5rem 0; }
+    #article-body pre { background: #1e293b; color: #e2e8f0; padding: 1rem; border-radius: 0.75rem; overflow-x: auto; margin: 1.5rem 0; }
+    #article-body code { background: rgba(59,130,246,0.1); color: #2563eb; padding: 0.1rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; }
+    #article-body pre code { background: transparent; color: inherit; padding: 0; }
+    .dark #article-body a { color: #60a5fa; }
+    #article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+    #article-body th, #article-body td { border: 1px solid #e2e8f0; padding: 0.5rem 0.75rem; text-align: left; }
+    #article-body th { background: #f8fafc; font-weight: 600; }
+    .dark #article-body th { background: #1e293b; border-color: #334155; }
+    .dark #article-body td { border-color: #334155; }
+    #article-body hr { margin: 2rem 0; border: none; border-top: 1px solid #e2e8f0; }
+    .dark #article-body hr { border-color: #334155; }
+  </style>
+
+  <!-- Immediate Theme Initializer -->
+  <script src="/js/theme.js"></script>
+</head>
+<body class="bg-white dark:bg-[#131B2E] text-slate-900 dark:text-slate-100 antialiased selection:bg-blue-600 selection:text-white min-h-screen flex flex-col justify-between transition-colors duration-200">
+
+  <!-- ========================================== -->
+  <!-- NAVBAR                                     -->
+  <!-- ========================================== -->
+  <nav id="main-navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex items-center justify-between backdrop-blur-md bg-white/95 dark:bg-[#131B2E]/95 border-b border-slate-200/80 dark:border-slate-800 shadow-sm">
+    <!-- Brand Logo -->
+    <a href="/" class="flex items-center group">
+      <img src="/logo.png" alt="Expressa" class="h-9 w-auto object-contain">
+    </a>
+
+    <!-- Center Navigation Links -->
+    <div class="hidden md:flex items-center gap-7 lg:gap-8 text-sm font-medium text-slate-600 dark:text-slate-300">
+      <a href="/" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Beranda</a>
+      <a href="/portofolio" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Portfolio</a>
+      <a href="/galeri" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Galeri Project</a>
+      <a href="/tim" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Tim</a>
+      <a href="/about" class="nav-anchor hover:text-blue-600 dark:hover:text-blue-400 transition-colors">About Us</a>
+      <a href="/artikel" class="nav-anchor text-blue-600 dark:text-blue-400 font-bold border-b-2 border-blue-600 dark:border-blue-400 pb-0.5 transition-colors">Artikel</a>
+    </div>
+
+    <!-- Right Controls: Theme Toggle & CTA Button -->
+    <div class="flex items-center gap-3">
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-btn" type="button" aria-label="Buka Menu" class="md:hidden p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="menu" id="mobile-menu-icon" class="w-5 h-5"></i>
+        <i data-lucide="x" id="mobile-close-icon" class="w-5 h-5 hidden"></i>
+      </button>
+
+      <!-- Dark / Light Mode Toggle Button -->
+      <button id="theme-toggle-btn" type="button" aria-label="Ganti Mode Tampilan" class="p-2 rounded-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800 transition-colors">
+        <i data-lucide="moon" id="theme-moon-icon" class="w-4 h-4"></i>
+        <i data-lucide="sun" id="theme-sun-icon" class="w-4 h-4 hidden"></i>
+      </button>
+
+      <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-700 text-white text-xs md:text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md hover:scale-105 active:scale-95">
+        <span>Konsultasi</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu Drawer -->
+  <div id="mobile-menu" class="fixed inset-0 z-40 hidden">
+    <div id="mobile-menu-backdrop" class="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"></div>
+    <div class="absolute top-0 left-0 w-72 h-full bg-white dark:bg-[#131B2E] border-r border-slate-200 dark:border-slate-800 shadow-2xl pt-20 pb-8 px-6 flex flex-col gap-2 overflow-y-auto">
+      <a href="/" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Beranda</a>
+      <a href="/portofolio" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Portfolio</a>
+      <a href="/galeri" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Galeri Project</a>
+      <a href="/tim" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Tim</a>
+      <a href="/about" class="block py-3 px-4 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">About Us</a>
+      <a href="/artikel" class="block py-3 px-4 rounded-xl text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 transition-colors">Artikel</a>
+      <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <button data-action="open-consultation" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-3 rounded-full transition-all flex items-center justify-center gap-2">
+          <span>Konsultasi Gratis</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MAIN CONTENT                               -->
+  <!-- ========================================== -->
+  <main class="flex-1 w-full pt-28 pb-24 px-6 md:px-12">
+    <div class="max-w-3xl mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-8" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Beranda</a>
+        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-400 dark:text-slate-600"></i>
+        <a href="/artikel" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Artikel</a>
+        <i data-lucide="chevron-right" class="w-3 h-3 text-slate-400 dark:text-slate-600"></i>
+        <span id="breadcrumb-title" class="text-slate-700 dark:text-slate-300 font-medium truncate max-w-xs">Memuat...</span>
+      </nav>
+
+      <!-- ========================== -->
+      <!-- LOADING STATE              -->
+      <!-- ========================== -->
+      <div id="article-loading" class="animate-pulse space-y-6">
+        <!-- Cover skeleton -->
+        <div class="w-full h-72 bg-slate-200 dark:bg-slate-700 rounded-2xl"></div>
+        <!-- Badge skeleton -->
+        <div class="h-5 bg-slate-200 dark:bg-slate-700 rounded-full w-20"></div>
+        <!-- Title skeleton -->
+        <div class="space-y-3">
+          <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded w-4/5"></div>
+          <div class="h-8 bg-slate-200 dark:bg-slate-700 rounded w-2/3"></div>
+        </div>
+        <!-- Meta skeleton -->
+        <div class="flex items-center gap-4">
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-24"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-20"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-16"></div>
+        </div>
+        <!-- Divider skeleton -->
+        <div class="h-px bg-slate-200 dark:bg-slate-700 rounded"></div>
+        <!-- Body skeleton lines -->
+        <div class="space-y-3">
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-11/12"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-4/5"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-5/6"></div>
+          <div class="h-4 bg-slate-200 dark:bg-slate-700 rounded w-3/4"></div>
+        </div>
+      </div>
+
+      <!-- ========================== -->
+      <!-- ARTICLE CONTENT (hidden until loaded) -->
+      <!-- ========================== -->
+      <article id="article-content" class="hidden">
+
+        <!-- Cover Image -->
+        <div class="mb-8 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm">
+          <img
+            id="article-cover"
+            src=""
+            alt="Cover Artikel"
+            class="w-full max-h-96 object-cover"
+            onerror="this.parentElement.classList.add('hidden')"
+          >
+        </div>
+
+        <!-- Category Badge -->
+        <div class="mb-4">
+          <span id="article-category" class="inline-block bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-semibold px-3 py-1 rounded-full"></span>
+        </div>
+
+        <!-- Title -->
+        <h1 id="article-title" class="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white leading-tight tracking-tight mb-5"></h1>
+
+        <!-- Meta Row -->
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-slate-500 dark:text-slate-400 mb-6">
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="user-circle" class="w-3.5 h-3.5"></i>
+            <span id="article-author"></span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+            <span id="article-date"></span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+            <span id="article-read-time"></span>
+          </span>
+        </div>
+
+        <!-- Divider -->
+        <hr class="border-slate-200 dark:border-slate-700 mb-8">
+
+        <!-- Article Body -->
+        <div
+          id="article-body"
+          class="text-slate-700 dark:text-slate-300 text-sm md:text-base leading-relaxed"
+        >
+          <!-- Content injected by artikel-detail.js -->
+        </div>
+
+        <!-- Divider -->
+        <hr class="border-slate-200 dark:border-slate-700 my-8">
+
+        <!-- Tags -->
+        <div class="mb-8">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3">Tag</p>
+          <div id="article-tags" class="flex flex-wrap gap-2">
+            <!-- Tags injected by artikel-detail.js -->
+          </div>
+        </div>
+
+        <!-- Share & Back Row -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+          <!-- Back Button -->
+          <a href="/artikel" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Kembali ke Semua Artikel</span>
+          </a>
+
+          <!-- Share Buttons -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Bagikan:</span>
+            <button id="share-twitter" title="Bagikan ke Twitter/X" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 flex items-center justify-center transition-colors">
+              <i data-lucide="twitter" class="w-3.5 h-3.5"></i>
+            </button>
+            <button id="share-linkedin" title="Bagikan ke LinkedIn" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 flex items-center justify-center transition-colors">
+              <i data-lucide="linkedin" class="w-3.5 h-3.5"></i>
+            </button>
+            <button id="share-copy" title="Salin Link" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-900/30 hover:text-blue-600 dark:hover:text-blue-400 flex items-center justify-center transition-colors">
+              <i data-lucide="link" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <div class="p-6 sm:p-8 rounded-2xl bg-slate-50 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 text-center relative overflow-hidden">
+          <div class="absolute top-0 right-0 w-40 h-40 bg-blue-500/5 dark:bg-blue-500/10 rounded-bl-full pointer-events-none"></div>
+          <div class="relative z-10">
+            <p class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-2">Ingin Solusi Seperti Ini?</p>
+            <h3 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2">Diskusikan Kebutuhan Sistem Anda</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-5 max-w-sm mx-auto">Konsultasi gratis dengan tim Expressa. Tidak ada biaya, tidak ada komitmen awal.</p>
+            <button data-action="open-consultation" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-7 py-2.5 rounded-full flex items-center gap-2 mx-auto shadow-sm transition-all hover:scale-105 active:scale-95">
+              <span>Konsultasi Sekarang</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+      </article>
+
+      <!-- ========================== -->
+      <!-- ERROR STATE (hidden by default) -->
+      <!-- ========================== -->
+      <div id="article-error" class="hidden text-center py-24">
+        <div class="w-16 h-16 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="alert-triangle" class="w-7 h-7 text-red-400 dark:text-red-500"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Artikel Tidak Ditemukan</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 max-w-sm mx-auto">
+          Artikel yang Anda cari tidak ada atau mungkin sudah dihapus. Kembali ke halaman artikel untuk menemukan konten lainnya.
+        </p>
+        <a href="/artikel" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm px-6 py-2.5 rounded-full transition-all hover:scale-105 active:scale-95">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          <span>Kembali ke Artikel</span>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ========================== -->
+    <!-- RELATED ARTICLES SECTION   -->
+    <!-- ========================== -->
+    <div id="related-articles" class="hidden max-w-7xl mx-auto mt-20 px-0">
+      <div class="border-t border-slate-200 dark:border-slate-700 pt-12">
+        <h2 class="text-xl font-extrabold text-slate-900 dark:text-white mb-2">Artikel Terkait</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-8">Artikel lain dalam kategori yang sama.</p>
+        <div id="related-articles-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Related article cards injected by artikel-detail.js -->
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- FOOTER                                     -->
+  <!-- ========================================== -->
+  <footer class="bg-[#0B132B] dark:bg-[#0B132B] text-slate-400 dark:text-slate-300 py-10 px-6 md:px-12 text-xs border-t border-transparent dark:border-slate-800">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="font-bold text-white">EXPRESSA</span> &nbsp;|&nbsp; Technology That Works Your Way &copy; 2026. All rights reserved.
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="/" class="hover:text-white transition-colors">Beranda</a>
+        <a href="/portofolio" class="hover:text-white transition-colors">Portfolio</a>
+        <a href="/galeri" class="hover:text-white transition-colors">Galeri Project</a>
+        <a href="/tim" class="hover:text-white transition-colors">Tim</a>
+        <a href="/about" class="hover:text-white transition-colors">About Us</a>
+        <a href="/artikel" class="text-blue-400 font-semibold">Artikel</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="/js/consultation.js"></script>
+  <script src="/js/app.js"></script>
+  <script src="/js/artikel-detail.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+
+      // Mobile Menu Toggle
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileMenu = document.getElementById('mobile-menu');
+      const mobileMenuBackdrop = document.getElementById('mobile-menu-backdrop');
+      const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+      const mobileCloseIcon = document.getElementById('mobile-close-icon');
+
+      function openMobileMenu() {
+        mobileMenu.classList.remove('hidden');
+        mobileMenuIcon.classList.add('hidden');
+        mobileCloseIcon.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMobileMenu() {
+        mobileMenu.classList.add('hidden');
+        mobileMenuIcon.classList.remove('hidden');
+        mobileCloseIcon.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+          if (mobileMenu.classList.contains('hidden')) {
+            openMobileMenu();
+          } else {
+            closeMobileMenu();
+          }
+        });
+      }
+
+      if (mobileMenuBackdrop) {
+        mobileMenuBackdrop.addEventListener('click', closeMobileMenu);
+      }
+
+      // Share buttons
+      const shareTwitter = document.getElementById('share-twitter');
+      const shareLinkedin = document.getElementById('share-linkedin');
+      const shareCopy = document.getElementById('share-copy');
+
+      if (shareTwitter) {
+        shareTwitter.addEventListener('click', () => {
+          const url = encodeURIComponent(window.location.href);
+          const title = encodeURIComponent(document.title);
+          window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+        });
+      }
+
+      if (shareLinkedin) {
+        shareLinkedin.addEventListener('click', () => {
+          const url = encodeURIComponent(window.location.href);
+          window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
+        });
+      }
+
+      if (shareCopy) {
+        shareCopy.addEventListener('click', () => {
+          navigator.clipboard.writeText(window.location.href).then(() => {
+            const icon = shareCopy.querySelector('i');
+            if (icon) {
+              icon.setAttribute('data-lucide', 'check');
+              if (window.lucide) window.lucide.createIcons();
+              setTimeout(() => {
+                icon.setAttribute('data-lucide', 'link');
+                if (window.lucide) window.lucide.createIcons();
+              }, 2000);
+            }
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -126,6 +126,14 @@
           <span id="leads-count-badge" class="px-2 py-0.5 text-[10px] font-bold bg-blue-600 text-white rounded-full">0</span>
         </button>
 
+        <button data-tab="tab-articles" class="tab-btn w-full flex items-center justify-between px-3.5 py-3 rounded-xl border border-transparent text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-left">
+          <div class="flex items-center gap-3">
+            <i data-lucide="newspaper" class="w-4 h-4"></i>
+            <span>Artikel / Blog</span>
+          </div>
+          <span id="articles-count-badge" class="px-2 py-0.5 text-[10px] font-bold bg-slate-700 text-slate-300 rounded-full">0</span>
+        </button>
+
         <button data-tab="tab-settings" class="tab-btn w-full flex items-center gap-3 px-3.5 py-3 rounded-xl border border-transparent text-sm font-semibold text-slate-400 hover:text-white hover:bg-slate-800/60 transition-all text-left">
           <i data-lucide="key" class="w-4 h-4"></i>
           <span>Akun & Password</span>
@@ -733,8 +741,177 @@
         </div>
       </section>
 
+      <!-- ============================================== -->
+      <!-- TAB ARTIKEL / BLOG                             -->
+      <!-- ============================================== -->
+      <section id="tab-articles" class="tab-pane hidden space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-slate-800">
+          <div>
+            <h2 class="text-xl font-bold text-white">Artikel / Blog</h2>
+            <p class="text-xs text-slate-400 mt-1">Buat, edit, dan kelola artikel yang tampil di halaman /artikel.</p>
+          </div>
+          <button id="btn-new-article" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-colors shadow-lg shadow-blue-600/20">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Artikel Baru</span>
+          </button>
+        </div>
+
+        <!-- Articles Table -->
+        <div id="articles-table-wrap" class="overflow-x-auto rounded-2xl border border-slate-800">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-slate-900/80 text-slate-400 text-xs uppercase tracking-wider">
+              <tr>
+                <th class="px-4 py-3">Judul</th>
+                <th class="px-4 py-3 hidden md:table-cell">Kategori</th>
+                <th class="px-4 py-3">Status</th>
+                <th class="px-4 py-3 hidden md:table-cell">Tanggal</th>
+                <th class="px-4 py-3 text-right">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="articles-tbody" class="divide-y divide-slate-800">
+              <tr>
+                <td colspan="5" class="px-4 py-8 text-center text-slate-500 text-sm">
+                  <i data-lucide="loader-2" class="w-5 h-5 animate-spin inline-block mb-2"></i><br>
+                  Memuat artikel...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
     </main>
   </div>
+
+  <!-- Article Editor Modal -->
+  <div id="article-modal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto">
+    <div class="bg-[#0D1526] border border-slate-700 rounded-3xl shadow-2xl w-full max-w-4xl my-6">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+        <h3 id="article-modal-title" class="text-base font-bold text-white">Artikel Baru</h3>
+        <button id="btn-close-article-modal" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800 transition-colors">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-5">
+        <input type="hidden" id="article-id">
+
+        <!-- Judul + Slug -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Judul <span class="text-rose-400">*</span></label>
+            <input type="text" id="article-title-input" placeholder="Judul artikel..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-500">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Slug URL</label>
+            <div class="flex items-center gap-2 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5">
+              <span class="text-xs text-slate-500 shrink-0">/artikel-detail?slug=</span>
+              <input type="text" id="article-slug-input" placeholder="auto-generate" class="flex-1 bg-transparent text-sm text-blue-400 focus:outline-none placeholder-slate-600 min-w-0">
+            </div>
+          </div>
+        </div>
+
+        <!-- Kategori + Author + Status -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Kategori</label>
+            <select id="article-category-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              <option value="Insight">Insight</option>
+              <option value="Tutorial">Tutorial</option>
+              <option value="Studi Kasus">Studi Kasus</option>
+              <option value="Berita">Berita</option>
+              <option value="Update">Update</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Penulis</label>
+            <input type="text" id="article-author-input" value="Tim Expressa" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+          </div>
+          <div class="col-span-2 md:col-span-1">
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">Status</label>
+            <select id="article-status-input" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500">
+              <option value="draft">Draft (Tidak tampil publik)</option>
+              <option value="published">Published (Tampil di website)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tags <span class="text-slate-500 font-normal">(pisahkan dengan koma)</span></label>
+          <input type="text" id="article-tags-input" placeholder="ERP, Digital, UMKM" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-500">
+        </div>
+
+        <!-- Excerpt -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Ringkasan / Excerpt</label>
+          <textarea id="article-excerpt-input" rows="2" placeholder="Ringkasan singkat yang tampil di listing artikel..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500 placeholder-slate-500 resize-none"></textarea>
+        </div>
+
+        <!-- Cover Image -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Gambar Cover</label>
+          <div class="flex items-center gap-3">
+            <div id="cover-preview-wrap" class="hidden w-20 h-14 rounded-xl overflow-hidden border border-slate-700 flex-shrink-0">
+              <img id="cover-preview-img" src="" alt="Cover" class="w-full h-full object-cover">
+            </div>
+            <label class="flex items-center gap-2 cursor-pointer bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-blue-500 text-slate-400 hover:text-white text-xs font-semibold px-4 py-2.5 rounded-xl transition-colors">
+              <i data-lucide="upload" class="w-4 h-4"></i>
+              <span id="cover-upload-label">Upload Gambar</span>
+              <input type="file" id="cover-upload-input" accept="image/*" class="hidden">
+            </label>
+            <button id="btn-remove-cover" class="hidden text-xs text-rose-400 hover:text-rose-300 transition-colors">Hapus</button>
+          </div>
+          <input type="hidden" id="article-cover-value">
+        </div>
+
+        <!-- Rich Text Editor -->
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5">Konten Artikel</label>
+          <div id="quill-editor" class="bg-slate-900 rounded-xl border border-slate-700 text-white min-h-[280px]"></div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-between gap-3 px-6 py-4 border-t border-slate-800">
+        <button id="btn-delete-article" class="hidden items-center gap-2 text-xs font-semibold text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 px-4 py-2.5 rounded-xl border border-rose-500/20 transition-colors">
+          <i data-lucide="trash-2" class="w-4 h-4"></i>
+          <span>Hapus Artikel</span>
+        </button>
+        <div class="flex items-center gap-3 ml-auto">
+          <button id="btn-save-draft" class="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 px-4 py-2.5 rounded-xl border border-slate-700 transition-colors">
+            <i data-lucide="save" class="w-4 h-4"></i>
+            <span>Simpan Draft</span>
+          </button>
+          <button id="btn-publish-article" class="flex items-center gap-2 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-xl shadow-lg shadow-blue-600/20 transition-colors">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>Publish</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quill.js CDN -->
+  <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+  <style>
+    /* Quill dark theme overrides */
+    .ql-toolbar { background: #1e293b !important; border-color: #334155 !important; border-radius: 0.75rem 0.75rem 0 0 !important; }
+    .ql-container { background: #0f172a !important; border-color: #334155 !important; border-radius: 0 0 0.75rem 0.75rem !important; font-size: 14px; }
+    .ql-editor { color: #e2e8f0 !important; min-height: 220px; }
+    .ql-editor.ql-blank::before { color: #475569 !important; font-style: normal !important; }
+    .ql-toolbar .ql-stroke { stroke: #94a3b8 !important; }
+    .ql-toolbar .ql-fill { fill: #94a3b8 !important; }
+    .ql-toolbar button:hover .ql-stroke, .ql-toolbar .ql-active .ql-stroke { stroke: #60a5fa !important; }
+    .ql-toolbar button:hover .ql-fill, .ql-toolbar .ql-active .ql-fill { fill: #60a5fa !important; }
+    .ql-toolbar .ql-picker-label { color: #94a3b8 !important; }
+    #article-modal .ql-toolbar { border-radius: 0.75rem 0.75rem 0 0 !important; }
+    #article-modal .ql-container { border-radius: 0 0 0.75rem 0.75rem !important; }
+    #article-modal #quill-editor { border-radius: 0.75rem !important; border: 1px solid #334155; }
+  </style>
 
   <!-- Admin CMS Logic -->
   <script src="/admin/admin.js"></script>
