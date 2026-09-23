@@ -34,7 +34,7 @@
   // ──────────────────────────────────────────
   async function fetchArticle(slug) {
     try {
-      const res = await fetch(/api/articles/);
+      const res = await fetch(`/api/articles/${slug}`);
       if (!res.ok) throw new Error('not found');
       const json = await res.json();
       return json.data;
@@ -48,7 +48,7 @@
   // ──────────────────────────────────────────
   async function fetchRelated(category, excludeSlug) {
     try {
-      const res = await fetch(/api/articles?category=&limit=4);
+      const res = await fetch(`/api/articles?category=${encodeURIComponent(category)}&limit=4`);
       const json = await res.json();
       return (json.data || []).filter(a => a.slug !== excludeSlug).slice(0, 3);
     } catch (e) {
@@ -61,7 +61,7 @@
   // ──────────────────────────────────────────
   function renderArticle(article) {
     // Update page title
-    document.title = ${article.title} | Expressa;
+    document.title = `${article.title} | Expressa`;
 
     // Cover
     if (coverEl && article.coverImage) {
@@ -93,7 +93,7 @@
     if (readTimeEl) {
       const wordCount = (article.content || '').replace(/<[^>]+>/g, '').split(/\s+/).length;
       const mins = Math.max(1, Math.round(wordCount / 200));
-      readTimeEl.textContent = ${mins} menit baca;
+      readTimeEl.textContent = `${mins} menit baca`;
     }
 
     // Body HTML
@@ -102,7 +102,7 @@
     // Tags
     if (tagsEl && article.tags && article.tags.length > 0) {
       tagsEl.innerHTML = article.tags.map(tag =>
-        <span class="inline-block bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs px-3 py-1 rounded-full"></span>
+        `<span class="inline-block bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs px-3 py-1 rounded-full">${escHtml(tag)}</span>`
       ).join('');
       tagsEl.classList.remove('hidden');
     }
@@ -127,22 +127,22 @@
       const date = formatDate(a.publishedAt || a.createdAt);
       const coverSrc = a.coverImage || '';
       const coverImg = coverSrc
-        ? <img src="" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
-        : <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"><i data-lucide="file-text" class="w-10 h-10 text-blue-300 dark:text-blue-600"></i></div>;
+        ? `<img src="${escHtml(coverSrc)}" alt="${escHtml(a.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">`
+        : `<div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20"><i data-lucide="file-text" class="w-10 h-10 text-blue-300 dark:text-blue-600"></i></div>`;
 
-      return 
+      return `
       <article class="group bg-white dark:bg-slate-800 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300">
-        <a href="/artikel-detail?slug=" class="block h-36 bg-slate-100 dark:bg-slate-700 overflow-hidden">
-          
+        <a href="/artikel-detail?slug=${escHtml(a.slug)}" class="block h-36 bg-slate-100 dark:bg-slate-700 overflow-hidden">
+          ${coverImg}
         </a>
         <div class="p-4">
-          <span class="inline-block bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2"></span>
+          <span class="inline-block bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-xs font-semibold px-2.5 py-0.5 rounded-full mb-2">${escHtml(a.category)}</span>
           <h4 class="text-sm font-bold text-slate-900 dark:text-white mb-1 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            <a href="/artikel-detail?slug="></a>
+            <a href="/artikel-detail?slug=${escHtml(a.slug)}">${escHtml(a.title)}</a>
           </h4>
-          <span class="text-xs text-slate-400"></span>
+          <span class="text-xs text-slate-400">${date}</span>
         </div>
-      </article>;
+      </article>`;
     }).join('');
 
     if (relatedEl) relatedEl.classList.remove('hidden');
