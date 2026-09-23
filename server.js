@@ -1,5 +1,8 @@
 'use strict';
 
+// Auto-load .env in Node.js 20.12+ if present
+try { if (typeof process.loadEnvFile === 'function') process.loadEnvFile(); } catch (e) {}
+
 const express  = require('express');
 const cors     = require('cors');
 const path     = require('path');
@@ -40,9 +43,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ─────────────────────────────────────────────
 // AUTH — stateless HMAC token
 // ─────────────────────────────────────────────
-const AUTH_SECRET = process.env.ADMIN_SECRET || 'expressa_cms_jwt_secret_key_2026_fixed';
-if (!process.env.ADMIN_SECRET) {
-  console.warn('[WARN] ADMIN_SECRET env var not set — using insecure fallback!');
+const AUTH_SECRET = process.env.ADMIN_SECRET;
+if (!AUTH_SECRET) {
+  console.error('[ERROR] ADMIN_SECRET env var tidak diset! Server tidak bisa dijalankan tanpa secret key.');
+  console.error('[ERROR] Buat file .env dan isi ADMIN_SECRET dengan string random minimal 32 karakter.');
+  process.exit(1);
 }
 
 function generateToken(username) {
@@ -441,17 +446,18 @@ app.get('*',                                                    (req, res) => re
 // START SERVER
 // ─────────────────────────────────────────────
 function startServer(port) {
-  const server = app.listen(port, () => {
+  const currentPort = parseInt(port, 10);
+  const server = app.listen(currentPort, () => {
     console.log('=============================================');
     console.log(' Expressa CMS — PostgreSQL + Prisma v6');
-    console.log(` Website : http://localhost:${port}`);
-    console.log(` Admin   : http://localhost:${port}/admin`);
+    console.log(` Website : http://localhost:${currentPort}`);
+    console.log(` Admin   : http://localhost:${currentPort}/admin`);
     console.log('=============================================');
   });
   server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-      console.log(`Port ${port} in use, trying ${port + 1}...`);
-      startServer(port + 1);
+      console.log(`Port ${currentPort} in use, trying ${currentPort + 1}...`);
+      startServer(currentPort + 1);
     } else {
       console.error('Server error:', err);
     }

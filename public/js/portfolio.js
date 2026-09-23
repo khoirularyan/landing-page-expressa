@@ -49,9 +49,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!data || !data.caseStudies || !Array.isArray(data.caseStudies)) return;
     data.caseStudies.forEach((cs, idx) => {
       const imgEl = document.getElementById(`cs-img-${idx}`);
-      if (imgEl && cs.imageUrl) {
-        imgEl.src = cs.imageUrl;
-      }
+      const clientEl = document.getElementById(`cs-client-${idx}`);
+      const industryEl = document.getElementById(`cs-industry-${idx}`);
+      const titleEl = document.getElementById(`cs-title-${idx}`);
+      const descEl = document.getElementById(`cs-desc-${idx}`);
+
+      if (imgEl && cs.imageUrl) imgEl.src = cs.imageUrl;
+      if (clientEl && cs.client) clientEl.textContent = cs.client;
+      if (industryEl && cs.industry) industryEl.textContent = cs.industry;
+      if (titleEl && cs.title) titleEl.textContent = cs.title;
+      if (descEl && cs.description) descEl.textContent = cs.description;
     });
   }
 

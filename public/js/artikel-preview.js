@@ -1,4 +1,4 @@
-﻿// artikel-preview.js — render 3 artikel terbaru di homepage
+// artikel-preview.js — render 3 artikel terbaru di homepage
 (function () {
   'use strict';
 
@@ -46,33 +46,25 @@
 
   async function loadArtikelPreview() {
     const grid = document.getElementById('artikel-preview-grid');
-    const empty = document.getElementById('artikel-preview-empty');
-    const section = document.getElementById('artikel-preview-section');
-
     if (!grid) return;
 
     try {
       const res = await fetch('/api/articles?limit=3');
+      if (!res.ok) return;
       const json = await res.json();
       const articles = json.data || [];
 
-      // Remove skeleton cards
-      grid.querySelectorAll('.artikel-preview-skeleton').forEach(el => el.remove());
-
-      if (articles.length === 0) {
-        // Hide whole section if no articles
-        if (section) section.classList.add('hidden');
-        return;
+      // If articles are available from CMS, dynamically replace the fallback cards
+      if (articles.length > 0) {
+        grid.innerHTML = '';
+        articles.forEach(a => {
+          grid.insertAdjacentHTML('beforeend', cardHTML(a));
+        });
+        if (window.lucide) window.lucide.createIcons();
       }
-
-      articles.forEach(a => {
-        grid.insertAdjacentHTML('beforeend', cardHTML(a));
-      });
-
-      if (window.lucide) window.lucide.createIcons();
     } catch (e) {
-      // Hide section on error
-      if (section) section.classList.add('hidden');
+      // Fallback articles remain visible if offline or API error
+      console.warn('[Articles Preview] Keeping fallback cards:', e.message);
     }
   }
 

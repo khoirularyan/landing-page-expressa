@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (successName) successName.textContent = name;
             if (waBtn) {
               const waText = encodeURIComponent(`Halo Tim Expressa, saya ${name}. Saya tertarik konsultasi mengenai solusi ${service}.`);
-              waBtn.href = `https://wa.me/6281234567890?text=${waText}`;
+              waBtn.href = `https://wa.me/${window.expressaWaNumber || ''}?text=${waText}`;
             }
           } else {
             alert(`Terima kasih, ${name}! Pengajuan konsultasi Anda berhasil kami terima.`);
@@ -238,11 +238,22 @@ document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) window.lucide.createIcons();
     }
 
-    // 5. Case Studies Images
+    // 5. Case Studies — render images, client names, industries, titles, descriptions
     if (data.caseStudies && Array.isArray(data.caseStudies)) {
       data.caseStudies.forEach((cs, idx) => {
         const imgEl = document.getElementById(`cs-img-${idx}`);
+        const clientEl = document.getElementById(`cs-client-${idx}`);
+        const industryEl = document.getElementById(`cs-industry-${idx}`);
+        const titleEl = document.getElementById(`cs-title-${idx}`);
+        const descEl = document.getElementById(`cs-desc-${idx}`);
+        const metricEl = document.getElementById(`cs-metric-${idx}`);
+
         if (imgEl && cs.imageUrl) imgEl.src = cs.imageUrl;
+        if (clientEl && cs.client) clientEl.textContent = cs.client;
+        if (industryEl && cs.industry) industryEl.textContent = cs.industry;
+        if (titleEl && cs.title) titleEl.textContent = cs.title;
+        if (descEl && cs.description) descEl.textContent = cs.description;
+        if (metricEl && cs.metric) metricEl.textContent = cs.metric;
       });
     }
 
@@ -270,19 +281,31 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // 7. Settings — Update semua link WhatsApp secara dinamis
-    if (data.settings && data.settings.whatsappNumber) {
-      const waNum = data.settings.whatsappNumber.replace(/\D/g, '');
-      const waDefaultText = encodeURIComponent(data.settings.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem');
-      // Update semua anchor yang menuju wa.me
-      document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
-        const href = link.getAttribute('href') || '';
-        const textPart = href.includes('?text=') ? '?text=' + href.split('?text=')[1] : `?text=${waDefaultText}`;
-        link.setAttribute('href', `https://wa.me/${waNum}${textPart}`);
-      });
-      // Simpan ke window untuk digunakan oleh form consultation
-      window.expressaWaNumber = waNum;
-      window.expressaWaText = data.settings.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem';
+    // 7. Settings — Update semua link WhatsApp, Email, dan Nama Perusahaan
+    if (data.settings) {
+      if (data.settings.whatsappNumber) {
+        const waNum = data.settings.whatsappNumber.replace(/\D/g, '');
+        const waDefaultText = encodeURIComponent(data.settings.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem');
+        // Update semua anchor yang menuju wa.me
+        document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+          const href = link.getAttribute('href') || '';
+          const textPart = href.includes('?text=') ? '?text=' + href.split('?text=')[1] : `?text=${waDefaultText}`;
+          link.setAttribute('href', `https://wa.me/${waNum}${textPart}`);
+        });
+        window.expressaWaNumber = waNum;
+        window.expressaWaText = data.settings.whatsappText || 'Halo Expressa, saya tertarik untuk konsultasi sistem';
+      }
+
+      if (data.settings.companyEmail) {
+        document.querySelectorAll('.company-email-text').forEach(el => el.textContent = data.settings.companyEmail);
+        document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+          link.setAttribute('href', `mailto:${data.settings.companyEmail}`);
+        });
+      }
+
+      if (data.settings.companyName) {
+        document.querySelectorAll('.company-name-text').forEach(el => el.textContent = data.settings.companyName);
+      }
     }
 
     // 8. Services — render kartu layanan dari CMS

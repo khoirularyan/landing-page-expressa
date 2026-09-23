@@ -1,4 +1,4 @@
-﻿// artikel.js — Listing page untuk /artikel.html
+// artikel.js — Listing page untuk /artikel.html
 (function () {
   'use strict';
 
@@ -19,16 +19,67 @@
   const loadMoreBtn = document.getElementById('load-more-btn');
   const filterBar   = document.getElementById('category-filter');
 
+  const defaultFallbackArticles = [
+    {
+      slug: 'membangun-erp-kustom-untuk-efisiensi-bisnis-modern',
+      title: 'Membangun ERP Kustom untuk Efisiensi Bisnis Modern',
+      excerpt: 'Bagaimana sistem ERP yang dirancang presisi mengikuti alur kerja internal dapat menekan biaya operasional hingga 40% dan mengeliminasi redudansi data bisnis.',
+      category: 'Insight',
+      coverImage: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80',
+      publishedAt: '2026-09-20T08:00:00.000Z',
+      author: 'Tim Engineering Expressa',
+      tags: ['ERP', 'Digitalisasi', 'Bisnis']
+    },
+    {
+      slug: 'studi-kasus-automasi-multi-gudang-alat-kesehatan',
+      title: 'Studi Kasus: Automasi Multi-Gudang pada Distribusi Alat Kesehatan',
+      excerpt: 'Kisah sukses implementasi sistem pelacakan stok real-time antar cabang yang memangkas waktu rekonsiliasi bulanan dari 5 hari menjadi hitungan menit.',
+      category: 'Studi Kasus',
+      coverImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80',
+      publishedAt: '2026-09-18T10:30:00.000Z',
+      author: 'Danu - Lead Solutions Architect',
+      tags: ['Studi Kasus', 'Gudang', 'Distribusi']
+    },
+    {
+      slug: 'mengapa-aplikasi-mobile-operasional-perlu-offline-first',
+      title: 'Mengapa Aplikasi Mobile Operasional Perlu Pendekatan Offline-First?',
+      excerpt: 'Menghadapi kendala sinyal di lapangan dengan arsitektur database sync agar tim operasional tetap dapat mencatat data tanpa hambatan.',
+      category: 'Tutorial',
+      coverImage: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1200&q=80',
+      publishedAt: '2026-09-15T14:15:00.000Z',
+      author: 'Khoirul - Mobile Developer',
+      tags: ['Mobile App', 'Offline First']
+    },
+    {
+      slug: 'expressa-rilis-fitur-integrasi-whatsapp-gateway',
+      title: 'Expressa Rilis Fitur Integrasi Notifikasi WhatsApp Gateway Otomatis',
+      excerpt: 'Pemberitahuan invoice jatuh tempo, status pesanan, dan verifikasi OTP kini terkirim otomatis ke WhatsApp pelanggan dengan integrasi API resmi.',
+      category: 'Update',
+      coverImage: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?auto=format&fit=crop&w=1200&q=80',
+      publishedAt: '2026-09-12T09:00:00.000Z',
+      author: 'Tim Expressa',
+      tags: ['Update', 'WhatsApp API']
+    }
+  ];
+
   // ──────────────────────────────────────────
   // Fetch articles
   // ──────────────────────────────────────────
   async function fetchArticles() {
     try {
       const res = await fetch('/api/articles');
-      const json = await res.json();
-      allArticles = json.data || [];
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+          allArticles = json.data;
+        } else {
+          allArticles = defaultFallbackArticles;
+        }
+      } else {
+        allArticles = defaultFallbackArticles;
+      }
     } catch (e) {
-      allArticles = [];
+      allArticles = defaultFallbackArticles;
     }
     applyFilter();
   }
