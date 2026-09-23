@@ -1,0 +1,75 @@
+// Prisma Schema — Expressa Landing Page
+// Node.js v20 | Prisma v6 | PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// ARTIKEL / BLOG
+// ─────────────────────────────────────────────
+model Article {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String    @default("")
+  content     String    @default("")
+  coverImage  String    @default("")
+  category    String    @default("Insight")
+  tags        String[]  @default([])
+  author      String    @default("Tim Expressa")
+  status      String    @default("draft")   // "published" | "draft"
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([status, publishedAt(sort: Desc)])
+  @@index([category])
+  @@map("articles")
+}
+
+// ─────────────────────────────────────────────
+// KONSULTASI / LEADS
+// ─────────────────────────────────────────────
+model Consultation {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @default("-")
+  phone     String
+  company   String   @default("-")
+  service   String   @default("Umum / Belum Ditentukan")
+  message   String   @default("")
+  createdAt DateTime @default(now())
+
+  @@map("consultations")
+}
+
+// ─────────────────────────────────────────────
+// KONTEN LANDING PAGE (single row, key-value JSON)
+// ─────────────────────────────────────────────
+model SiteContent {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique  // e.g. "main"
+  data        Json
+  updatedAt   DateTime @updatedAt
+
+  @@map("site_content")
+}
+
+// ─────────────────────────────────────────────
+// ADMIN CONFIG (single row)
+// ─────────────────────────────────────────────
+model AdminConfig {
+  id           Int      @id @default(autoincrement())
+  username     String   @unique @default("admin")
+  passwordHash String
+  siteName     String   @default("Expressa Content Manager")
+  updatedAt    DateTime @updatedAt
+
+  @@map("admin_config")
+}

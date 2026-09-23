@@ -13,6 +13,9 @@ data/articles.json
 public/uploads/*
 !public/uploads/.gitkeep
 
+# Prisma
+prisma/migrations/
+
 # System & OS Files
 .DS_Store
 Thumbs.db

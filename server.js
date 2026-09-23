@@ -1,780 +1,456 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
-const fs = require('fs');
-const crypto = require('crypto');
-const multer = require('multer');
+'use strict';
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const express  = require('express');
+const cors     = require('cors');
+const path     = require('path');
+const fs       = require('fs');
+const crypto   = require('crypto');
+const multer   = require('multer');
+const bcrypt   = require('bcryptjs');
+const { PrismaClient } = require('@prisma/client');
 
-// Detect Serverless / Vercel environment
-const IS_SERVERLESS = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_VERSION);
-const TMP_DIR = path.join('/tmp', 'expressa');
+const app    = express();
+const prisma = new PrismaClient();
+const PORT   = process.env.PORT || 3000;
 
-// Ensure local directories exist (wrapped in try-catch to prevent EROFS)
+// ─────────────────────────────────────────────
+// MULTER — memory storage (Vercel-safe)
+// ─────────────────────────────────────────────
 const UPLOADS_DIR = path.join(__dirname, 'public', 'uploads');
-const DATA_DIR = path.join(__dirname, 'data');
-try {
-  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-} catch (e) {}
-try {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-} catch (e) {}
-try {
-  if (IS_SERVERLESS && !fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
-} catch (e) {}
+try { if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true }); } catch (e) {}
 
-// File paths
-const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
-const ADMIN_FILE = path.join(DATA_DIR, 'admin-config.json');
-const ARTICLES_FILE = path.join(DATA_DIR, 'articles.json');
-const DATA_FILE = path.join(__dirname, 'consultations.json');
-
-const TMP_CONTENT_FILE = path.join(TMP_DIR, 'content.json');
-const TMP_ADMIN_FILE = path.join(TMP_DIR, 'admin-config.json');
-const TMP_ARTICLES_FILE = path.join(TMP_DIR, 'articles.json');
-const TMP_DATA_FILE = path.join(TMP_DIR, 'consultations.json');
-
-// Memory storage for uploads to completely eliminate EROFS on Vercel / serverless
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB limit
-  fileFilter: function (req, file, cb) {
-    const allowed = /jpeg|jpg|png|webp|svg|gif/;
-    const extname = allowed.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = allowed.test(file.mimetype);
-    if (extname || mimetype) {
-      return cb(null, true);
-    }
-    cb(new Error('Format file harus berupa gambar (PNG, JPG, JPEG, WEBP, SVG)!'));
-  }
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter(req, file, cb) {
+    const ok = /jpeg|jpg|png|webp|svg|gif/.test(path.extname(file.originalname).toLowerCase())
+            || /jpeg|jpg|png|webp|svg|gif/.test(file.mimetype);
+    ok ? cb(null, true) : cb(new Error('Format file harus berupa gambar (PNG, JPG, JPEG, WEBP, SVG)'));
+  },
 });
 
-// Middleware with large body limit for Base64 image payloads
+// ─────────────────────────────────────────────
+// MIDDLEWARE
+// ─────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// In-memory data caches for fast retrieval and serverless resilience
-let memoryContent = null;
-let memoryAdminConfig = null;
-let memoryConsultations = null;
-let memoryArticles = null;
-
-// Secret key for HMAC token signing (stateless for serverless / Vercel multi-instance environments)
+// ─────────────────────────────────────────────
+// AUTH — stateless HMAC token
+// ─────────────────────────────────────────────
 const AUTH_SECRET = process.env.ADMIN_SECRET || 'expressa_cms_jwt_secret_key_2026_fixed';
 if (!process.env.ADMIN_SECRET) {
-  console.warn('[WARN] ADMIN_SECRET env var not set — using insecure fallback. Set ADMIN_SECRET in .env for production!');
+  console.warn('[WARN] ADMIN_SECRET env var not set — using insecure fallback!');
 }
 
 function generateToken(username) {
-  const payload = {
-    u: username,
-    iat: Date.now(),
-    exp: Date.now() + (30 * 24 * 60 * 60 * 1000) // 30 days expiration
-  };
-  const payloadStr = JSON.stringify(payload);
-  const encodedPayload = Buffer.from(payloadStr).toString('base64url');
-  const signature = crypto.createHmac('sha256', AUTH_SECRET).update(encodedPayload).digest('hex');
-  return `expr.${encodedPayload}.${signature}`;
+  const payload    = { u: username, iat: Date.now(), exp: Date.now() + 30 * 24 * 60 * 60 * 1000 };
+  const encoded    = Buffer.from(JSON.stringify(payload)).toString('base64url');
+  const signature  = crypto.createHmac('sha256', AUTH_SECRET).update(encoded).digest('hex');
+  return `expr.${encoded}.${signature}`;
 }
 
 function verifyToken(token) {
   if (!token || typeof token !== 'string') return null;
-
   try {
-    const parts = token.split('.');
-    if (parts.length === 3 && parts[0] === 'expr') {
-      const encodedPayload = parts[1];
-      const signature = parts[2];
-      const expectedSig = crypto.createHmac('sha256', AUTH_SECRET).update(encodedPayload).digest('hex');
-
-      const sigBuf = Buffer.from(signature);
-      const expectedSigBuf = Buffer.from(expectedSig);
-      if (sigBuf.length === expectedSigBuf.length && crypto.timingSafeEqual(sigBuf, expectedSigBuf)) {
-        const payloadStr = Buffer.from(encodedPayload, 'base64url').toString('utf8');
-        const payload = JSON.parse(payloadStr);
-        if (payload.exp && payload.exp > Date.now()) {
-          return payload;
-        }
-      }
-    }
-  } catch (e) {
-    // Malformed token or JSON parse error
-  }
-  return null;
+    const [prefix, encoded, sig] = token.split('.');
+    if (prefix !== 'expr') return null;
+    const expected = crypto.createHmac('sha256', AUTH_SECRET).update(encoded).digest('hex');
+    const eBuf = Buffer.from(sig);
+    const xBuf = Buffer.from(expected);
+    if (eBuf.length !== xBuf.length || !crypto.timingSafeEqual(eBuf, xBuf)) return null;
+    const payload = JSON.parse(Buffer.from(encoded, 'base64url').toString());
+    return payload.exp > Date.now() ? payload : null;
+  } catch { return null; }
 }
 
 function authMiddleware(req, res, next) {
-  const authHeader = req.headers.authorization;
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  const header = req.headers.authorization;
+  if (!header?.startsWith('Bearer ')) {
     return res.status(401).json({ success: false, message: 'Silakan login terlebih dahulu.' });
   }
-  const token = authHeader.split(' ')[1];
-  const payload = verifyToken(token);
+  const payload = verifyToken(header.split(' ')[1]);
   if (!payload) {
-    return res.status(401).json({ success: false, message: 'Sesi login telah berakhir atau tidak valid. Silakan login kembali.' });
+    return res.status(401).json({ success: false, message: 'Sesi login telah berakhir atau tidak valid.' });
   }
   req.user = payload;
   next();
 }
 
-// Content retrieval with serverless fallback
-function getContent() {
-  if (memoryContent) return memoryContent;
-
-  if (IS_SERVERLESS) {
-    try {
-      if (fs.existsSync(TMP_CONTENT_FILE)) {
-        memoryContent = JSON.parse(fs.readFileSync(TMP_CONTENT_FILE, 'utf8'));
-        return memoryContent;
-      }
-    } catch (e) {}
-  }
-
-  try {
-    if (fs.existsSync(CONTENT_FILE)) {
-      memoryContent = JSON.parse(fs.readFileSync(CONTENT_FILE, 'utf8'));
-      return memoryContent;
-    }
-  } catch (err) {
-    console.error('Error reading content file:', err);
-  }
-
-  return {};
-}
-
-// Content saving with EROFS protection
-function saveContent(data) {
-  if (data && typeof data === 'object') {
-    data._lastUpdated = data._lastUpdated || Date.now();
-  }
-  memoryContent = data;
-
-  try {
-    fs.writeFileSync(CONTENT_FILE, JSON.stringify(data, null, 2));
-    return true;
-  } catch (err) {
-    if (err.code === 'EROFS' || IS_SERVERLESS) {
-      try {
-        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
-        fs.writeFileSync(TMP_CONTENT_FILE, JSON.stringify(data, null, 2));
-        console.log('[CMS] Content saved to serverless /tmp cache.');
-        return true;
-      } catch (tmpErr) {
-        console.warn('[CMS] Warning saving to /tmp, retained in memory:', tmpErr.message);
-        return true;
-      }
-    }
-    console.error('Error saving content file:', err);
-    return false;
-  }
-}
-
-// Admin config retrieval with serverless fallback
-function getAdminConfig() {
-  if (memoryAdminConfig) return memoryAdminConfig;
-
-  if (IS_SERVERLESS) {
-    try {
-      if (fs.existsSync(TMP_ADMIN_FILE)) {
-        memoryAdminConfig = JSON.parse(fs.readFileSync(TMP_ADMIN_FILE, 'utf8'));
-        return memoryAdminConfig;
-      }
-    } catch (e) {}
-  }
-
-  try {
-    if (fs.existsSync(ADMIN_FILE)) {
-      memoryAdminConfig = JSON.parse(fs.readFileSync(ADMIN_FILE, 'utf8'));
-      return memoryAdminConfig;
-    }
-  } catch (err) {
-    console.error('Error reading admin config:', err);
-  }
-
-  return { username: 'admin', password: 'admin123' };
-}
-
-// Admin config saving with EROFS protection
-function saveAdminConfig(cfg) {
-  memoryAdminConfig = cfg;
-
-  try {
-    fs.writeFileSync(ADMIN_FILE, JSON.stringify(cfg, null, 2));
-    return true;
-  } catch (err) {
-    if (err.code === 'EROFS' || IS_SERVERLESS) {
-      try {
-        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
-        fs.writeFileSync(TMP_ADMIN_FILE, JSON.stringify(cfg, null, 2));
-        return true;
-      } catch (tmpErr) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
-// Consultations retrieval with serverless fallback
-function getConsultations() {
-  if (memoryConsultations) return memoryConsultations;
-
-  if (IS_SERVERLESS) {
-    try {
-      if (fs.existsSync(TMP_DATA_FILE)) {
-        memoryConsultations = JSON.parse(fs.readFileSync(TMP_DATA_FILE, 'utf8'));
-        return memoryConsultations;
-      }
-    } catch (e) {}
-  }
-
-  try {
-    if (fs.existsSync(DATA_FILE)) {
-      const data = fs.readFileSync(DATA_FILE, 'utf8');
-      memoryConsultations = JSON.parse(data || '[]');
-      return memoryConsultations;
-    }
-  } catch (err) {
-    console.error('Error reading consultations file:', err);
-  }
-
-  return [];
-}
-
-// Consultations saving with EROFS protection
-function saveAllConsultations(list) {
-  memoryConsultations = list;
-
-  try {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(list, null, 2));
-    return true;
-  } catch (err) {
-    if (err.code === 'EROFS' || IS_SERVERLESS) {
-      try {
-        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
-        fs.writeFileSync(TMP_DATA_FILE, JSON.stringify(list, null, 2));
-        return true;
-      } catch (tmpErr) {
-        return true;
-      }
-    }
-    return false;
-  }
-}
-
-function saveConsultation(record) {
-  const list = getConsultations();
-  list.unshift(record);
-  saveAllConsultations(list);
-}
-
-// =============================================
-// ARTICLES HELPERS
-// =============================================
-
+// ─────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────
 function slugify(text) {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
+  return String(text).toLowerCase().trim()
     .replace(/\s+/g, '-')
-    .replace(/[àáâãäå]/g, 'a')
-    .replace(/[èéêë]/g, 'e')
-    .replace(/[ìíîï]/g, 'i')
-    .replace(/[òóôõö]/g, 'o')
-    .replace(/[ùúûü]/g, 'u')
-    .replace(/[ñ]/g, 'n')
-    .replace(/[^a-z0-9-]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
+    .replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e')
+    .replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o')
+    .replace(/[ùúûü]/g, 'u').replace(/[ñ]/g, 'n')
+    .replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 }
 
-function getArticles() {
-  if (memoryArticles) return memoryArticles;
+// ─────────────────────────────────────────────
+// PUBLIC ROUTES
+// ─────────────────────────────────────────────
 
-  if (IS_SERVERLESS) {
-    try {
-      if (fs.existsSync(TMP_ARTICLES_FILE)) {
-        memoryArticles = JSON.parse(fs.readFileSync(TMP_ARTICLES_FILE, 'utf8'));
-        return memoryArticles;
-      }
-    } catch (e) {}
-  }
-
-  try {
-    if (fs.existsSync(ARTICLES_FILE)) {
-      const data = JSON.parse(fs.readFileSync(ARTICLES_FILE, 'utf8'));
-      memoryArticles = Array.isArray(data) ? { articles: data } : data;
-      if (!memoryArticles.articles) memoryArticles.articles = [];
-      return memoryArticles;
-    }
-  } catch (err) {
-    console.error('Error reading articles file:', err);
-  }
-
-  return { articles: [] };
-}
-
-function saveArticles(data) {
-  memoryArticles = data;
-
-  try {
-    fs.writeFileSync(ARTICLES_FILE, JSON.stringify(data, null, 2));
-    return true;
-  } catch (err) {
-    if (err.code === 'EROFS' || IS_SERVERLESS) {
-      try {
-        if (!fs.existsSync(TMP_DIR)) fs.mkdirSync(TMP_DIR, { recursive: true });
-        fs.writeFileSync(TMP_ARTICLES_FILE, JSON.stringify(data, null, 2));
-        return true;
-      } catch (tmpErr) {
-        return true;
-      }
-    }
-    console.error('Error saving articles file:', err);
-    return false;
-  }
-}
-
-
-// =============================================
-
-// Health Check
 app.get('/api/health', (req, res) => {
-  res.json({
-    status: 'ok',
-    app: 'Expressa Landing Page & CMS',
-    serverless: IS_SERVERLESS,
-    timestamp: new Date().toISOString()
-  });
+  res.json({ status: 'ok', app: 'Expressa CMS', timestamp: new Date().toISOString() });
 });
 
-// Public content endpoint
-app.get('/api/content', (req, res) => {
-  const content = getContent();
-  res.json({
-    success: true,
-    data: content
-  });
+// Landing page content
+app.get('/api/content', async (req, res) => {
+  try {
+    const row = await prisma.siteContent.findUnique({ where: { key: 'main' } });
+    res.json({ success: true, data: row?.data ?? {} });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal mengambil konten.' });
+  }
+});
+
+// Stats shortcut (backward-compat)
+app.get('/api/stats', async (req, res) => {
+  try {
+    const row = await prisma.siteContent.findUnique({ where: { key: 'main' } });
+    const stats = (row?.data)?.stats;
+    res.json({
+      projectsCompleted: stats?.stat1?.number ?? '200+',
+      enterpriseClients: stats?.stat2?.number ?? '50+',
+      industries:        stats?.stat3?.number ?? '15+',
+      satisfactionRate:  stats?.stat4?.number ?? '98%',
+    });
+  } catch (e) {
+    res.json({ projectsCompleted: '200+', enterpriseClients: '50+', industries: '15+', satisfactionRate: '98%' });
+  }
 });
 
 // Public articles list
-app.get('/api/articles', (req, res) => {
-  const { category, tag, limit } = req.query;
-  const store = getArticles();
-  let articles = (store.articles || []).filter(a => a.status === 'published');
+app.get('/api/articles', async (req, res) => {
+  try {
+    const { category, tag, limit } = req.query;
+    const where = { status: 'published' };
+    if (category) where.category = category;
+    if (tag)      where.tags = { has: tag };
 
-  // Sort by publishedAt desc
-  articles.sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt));
-
-  if (category) articles = articles.filter(a => a.category === category);
-  if (tag) articles = articles.filter(a => Array.isArray(a.tags) && a.tags.includes(tag));
-  if (limit) articles = articles.slice(0, parseInt(limit, 10));
-
-  res.json({ success: true, data: articles });
+    const articles = await prisma.article.findMany({
+      where,
+      orderBy: { publishedAt: 'desc' },
+      take: limit ? parseInt(limit, 10) : undefined,
+    });
+    res.json({ success: true, data: articles });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal mengambil artikel.' });
+  }
 });
 
 // Public single article by slug
-app.get('/api/articles/:slug', (req, res) => {
-  const store = getArticles();
-  const article = (store.articles || []).find(
-    a => a.slug === req.params.slug && a.status === 'published'
-  );
-  if (!article) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
-  res.json({ success: true, data: article });
-});
-
-
-
-// Backward-compatible stats endpoint
-app.get('/api/stats', (req, res) => {
-  const content = getContent();
-  if (content.stats) {
-    return res.json({
-      projectsCompleted: content.stats.stat1?.number || '200+',
-      enterpriseClients: content.stats.stat2?.number || '50+',
-      industries: content.stats.stat3?.number || '15+',
-      satisfactionRate: content.stats.stat4?.number || '98%'
+app.get('/api/articles/:slug', async (req, res) => {
+  try {
+    const article = await prisma.article.findFirst({
+      where: { slug: req.params.slug, status: 'published' },
     });
+    if (!article) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+    res.json({ success: true, data: article });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal mengambil artikel.' });
   }
-  res.json({
-    projectsCompleted: '200+',
-    enterpriseClients: '50+',
-    industries: '15+',
-    satisfactionRate: '98%'
-  });
 });
 
 // Public consultation submission
-app.post('/api/consultation', (req, res) => {
+app.post('/api/consultation', async (req, res) => {
   const { name, email, phone, company, service, message } = req.body;
-
   if (!name || !phone) {
-    return res.status(400).json({
-      success: false,
-      message: 'Nama dan Nomor WhatsApp wajib diisi.'
-    });
+    return res.status(400).json({ success: false, message: 'Nama dan Nomor WhatsApp wajib diisi.' });
   }
-
-  const record = {
-    id: Date.now(),
-    name: name.trim(),
-    email: email ? email.trim() : '-',
-    phone: phone.trim(),
-    company: company ? company.trim() : '-',
-    service: service || 'Umum / Belum Ditentukan',
-    message: message ? message.trim() : '',
-    createdAt: new Date().toISOString()
-  };
-
-  saveConsultation(record);
-  console.log(`[New Consultation Request] ${record.name} (${record.company || 'Personal'}) - ${record.service}`);
-
-  res.status(201).json({
-    success: true,
-    message: 'Konsultasi berhasil diajukan! Tim ahli Expressa akan menghubungi Anda melalui WhatsApp/Email dalam 1x24 jam kerja.',
-    data: record
-  });
+  try {
+    const record = await prisma.consultation.create({
+      data: {
+        name:    name.trim(),
+        email:   email?.trim()   || '-',
+        phone:   phone.trim(),
+        company: company?.trim() || '-',
+        service: service         || 'Umum / Belum Ditentukan',
+        message: message?.trim() || '',
+      },
+    });
+    console.log(`[New Consultation] ${record.name} (${record.company}) — ${record.service}`);
+    res.status(201).json({
+      success: true,
+      message: 'Konsultasi berhasil diajukan! Tim Expressa akan menghubungi Anda dalam 1×24 jam kerja.',
+      data: record,
+    });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal menyimpan konsultasi.' });
+  }
 });
 
-// Simple Login Endpoint
-app.post('/api/login', (req, res) => {
+// Login
+app.post('/api/login', async (req, res) => {
   const { username, password } = req.body;
-  const adminConfig = getAdminConfig();
-
   if (!username || !password) {
     return res.status(400).json({ success: false, message: 'Username dan password wajib diisi.' });
   }
+  try {
+    const admin = await prisma.adminConfig.findUnique({ where: { username } });
+    if (!admin) return res.status(401).json({ success: false, message: 'Username atau password salah.' });
 
-  if (username === adminConfig.username && password === adminConfig.password) {
-    const token = generateToken(adminConfig.username);
-    return res.json({
-      success: true,
-      message: 'Login berhasil!',
-      token: token,
-      user: { username: adminConfig.username }
-    });
+    const match = await bcrypt.compare(password, admin.passwordHash);
+    if (!match) return res.status(401).json({ success: false, message: 'Username atau password salah.' });
+
+    const token = generateToken(admin.username);
+    res.json({ success: true, message: 'Login berhasil!', token, user: { username: admin.username } });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Server error saat login.' });
   }
-
-  return res.status(401).json({
-    success: false,
-    message: 'Username atau password salah. Silakan coba lagi.'
-  });
 });
 
-// =============================================
-// ADMIN PROTECTED API ROUTES
-// =============================================
+// ─────────────────────────────────────────────
+// ADMIN ROUTES (protected)
+// ─────────────────────────────────────────────
 
-// Check auth status
-app.get('/api/admin/check-auth', authMiddleware, (req, res) => {
-  const adminConfig = getAdminConfig();
-  res.json({
-    success: true,
-    authenticated: true,
-    username: adminConfig.username
-  });
+app.get('/api/admin/check-auth', authMiddleware, async (req, res) => {
+  res.json({ success: true, authenticated: true, username: req.user.u });
 });
 
-// Logout
 app.post('/api/admin/logout', (req, res) => {
   res.json({ success: true, message: 'Logout berhasil.' });
 });
 
-// Change Admin Credentials
-app.post('/api/admin/change-credentials', authMiddleware, (req, res) => {
+// Change credentials
+app.post('/api/admin/change-credentials', authMiddleware, async (req, res) => {
   const { currentPassword, newUsername, newPassword } = req.body;
-  const adminConfig = getAdminConfig();
+  try {
+    const admin = await prisma.adminConfig.findUnique({ where: { username: req.user.u } });
+    if (!admin) return res.status(404).json({ success: false, message: 'Akun tidak ditemukan.' });
 
-  if (currentPassword !== adminConfig.password) {
-    return res.status(400).json({ success: false, message: 'Password lama tidak sesuai.' });
+    const match = await bcrypt.compare(currentPassword, admin.passwordHash);
+    if (!match) return res.status(400).json({ success: false, message: 'Password lama tidak sesuai.' });
+
+    const data = {};
+    if (newUsername) data.username     = newUsername.trim();
+    if (newPassword) data.passwordHash = await bcrypt.hash(newPassword.trim(), 10);
+
+    await prisma.adminConfig.update({ where: { id: admin.id }, data });
+    res.json({ success: true, message: 'Kredensial admin berhasil diperbarui!' });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal memperbarui kredensial.' });
   }
-
-  if (newUsername) adminConfig.username = newUsername.trim();
-  if (newPassword) adminConfig.password = newPassword.trim();
-
-  saveAdminConfig(adminConfig);
-  res.json({ success: true, message: 'Kredensial admin berhasil diperbarui!' });
 });
 
-// Update Content
-app.put('/api/admin/content', authMiddleware, (req, res) => {
+// Update site content
+app.put('/api/admin/content', authMiddleware, async (req, res) => {
   const newContent = req.body;
   if (!newContent || typeof newContent !== 'object') {
     return res.status(400).json({ success: false, message: 'Format data tidak valid.' });
   }
-
-  const ok = saveContent(newContent);
-  if (ok) {
-    console.log('[CMS Update] Landing page content updated successfully.');
-    return res.json({ success: true, message: 'Konten landing page berhasil disimpan!' });
+  try {
+    await prisma.siteContent.upsert({
+      where:  { key: 'main' },
+      update: { data: newContent },
+      create: { key: 'main', data: newContent },
+    });
+    console.log('[CMS] Content updated');
+    res.json({ success: true, message: 'Konten berhasil disimpan!' });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal menyimpan konten.' });
   }
-  res.status(500).json({ success: false, message: 'Gagal menyimpan konten ke sistem file.' });
 });
 
-// Upload Image - Memory buffer to Base64 (100% Serverless & Vercel friendly, zero EROFS error)
+// Upload image (memory → base64 Data URI, Vercel-safe)
 app.post('/api/admin/upload', authMiddleware, upload.single('image'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ success: false, message: 'Tidak ada file gambar yang diunggah.' });
+  if (!req.file) return res.status(400).json({ success: false, message: 'Tidak ada file gambar.' });
+  const dataUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+  // Optionally save locally in non-serverless env
+  try {
+    const ext      = path.extname(req.file.originalname).toLowerCase() || '.png';
+    const filename = `img-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+    fs.writeFileSync(path.join(UPLOADS_DIR, filename), req.file.buffer);
+  } catch (e) {}
+  res.json({ success: true, message: 'Gambar berhasil diunggah!', url: dataUrl, filename: req.file.originalname });
+}, (err, req, res, next) => {
+  res.status(400).json({ success: false, message: err.message });
+});
+
+// Get consultations (admin)
+app.get('/api/admin/consultations', authMiddleware, async (req, res) => {
+  try {
+    const data = await prisma.consultation.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json({ success: true, data });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal mengambil data konsultasi.' });
   }
+});
 
-  // Convert buffer to Data URI (Base64) so it works natively on Vercel read-only filesystem
-  const base64Data = req.file.buffer.toString('base64');
-  const mimeType = req.file.mimetype || 'image/png';
-  const dataUrl = `data:${mimeType};base64,${base64Data}`;
-
-  // If local environment with writable filesystem, optionally save copy to disk as well
-  if (!IS_SERVERLESS) {
-    try {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      const ext = path.extname(req.file.originalname).toLowerCase() || '.png';
-      const filename = 'img-' + uniqueSuffix + ext;
-      fs.writeFileSync(path.join(UPLOADS_DIR, filename), req.file.buffer);
-    } catch (e) {}
+// Delete consultation
+app.delete('/api/admin/consultations/:id', authMiddleware, async (req, res) => {
+  try {
+    await prisma.consultation.delete({ where: { id: parseInt(req.params.id, 10) } });
+    res.json({ success: true, message: 'Data prospek berhasil dihapus.' });
+  } catch (e) {
+    if (e.code === 'P2025') return res.status(404).json({ success: false, message: 'Data tidak ditemukan.' });
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal menghapus data.' });
   }
-
-  console.log(`[Upload Success] File converted to Data URI (${req.file.originalname}, ${req.file.size} bytes).`);
-  res.json({
-    success: true,
-    message: 'Gambar berhasil diunggah!',
-    url: dataUrl,
-    filename: req.file.originalname
-  });
-}, (error, req, res, next) => {
-  res.status(400).json({ success: false, message: error.message });
 });
 
-// Get Consultations for Admin
-app.get('/api/admin/consultations', authMiddleware, (req, res) => {
-  res.json({
-    success: true,
-    data: getConsultations()
-  });
-});
+// ─────────────────────────────────────────────
+// ADMIN ARTICLES CRUD
+// ─────────────────────────────────────────────
 
-// Delete Consultation Lead
-app.delete('/api/admin/consultations/:id', authMiddleware, (req, res) => {
-  const id = parseInt(req.params.id, 10);
-  let list = getConsultations();
-  const initialLength = list.length;
-  list = list.filter(item => item.id !== id);
-
-  if (list.length !== initialLength) {
-    saveAllConsultations(list);
-    return res.json({ success: true, message: 'Data prospek berhasil dihapus.' });
+// List all articles (admin sees draft + published)
+app.get('/api/admin/articles', authMiddleware, async (req, res) => {
+  try {
+    const articles = await prisma.article.findMany({ orderBy: { createdAt: 'desc' } });
+    res.json({ success: true, data: articles });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal mengambil artikel.' });
   }
-  res.status(404).json({ success: false, message: 'Data tidak ditemukan.' });
 });
 
-// =============================================
-// ADMIN ARTICLES API ROUTES
-// =============================================
-
-// Get all articles (admin sees draft + published)
-app.get('/api/admin/articles', authMiddleware, (req, res) => {
-  const store = getArticles();
-  const articles = (store.articles || []).sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  );
-  res.json({ success: true, data: articles });
-});
-
-// Create new article
-app.post('/api/admin/articles', authMiddleware, (req, res) => {
+// Create article
+app.post('/api/admin/articles', authMiddleware, async (req, res) => {
   const { title, excerpt, content, coverImage, category, tags, author, status, slug: customSlug } = req.body;
-
-  if (!title || !title.trim()) {
-    return res.status(400).json({ success: false, message: 'Judul artikel wajib diisi.' });
-  }
-
-  const store = getArticles();
-  const now = new Date().toISOString();
-  const id = 'art-' + Date.now();
+  if (!title?.trim()) return res.status(400).json({ success: false, message: 'Judul artikel wajib diisi.' });
 
   // Generate unique slug
   let baseSlug = customSlug ? slugify(customSlug) : slugify(title);
-  let slug = baseSlug;
-  let counter = 1;
-  while ((store.articles || []).some(a => a.slug === slug)) {
+  let slug     = baseSlug;
+  let counter  = 1;
+  while (await prisma.article.findUnique({ where: { slug } })) {
     slug = `${baseSlug}-${counter++}`;
   }
 
-  const article = {
-    id,
-    slug,
-    title: title.trim(),
-    excerpt: excerpt ? excerpt.trim() : '',
-    content: content || '',
-    coverImage: coverImage || '',
-    category: category || 'Insight',
-    tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : []),
-    author: author || 'Tim Expressa',
-    status: status === 'published' ? 'published' : 'draft',
-    publishedAt: status === 'published' ? now : null,
-    createdAt: now,
-    updatedAt: now
-  };
+  const isPublished  = status === 'published';
+  const now          = new Date();
 
-  store.articles = store.articles || [];
-  store.articles.unshift(article);
-  saveArticles(store);
-
-  console.log(`[Article Created] "${article.title}" (${article.status})`);
-  res.status(201).json({ success: true, message: 'Artikel berhasil dibuat!', data: article });
+  try {
+    const article = await prisma.article.create({
+      data: {
+        slug,
+        title:       title.trim(),
+        excerpt:     excerpt?.trim()  || '',
+        content:     content          || '',
+        coverImage:  coverImage       || '',
+        category:    category         || 'Insight',
+        tags:        Array.isArray(tags) ? tags : (tags ? String(tags).split(',').map(t => t.trim()).filter(Boolean) : []),
+        author:      author           || 'Tim Expressa',
+        status:      isPublished ? 'published' : 'draft',
+        publishedAt: isPublished ? now : null,
+      },
+    });
+    console.log(`[Article Created] "${article.title}" (${article.status})`);
+    res.status(201).json({ success: true, message: 'Artikel berhasil dibuat!', data: article });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal membuat artikel.' });
+  }
 });
 
 // Update article
-app.put('/api/admin/articles/:id', authMiddleware, (req, res) => {
-  const store = getArticles();
-  const idx = (store.articles || []).findIndex(a => a.id === req.params.id);
-
-  if (idx === -1) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
-
-  const existing = store.articles[idx];
+app.put('/api/admin/articles/:id', authMiddleware, async (req, res) => {
   const { title, excerpt, content, coverImage, category, tags, author, status, slug: customSlug } = req.body;
-  const now = new Date().toISOString();
 
-  // Handle slug
-  let slug = existing.slug;
-  if (customSlug && slugify(customSlug) !== existing.slug) {
-    const newSlug = slugify(customSlug);
-    const conflict = (store.articles || []).some((a, i) => i !== idx && a.slug === newSlug);
-    if (!conflict) slug = newSlug;
+  try {
+    const existing = await prisma.article.findUnique({ where: { id: req.params.id } });
+    if (!existing) return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+
+    // Slug update: hanya jika customSlug berbeda dan tidak konflik
+    let slug = existing.slug;
+    if (customSlug) {
+      const newSlug = slugify(customSlug);
+      if (newSlug !== existing.slug) {
+        const conflict = await prisma.article.findFirst({ where: { slug: newSlug, NOT: { id: req.params.id } } });
+        if (!conflict) slug = newSlug;
+      }
+    }
+
+    const wasPublished  = existing.status === 'published';
+    const willPublish   = status === 'published';
+    const publishedAt   = willPublish ? (wasPublished ? existing.publishedAt : new Date()) : null;
+
+    const updated = await prisma.article.update({
+      where: { id: req.params.id },
+      data: {
+        slug,
+        title:       title       !== undefined ? title.trim()      : existing.title,
+        excerpt:     excerpt     !== undefined ? excerpt.trim()     : existing.excerpt,
+        content:     content     !== undefined ? content            : existing.content,
+        coverImage:  coverImage  !== undefined ? coverImage         : existing.coverImage,
+        category:    category    || existing.category,
+        tags:        Array.isArray(tags) ? tags : (tags ? String(tags).split(',').map(t => t.trim()).filter(Boolean) : existing.tags),
+        author:      author      || existing.author,
+        status:      willPublish ? 'published' : 'draft',
+        publishedAt,
+      },
+    });
+    console.log(`[Article Updated] "${updated.title}" (${updated.status})`);
+    res.json({ success: true, message: 'Artikel berhasil diperbarui!', data: updated });
+  } catch (e) {
+    if (e.code === 'P2025') return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal memperbarui artikel.' });
   }
-
-  // Handle publish timestamp
-  const wasPublished = existing.status === 'published';
-  const willPublish = status === 'published';
-  const publishedAt = willPublish ? (wasPublished ? existing.publishedAt : now) : null;
-
-  store.articles[idx] = {
-    ...existing,
-    slug,
-    title: title !== undefined ? title.trim() : existing.title,
-    excerpt: excerpt !== undefined ? excerpt.trim() : existing.excerpt,
-    content: content !== undefined ? content : existing.content,
-    coverImage: coverImage !== undefined ? coverImage : existing.coverImage,
-    category: category || existing.category,
-    tags: Array.isArray(tags) ? tags : (tags ? tags.split(',').map(t => t.trim()).filter(Boolean) : existing.tags),
-    author: author || existing.author,
-    status: willPublish ? 'published' : 'draft',
-    publishedAt,
-    updatedAt: now
-  };
-
-  saveArticles(store);
-  console.log(`[Article Updated] "${store.articles[idx].title}" (${store.articles[idx].status})`);
-  res.json({ success: true, message: 'Artikel berhasil diperbarui!', data: store.articles[idx] });
 });
 
 // Delete article
-app.delete('/api/admin/articles/:id', authMiddleware, (req, res) => {
-  const store = getArticles();
-  const initial = (store.articles || []).length;
-  store.articles = (store.articles || []).filter(a => a.id !== req.params.id);
-
-  if (store.articles.length === initial) {
-    return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+app.delete('/api/admin/articles/:id', authMiddleware, async (req, res) => {
+  try {
+    await prisma.article.delete({ where: { id: req.params.id } });
+    res.json({ success: true, message: 'Artikel berhasil dihapus.' });
+  } catch (e) {
+    if (e.code === 'P2025') return res.status(404).json({ success: false, message: 'Artikel tidak ditemukan.' });
+    console.error(e);
+    res.status(500).json({ success: false, message: 'Gagal menghapus artikel.' });
   }
-
-  saveArticles(store);
-  res.json({ success: true, message: 'Artikel berhasil dihapus.' });
 });
 
-// Upload article cover image
+// Upload article cover
 app.post('/api/admin/articles/:id/upload-cover', authMiddleware, upload.single('image'), (req, res) => {
   if (!req.file) return res.status(400).json({ success: false, message: 'Tidak ada file gambar.' });
-
-  const base64Data = req.file.buffer.toString('base64');
-  const mimeType = req.file.mimetype || 'image/png';
-  const dataUrl = `data:${mimeType};base64,${base64Data}`;
-
-  if (!IS_SERVERLESS) {
-    try {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      const ext = path.extname(req.file.originalname).toLowerCase() || '.png';
-      const filename = 'cover-' + uniqueSuffix + ext;
-      fs.writeFileSync(path.join(UPLOADS_DIR, filename), req.file.buffer);
-    } catch (e) {}
-  }
-
-  res.json({ success: true, message: 'Cover berhasil diunggah!', url: dataUrl, filename: req.file.originalname });
-}, (error, req, res, next) => {
-  res.status(400).json({ success: false, message: error.message });
+  const dataUrl = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+  res.json({ success: true, message: 'Cover berhasil diunggah!', url: dataUrl });
+}, (err, req, res, next) => {
+  res.status(400).json({ success: false, message: err.message });
 });
 
-// =============================================
-// ADMIN & STATIC PAGE ROUTING
-// =============================================
+// ─────────────────────────────────────────────
+// STATIC PAGE ROUTING
+// ─────────────────────────────────────────────
+app.get('/login',                                               (req, res) => res.sendFile(path.join(__dirname, 'public/admin/login.html')));
+app.get(['/portofolio', '/portfolio', '/portofolio.html'],      (req, res) => res.sendFile(path.join(__dirname, 'public/portofolio.html')));
+app.get(['/tim', '/team', '/tim.html'],                        (req, res) => res.sendFile(path.join(__dirname, 'public/tim.html')));
+app.get(['/galeri', '/gallery', '/galeri.html'],                (req, res) => res.sendFile(path.join(__dirname, 'public/galeri.html')));
+app.get(['/about', '/about-us', '/tentang', '/about.html'],     (req, res) => res.sendFile(path.join(__dirname, 'public/about.html')));
+app.get(['/artikel', '/artikel.html', '/blog'],                 (req, res) => res.sendFile(path.join(__dirname, 'public/artikel.html')));
+app.get(['/artikel-detail', '/artikel-detail.html'],            (req, res) => res.sendFile(path.join(__dirname, 'public/artikel-detail.html')));
+app.get('/admin',                                               (req, res) => res.sendFile(path.join(__dirname, 'public/admin/index.html')));
+app.get('/admin/*',                                             (req, res) => res.sendFile(path.join(__dirname, 'public/admin/index.html')));
+app.get('*',                                                    (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
-// Route for /login -> public/admin/login.html
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'login.html'));
-});
-
-// Route for /portofolio & /portfolio -> public/portofolio.html
-app.get(['/portofolio', '/portfolio', '/portofolio.html', '/proyek'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'portofolio.html'));
-});
-
-// Route for /tim & /team -> public/tim.html
-app.get(['/tim', '/team', '/tim.html', '/team.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'tim.html'));
-});
-
-// Route for /galeri & /gallery -> public/galeri.html
-app.get(['/galeri', '/gallery', '/galeri-project', '/gallery-project', '/galeri.html', '/gallery.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'galeri.html'));
-});
-
-// Route for /about & /about-us -> public/about.html
-app.get(['/about', '/about-us', '/tentang', '/tentang-kami', '/about.html', '/about-us.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'about.html'));
-});
-
-// Route for /artikel (blog listing)
-app.get(['/artikel', '/artikel.html', '/blog'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'artikel.html'));
-});
-
-// Route for /artikel-detail (single article)
-app.get(['/artikel-detail', '/artikel-detail.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'artikel-detail.html'));
-});
-
-// Route for /admin -> public/admin/index.html
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
-});
-
-// Route for /admin/ -> public/admin/index.html
-app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'index.html'));
-});
-
-// Fallback to public/index.html for any other URL
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Start Server with fallback port support (only in non-serverless environments)
+// ─────────────────────────────────────────────
+// START SERVER
+// ─────────────────────────────────────────────
 function startServer(port) {
   const server = app.listen(port, () => {
-    console.log(`=============================================`);
-    console.log(` Expressa Landing Page & CMS Server Running!`);
-    console.log(` Website URL: http://localhost:${port}`);
-    console.log(` CMS Admin:   http://localhost:${port}/admin`);
-    console.log(` CMS Login:   http://localhost:${port}/login`);
-    console.log(`=============================================`);
+    console.log('=============================================');
+    console.log(' Expressa CMS — PostgreSQL + Prisma v6');
+    console.log(` Website : http://localhost:${port}`);
+    console.log(` Admin   : http://localhost:${port}/admin`);
+    console.log('=============================================');
   });
-
   server.on('error', (err) => {
     if (err.code === 'EADDRINUSE') {
-      console.log(`Port ${port} is in use, trying port ${port + 1}...`);
+      console.log(`Port ${port} in use, trying ${port + 1}...`);
       startServer(port + 1);
     } else {
       console.error('Server error:', err);
@@ -782,9 +458,12 @@ function startServer(port) {
   });
 }
 
-if (!IS_SERVERLESS && process.env.NODE_ENV !== 'test') {
-  startServer(PORT);
-}
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  await prisma.$disconnect();
+  process.exit(0);
+});
 
-// Export app instance for Vercel Serverless Functions
+if (process.env.NODE_ENV !== 'test') startServer(PORT);
+
 module.exports = app;
