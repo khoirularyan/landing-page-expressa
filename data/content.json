@@ -87,37 +87,43 @@
       "id": "client-1",
       "name": "COBRA DENTAL",
       "icon": "building",
-      "logoUrl": ""
+      "logoUrl": "/assets/images/clients/cobra-dental.png"
     },
     {
       "id": "client-2",
       "name": "PETROKIMIA GRESIK",
       "icon": "activity",
-      "logoUrl": ""
+      "logoUrl": "/assets/images/clients/petrokimia-gresik.jpg"
     },
     {
       "id": "client-3",
       "name": "FOKUS JASA MITRA",
       "icon": "users",
-      "logoUrl": ""
+      "logoUrl": "/assets/images/clients/fokus-jasa-mitra.png"
     },
     {
       "id": "client-4",
-      "name": "WHOLESALE ID",
-      "icon": "database",
-      "logoUrl": ""
+      "name": "POLITEKNIK INDONUSA",
+      "icon": "graduation-cap",
+      "logoUrl": "/assets/images/clients/politeknik-indonusa.png"
     },
     {
       "id": "client-5",
-      "name": "FMCG LOGISTICS",
-      "icon": "layers",
-      "logoUrl": ""
+      "name": "GAMMA BUANA PERSADA",
+      "icon": "shield-check",
+      "logoUrl": "/assets/images/clients/gamma-buana-persada.png"
     },
     {
       "id": "client-6",
-      "name": "MEDIKA UTAMA",
-      "icon": "shield-check",
-      "logoUrl": ""
+      "name": "SAVA GROUP",
+      "icon": "briefcase",
+      "logoUrl": "/assets/images/clients/sava-group.png"
+    },
+    {
+      "id": "client-7",
+      "name": "RSI MUSLIMAT JOMBANG",
+      "icon": "heart-pulse",
+      "logoUrl": "/assets/images/clients/rsi-muslimat.png"
     }
   ],
   "stats": {
