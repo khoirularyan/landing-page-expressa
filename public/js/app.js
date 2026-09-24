@@ -215,9 +215,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const renderClientItem = (c) => {
         if (c.logoUrl) {
+          const darkLogo = c.logoDarkUrl || c.logoUrl;
           return `
             <div class="flex items-center justify-center px-5 py-2.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 shadow-sm shrink-0 hover:scale-105 transition-all">
-              <img src="${c.logoUrl}" alt="${c.name || 'Client'}" class="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[160px] object-contain">
+              <img src="${c.logoUrl}" alt="${c.name || 'Client'}" class="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[160px] object-contain dark:hidden">
+              <img src="${darkLogo}" alt="${c.name || 'Client'}" class="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[160px] object-contain hidden dark:block">
             </div>
           `;
         }

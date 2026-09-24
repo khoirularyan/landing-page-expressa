@@ -325,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.dataset.clientId = client.id || `client-${idx + 1}`;
 
         const hasLogo = Boolean(client.logoUrl);
+        const hasDarkLogo = Boolean(client.logoDarkUrl);
 
         card.innerHTML = `
           <div class="flex items-center justify-between border-b border-slate-800 pb-2">
@@ -337,14 +338,21 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
           </div>
 
-          <!-- Preview -->
-          <div class="h-16 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center p-2.5 overflow-hidden">
-            <img id="client-preview-img-${idx}" src="${client.logoUrl || ''}" alt="${client.name || 'Logo'}" class="max-h-12 max-w-[140px] object-contain ${hasLogo ? '' : 'hidden'}">
-            <div id="client-preview-badge-${idx}" class="flex items-center gap-2 text-slate-300 font-bold text-xs ${hasLogo ? 'hidden' : ''}">
-              <div class="w-7 h-7 rounded-lg bg-blue-900/50 text-blue-400 flex items-center justify-center">
-                <i data-lucide="${client.icon || 'building'}" class="w-3.5 h-3.5"></i>
+          <!-- Dual Preview: Light Mode & Dark Mode -->
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <div class="text-[9px] font-semibold text-slate-400 mb-1">Light Mode</div>
+              <div class="h-14 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-2 overflow-hidden shadow-inner">
+                <img id="client-preview-img-${idx}" src="${client.logoUrl || ''}" alt="${client.name || 'Logo'}" class="max-h-10 max-w-full object-contain ${hasLogo ? '' : 'hidden'}">
+                <span class="text-[10px] text-slate-400 ${hasLogo ? 'hidden' : ''}">Belum ada</span>
               </div>
-              <span class="client-preview-name">${escapeHtml(client.name || 'Nama Perusahaan')}</span>
+            </div>
+            <div>
+              <div class="text-[9px] font-semibold text-slate-400 mb-1">Dark Mode (Font Putih)</div>
+              <div class="h-14 rounded-xl bg-[#0F172A] border border-slate-700 flex items-center justify-center p-2 overflow-hidden shadow-inner">
+                <img id="client-preview-dark-img-${idx}" src="${client.logoDarkUrl || client.logoUrl || ''}" alt="${client.name || 'Logo'}" class="max-h-10 max-w-full object-contain ${(hasDarkLogo || hasLogo) ? '' : 'hidden'}">
+                <span class="text-[10px] text-slate-500 ${(hasDarkLogo || hasLogo) ? 'hidden' : ''}">Belum ada</span>
+              </div>
             </div>
           </div>
 
@@ -360,17 +368,36 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </div>
 
-          <!-- Logo Upload & URL -->
-          <div class="space-y-1.5 pt-1">
-            <div class="flex items-center gap-2">
-              <input type="file" id="client-file-${idx}" accept="image/*" class="hidden">
-              <button type="button" class="btn-trigger-client-file bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5">
-                <i data-lucide="upload" class="w-3.5 h-3.5 text-emerald-400"></i>
-                <span>Unggah Logo</span>
-              </button>
+          <!-- Logo Light Mode -->
+          <div class="space-y-1 pt-1 border-t border-slate-800/60">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold text-slate-400">Logo Standar (Light)</span>
               <span id="client-status-${idx}" class="text-[10px] text-slate-400"></span>
             </div>
-            <input type="text" class="client-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-200 font-mono" value="${escapeHtml(client.logoUrl || '')}" placeholder="https://... atau biarkan kosong">
+            <div class="flex items-center gap-2">
+              <input type="file" id="client-file-${idx}" accept="image/*" class="hidden">
+              <button type="button" class="btn-trigger-client-file bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 shrink-0">
+                <i data-lucide="upload" class="w-3 h-3 text-emerald-400"></i>
+                <span>Unggah</span>
+              </button>
+              <input type="text" class="client-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-200 font-mono" value="${escapeHtml(client.logoUrl || '')}" placeholder="URL Logo Light">
+            </div>
+          </div>
+
+          <!-- Logo Dark Mode -->
+          <div class="space-y-1 pt-1 border-t border-slate-800/60">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] font-semibold text-blue-400">Logo Dark Mode (Opsional)</span>
+              <span id="client-dark-status-${idx}" class="text-[10px] text-slate-400"></span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="file" id="client-dark-file-${idx}" accept="image/*" class="hidden">
+              <button type="button" class="btn-trigger-client-dark-file bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] font-semibold px-2.5 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 shrink-0">
+                <i data-lucide="moon" class="w-3 h-3 text-blue-400"></i>
+                <span>Unggah</span>
+              </button>
+              <input type="text" class="client-dark-url-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-200 font-mono" value="${escapeHtml(client.logoDarkUrl || '')}" placeholder="URL Logo Dark Mode">
+            </div>
           </div>
         `;
 
@@ -379,17 +406,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const nameInput = card.querySelector('.client-name-input');
         const iconInput = card.querySelector('.client-icon-input');
         const urlInput = card.querySelector('.client-url-input');
+        const darkUrlInput = card.querySelector('.client-dark-url-input');
         const previewImg = card.querySelector(`#client-preview-img-${idx}`);
-        const previewBadge = card.querySelector(`#client-preview-badge-${idx}`);
-        const previewName = card.querySelector('.client-preview-name');
+        const previewDarkImg = card.querySelector(`#client-preview-dark-img-${idx}`);
         const fileBtn = card.querySelector('.btn-trigger-client-file');
         const fileInput = card.querySelector(`#client-file-${idx}`);
+        const darkFileBtn = card.querySelector('.btn-trigger-client-dark-file');
+        const darkFileInput = card.querySelector(`#client-dark-file-${idx}`);
         const statusSpan = card.querySelector(`#client-status-${idx}`);
+        const darkStatusSpan = card.querySelector(`#client-dark-status-${idx}`);
         const deleteBtn = card.querySelector('.btn-delete-client');
 
         nameInput.addEventListener('input', () => {
           client.name = nameInput.value;
-          if (previewName) previewName.textContent = nameInput.value || 'Nama Perusahaan';
         });
 
         iconInput.addEventListener('input', () => {
@@ -402,10 +431,24 @@ document.addEventListener('DOMContentLoaded', () => {
           if (client.logoUrl) {
             previewImg.src = client.logoUrl;
             previewImg.classList.remove('hidden');
-            previewBadge.classList.add('hidden');
+            if (!client.logoDarkUrl) {
+              previewDarkImg.src = client.logoUrl;
+              previewDarkImg.classList.remove('hidden');
+            }
           } else {
             previewImg.classList.add('hidden');
-            previewBadge.classList.remove('hidden');
+            if (!client.logoDarkUrl) previewDarkImg.classList.add('hidden');
+          }
+        });
+
+        darkUrlInput.addEventListener('input', () => {
+          client.logoDarkUrl = darkUrlInput.value.trim();
+          const targetDark = client.logoDarkUrl || client.logoUrl;
+          if (targetDark) {
+            previewDarkImg.src = targetDark;
+            previewDarkImg.classList.remove('hidden');
+          } else {
+            previewDarkImg.classList.add('hidden');
           }
         });
 
@@ -414,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
           fileInput.addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            statusSpan.textContent = 'Mengoptimasi & mengunggah...';
+            statusSpan.textContent = 'Mengunggah...';
             try {
               const compressed = await compressImage(file, 500, 0.9);
               const uploadedUrl = await uploadImageFile(compressed);
@@ -423,16 +466,46 @@ document.addEventListener('DOMContentLoaded', () => {
                 client.logoUrl = uploadedUrl;
                 previewImg.src = uploadedUrl;
                 previewImg.classList.remove('hidden');
-                previewBadge.classList.add('hidden');
+                if (!client.logoDarkUrl) {
+                  previewDarkImg.src = uploadedUrl;
+                  previewDarkImg.classList.remove('hidden');
+                }
                 statusSpan.textContent = '✓ Tersimpan!';
 
-                await saveContentToServer(currentContent, `✓ Logo Mitra (${client.name || 'Klien'}) berhasil disimpan & aktif!`);
+                await saveContentToServer(currentContent, `✓ Logo Mitra (${client.name || 'Klien'}) berhasil disimpan!`);
                 triggerImageSaveUIEffect('✓ Logo Mitra Tersimpan!');
               } else {
                 statusSpan.textContent = 'Gagal upload.';
               }
             } catch (err) {
               statusSpan.textContent = 'Gagal upload.';
+            }
+          });
+        }
+
+        if (darkFileBtn && darkFileInput) {
+          darkFileBtn.addEventListener('click', () => darkFileInput.click());
+          darkFileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            darkStatusSpan.textContent = 'Mengunggah...';
+            try {
+              const compressed = await compressImage(file, 500, 0.9);
+              const uploadedUrl = await uploadImageFile(compressed);
+              if (uploadedUrl) {
+                darkUrlInput.value = uploadedUrl;
+                client.logoDarkUrl = uploadedUrl;
+                previewDarkImg.src = uploadedUrl;
+                previewDarkImg.classList.remove('hidden');
+                darkStatusSpan.textContent = '✓ Tersimpan!';
+
+                await saveContentToServer(currentContent, `✓ Logo Dark Mode (${client.name || 'Klien'}) berhasil disimpan!`);
+                triggerImageSaveUIEffect('✓ Logo Dark Mode Tersimpan!');
+              } else {
+                darkStatusSpan.textContent = 'Gagal upload.';
+              }
+            } catch (err) {
+              darkStatusSpan.textContent = 'Gagal upload.';
             }
           });
         }

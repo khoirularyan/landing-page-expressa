@@ -87,37 +87,43 @@
       "id": "client-1",
       "name": "COBRA DENTAL",
       "icon": "building",
-      "logoUrl": "/assets/images/clients/cobra-dental.png"
+      "logoUrl": "/assets/images/clients/cobra-dental.png",
+      "logoDarkUrl": "/assets/images/clients/cobra-dental-dark.png"
     },
     {
       "id": "client-2",
       "name": "PETROKIMIA GRESIK",
       "icon": "activity",
-      "logoUrl": "/assets/images/clients/petrokimia-gresik.jpg"
+      "logoUrl": "/assets/images/clients/petrokimia-gresik.jpg",
+      "logoDarkUrl": "/assets/images/clients/petrokimia-gresik-dark.png"
     },
     {
       "id": "client-3",
       "name": "FOKUS JASA MITRA",
       "icon": "users",
-      "logoUrl": "/assets/images/clients/fokus-jasa-mitra.png"
+      "logoUrl": "/assets/images/clients/fokus-jasa-mitra.png",
+      "logoDarkUrl": "/assets/images/clients/fokus-jasa-mitra-dark.png"
     },
     {
       "id": "client-4",
       "name": "GAMMA BUANA PERSADA",
       "icon": "shield-check",
-      "logoUrl": "/assets/images/clients/gamma-buana-persada.png"
+      "logoUrl": "/assets/images/clients/gamma-buana-persada.png",
+      "logoDarkUrl": "/assets/images/clients/gamma-buana-persada-dark.png"
     },
     {
       "id": "client-5",
       "name": "SAVA GROUP",
       "icon": "briefcase",
-      "logoUrl": "/assets/images/clients/sava-group.png"
+      "logoUrl": "/assets/images/clients/sava-group.png",
+      "logoDarkUrl": "/assets/images/clients/sava-group-dark.png"
     },
     {
       "id": "client-6",
       "name": "KLINIK PRATAMA KUSMAHATI",
       "icon": "heart-pulse",
-      "logoUrl": "/assets/images/clients/kusmahati.png"
+      "logoUrl": "/assets/images/clients/kusmahati.png",
+      "logoDarkUrl": "/assets/images/clients/kusmahati-dark.png"
     }
   ],
   "stats": {
