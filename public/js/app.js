@@ -339,6 +339,8 @@ document.addEventListener('DOMContentLoaded', () => {
       setEl('about-hero-title-highlight', ab.heroTitleHighlight);
       setEl('about-hero-subtitle', ab.heroSubtitle);
       setEl('about-story-title', ab.storyTitle);
+      const storyImg = document.getElementById('about-story-img');
+      if (storyImg && ab.storyImageUrl) storyImg.src = ab.storyImageUrl;
       // Story text with newlines
       const storyEl = document.getElementById('about-story-text');
       if (storyEl && ab.storyText) {

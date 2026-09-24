@@ -3,45 +3,83 @@ document.addEventListener('DOMContentLoaded', () => {
   const defaultGallery = [
     {
       id: "gal-1",
-      title: "Enterprise ERP Distribution Hub",
+      title: "SIT Sistem ERP PT. Fokus Jasa Mitra (FJM)",
+      client: "PT. Fokus Jasa Mitra (FJM)",
       category: "ERP & Bisnis",
-      imageUrl: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80",
-      description: "Dasbor integrasi multi-gudang dan pelacakan batch serial number secara real-time."
+      imageUrl: "/assets/images/projects/project-3.jpeg",
+      description: "Implementasi Sistem Informasi Terpadu (SIT) ERP untuk PT. Fokus Jasa Mitra yang mengintegrasikan proses bisnis procurement, inventory, finance, hingga HR management dalam satu platform terpadu."
     },
     {
       id: "gal-2",
-      title: "Field Sales & Courier Dispatch Mobile App",
-      category: "Mobile App",
-      imageUrl: "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1200&q=80",
-      description: "Aplikasi kurir dan sales lapangan terhubung GPS offline-first ke server ERP pusat."
+      title: "Assessment Sistem ERP PT. Cobra Dental Indonesia",
+      client: "PT. Cobra Dental Indonesia",
+      category: "Konsultasi & Analisis",
+      imageUrl: "/assets/images/projects/project-4.jpeg",
+      description: "Assessment menyeluruh terhadap kebutuhan sistem ERP PT. Cobra Dental Indonesia, mencakup analisis proses bisnis, gap analysis, dan rekomendasi solusi optimalisasi operasional dental nasional."
     },
     {
       id: "gal-3",
-      title: "Smart Factory Shift & QC Monitoring",
-      category: "Industrial & IoT",
-      imageUrl: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80",
-      description: "Pemantauan output mesin produksi dan pencatatan cacat produk jalur konveyor pabrik."
+      title: "Demo Proyek Sistem ERP PT. Cobra Dental Indonesia",
+      client: "PT. Cobra Dental Indonesia",
+      category: "ERP & Bisnis",
+      imageUrl: "/assets/images/projects/project-5.jpeg",
+      description: "Sesi presentasi dan pengujian sistem ERP kustom yang menghubungkan modul persediaan multi-cabang, order purchasing, dan alur otorisasi keuangan secara realtime."
     },
     {
       id: "gal-4",
-      title: "Automated OCR Invoice & WhatsApp Billing",
-      category: "Otomasi & AI",
-      imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-      description: "Ekstraksi otomatis faktur vendor dan pengiriman invoice PDF otomatis via WhatsApp API."
+      title: "Demo Mobile & Customer App PT. Cobra Dental Indonesia",
+      client: "PT. Cobra Dental Indonesia",
+      category: "Mobile App",
+      imageUrl: "/assets/images/projects/project-10.jpeg",
+      description: "Demonstrasi aplikasi mobile dan customer portal terintegrasi sistem ERP, memudahkan tim sales lapangan dalam pengecekan stok gudang dan pembuatan pesanan klinis secara cepat."
     },
     {
       id: "gal-5",
-      title: "Executive Financial Analytics & Cashflow",
-      category: "ERP & Bisnis",
-      imageUrl: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
-      description: "Visualisasi laba-rugi kotor dan proyeksi arus kas bulanan konsolidasi group perusahaan."
+      title: "Sistem Pembelajaran Farmasi Politeknik Indonusa",
+      client: "Politeknik Indonusa Surakarta",
+      category: "Web Platform",
+      imageUrl: "/assets/images/projects/project-2.jpeg",
+      description: "Demonstrasi sistem pembelajaran farmasi yang dikembangkan khusus untuk dosen Politeknik Indonusa dengan fitur manajemen kurikulum, e-learning, dan sistem evaluasi pembelajaran yang terintegrasi."
     },
     {
       id: "gal-6",
-      title: "B2B Wholesale Ordering & Customer Portal",
+      title: "Assessment Sistem ERP di PT. Gamma Buana Persada",
+      client: "PT. Gamma Buana Persada",
+      category: "Konsultasi & Analisis",
+      imageUrl: "/assets/images/projects/project-6.jpeg",
+      description: "Melakukan assessment menyeluruh terhadap alur proses bisnis dan kebutuhan transformasi sistem ERP untuk efisiensi rantai pasok dan operasional perusahaan."
+    },
+    {
+      id: "gal-7",
+      title: "Training & Implementasi Sistem ERP SaVa Group",
+      client: "SaVa Group",
+      category: "ERP & Bisnis",
+      imageUrl: "/assets/images/projects/project-7.jpeg",
+      description: "Pelatihan dan pendampingan implementasi sistem ERP untuk SaVa Group guna meningkatkan efisiensi operasional dan integrasi sistem antar unit bisnis."
+    },
+    {
+      id: "gal-8",
+      title: "Implementasi Sistem Klinik Pratama Kusmahati Dua",
+      client: "Klinik Pratama Kusmahati Dua",
       category: "Web Platform",
-      imageUrl: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
-      description: "Portal pemesanan grosir tiering harga khusus distributor dengan plafon piutang otomatis."
+      imageUrl: "/assets/images/projects/project-1.jpeg",
+      description: "Implementasi sistem rekam medis elektronik dan operasional administrasi klinik untuk mempercepat alur pelayanan pasien serta manajemen obat farmasi."
+    },
+    {
+      id: "gal-9",
+      title: "Uji Coba Lapangan Aplikasi Mobile Operasional",
+      client: "PT. Cobra Dental Indonesia",
+      category: "Mobile App",
+      imageUrl: "/assets/images/projects/project-8.jpeg",
+      description: "Pengujian lapangan aplikasi mobile terhubung ERP secara offline-first untuk koordinasi tim operasional dan tracking pengiriman produk secara presisi."
+    },
+    {
+      id: "gal-10",
+      title: "Handover & Evaluasi Sistem ERP Terintegrasi",
+      client: "PT. Cobra Dental Indonesia",
+      category: "ERP & Bisnis",
+      imageUrl: "/assets/images/projects/project-9.jpeg",
+      description: "Serah terima final modul ERP, evaluasi performa implementasi, dan pengesahan kesiapan go-live seluruh divisi operasional perusahaan."
     }
   ];
 
@@ -116,7 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div>
           <!-- Image Showcase with Hover Zoom -->
           <div class="relative w-full aspect-[16/10] bg-slate-100 dark:bg-slate-900 overflow-hidden">
-            <img src="${item.imageUrl || 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'}" 
+            <img src="${item.imageUrl || '/assets/images/projects/project-3.jpeg'}" 
                  alt="${escapeHtml(item.title || 'Galeri Proyek')}" 
                  loading="lazy" 
                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
@@ -135,6 +173,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <!-- Card Content -->
           <div class="p-5 sm:p-6 space-y-2">
+            ${item.client ? `
+              <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+                <i data-lucide="building" class="w-3.5 h-3.5 text-blue-500"></i>
+                <span>${escapeHtml(item.client)}</span>
+              </div>
+            ` : ''}
             <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
               ${escapeHtml(item.title || 'Proyek Expressa')}
             </h3>
