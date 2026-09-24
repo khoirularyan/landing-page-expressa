@@ -216,9 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const renderClientItem = (c) => {
         if (c.logoUrl) {
           return `
-            <div class="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white/60 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 shadow-sm shrink-0 hover:scale-105 transition-transform">
-              <img src="${c.logoUrl}" alt="${c.name || 'Client'}" class="h-6 sm:h-7 max-w-[130px] object-contain">
-              <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${c.name || ''}</span>
+            <div class="flex items-center justify-center px-5 py-2.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 shadow-sm shrink-0 hover:scale-105 transition-all">
+              <img src="${c.logoUrl}" alt="${c.name || 'Client'}" class="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[160px] object-contain">
             </div>
           `;
         }
@@ -232,7 +231,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       };
 
-      const html = data.clients.map(renderClientItem).join('');
+      // Repeat items if count is small for seamless infinite scrolling
+      const displayClients = data.clients.length < 8 ? [...data.clients, ...data.clients] : data.clients;
+      const html = displayClients.map(renderClientItem).join('');
       if (marquee1) marquee1.innerHTML = html;
       if (marquee2) marquee2.innerHTML = html;
       if (window.lucide) window.lucide.createIcons();

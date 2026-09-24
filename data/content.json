@@ -103,27 +103,9 @@
     },
     {
       "id": "client-4",
-      "name": "POLITEKNIK INDONUSA",
-      "icon": "graduation-cap",
-      "logoUrl": "/assets/images/clients/politeknik-indonusa.png"
-    },
-    {
-      "id": "client-5",
       "name": "GAMMA BUANA PERSADA",
       "icon": "shield-check",
       "logoUrl": "/assets/images/clients/gamma-buana-persada.png"
-    },
-    {
-      "id": "client-6",
-      "name": "SAVA GROUP",
-      "icon": "briefcase",
-      "logoUrl": "/assets/images/clients/sava-group.png"
-    },
-    {
-      "id": "client-7",
-      "name": "RSI MUSLIMAT JOMBANG",
-      "icon": "heart-pulse",
-      "logoUrl": "/assets/images/clients/rsi-muslimat.png"
     }
   ],
   "stats": {
