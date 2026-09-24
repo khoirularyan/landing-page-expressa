@@ -1133,6 +1133,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroSubtitle = document.getElementById('about-hero-subtitle-input');
     const storyTitle = document.getElementById('about-story-title-input');
     const storyText = document.getElementById('about-story-text-input');
+    const storyImgPreview = document.getElementById('about-story-img-preview');
+    const storyUrlInput = document.getElementById('about-story-image-url');
+    const storyFileInput = document.getElementById('about-story-file-input');
+    const storyUploadStatus = document.getElementById('about-story-upload-status');
     const visionTitle = document.getElementById('about-vision-title-input');
     const visionText = document.getElementById('about-vision-text-input');
     const m1 = document.getElementById('about-mission-1-input');
@@ -1146,6 +1150,45 @@ document.addEventListener('DOMContentLoaded', () => {
     if (heroSubtitle) heroSubtitle.value = a.heroSubtitle || '';
     if (storyTitle) storyTitle.value = a.storyTitle || 'Cerita & Filosofi Kami';
     if (storyText) storyText.value = a.storyText || '';
+
+    const currentStoryImg = a.storyImageUrl || '/assets/images/team/team-6.jpeg';
+    if (storyUrlInput) storyUrlInput.value = currentStoryImg;
+    if (storyImgPreview) storyImgPreview.src = currentStoryImg;
+
+    if (storyUrlInput && !storyUrlInput.dataset.listenerAttached) {
+      storyUrlInput.dataset.listenerAttached = 'true';
+      storyUrlInput.addEventListener('input', (e) => {
+        if (storyImgPreview) storyImgPreview.src = e.target.value;
+      });
+    }
+
+    if (storyFileInput && !storyFileInput.dataset.listenerAttached) {
+      storyFileInput.dataset.listenerAttached = 'true';
+      storyFileInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (storyUploadStatus) storyUploadStatus.textContent = 'Mengoptimasi & mengunggah...';
+        try {
+          const compressed = await compressImage(file, 1200, 0.85);
+          const uploadedUrl = await uploadImageFile(compressed);
+          if (uploadedUrl) {
+            if (storyUrlInput) storyUrlInput.value = uploadedUrl;
+            if (storyImgPreview) storyImgPreview.src = uploadedUrl;
+            if (storyUploadStatus) storyUploadStatus.textContent = '✓ Terunggah & aktif!';
+            if (!currentContent) currentContent = {};
+            if (!currentContent.about) currentContent.about = {};
+            currentContent.about.storyImageUrl = uploadedUrl;
+            await saveContentToServer(currentContent, '✓ Foto Cerita About Us berhasil disimpan!');
+            triggerImageSaveUIEffect('✓ Foto About Us Tersimpan!');
+          } else {
+            if (storyUploadStatus) storyUploadStatus.textContent = 'Gagal upload.';
+          }
+        } catch (err) {
+          if (storyUploadStatus) storyUploadStatus.textContent = 'Gagal upload.';
+        }
+      });
+    }
+
     if (visionTitle) visionTitle.value = a.visionTitle || 'Visi Perusahaan';
     if (visionText) visionText.value = a.visionText || '';
     if (a.missions && Array.isArray(a.missions)) {
@@ -1166,6 +1209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentContent.about.heroSubtitle = heroSubtitle?.value || '';
         currentContent.about.storyTitle = storyTitle?.value || '';
         currentContent.about.storyText = storyText?.value || '';
+        currentContent.about.storyImageUrl = storyUrlInput?.value || a.storyImageUrl || '/assets/images/team/team-6.jpeg';
         currentContent.about.visionTitle = visionTitle?.value || '';
         currentContent.about.visionText = visionText?.value || '';
         currentContent.about.missions = [
