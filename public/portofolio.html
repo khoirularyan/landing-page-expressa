@@ -137,36 +137,33 @@
         <button class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all" data-category="workforce">
           Manpower &amp; Operasional
         </button>
-        <button class="filter-btn px-4 py-2 rounded-full text-xs font-semibold bg-slate-100 dark:bg-[#182238] border border-slate-200/80 dark:border-slate-700/80 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all" data-category="logistics">
-          Supply Chain &amp; Distribusi
-        </button>
       </div>
 
       <!-- Portfolio Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="portfolio-items-grid">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="portfolio-items-grid">
 
         <!-- CASE STUDY 1: COBRA DENTAL -->
-        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group" data-category="healthcare">
-          <div class="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-900">
-            <img id="cs-img-0" src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80" alt="Cobra Dental" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl transition-all duration-300" data-category="healthcare">
+          <div class="relative h-60 overflow-hidden bg-slate-100 dark:bg-slate-900">
+            <img id="cs-img-0" src="/assets/images/portfolio/cobra-dental.png" alt="Cobra Dental" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+            <div id="cs-client-0" class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-3 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
               Cobra Dental Indonesia
             </div>
-            <div class="absolute bottom-3 left-3 bg-blue-50/90 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 border border-transparent dark:border-blue-700/50 px-2 py-0.5 rounded text-[10px] font-semibold">
-              Alat Kesehatan &amp; Dental
+            <div id="cs-industry-0" class="absolute bottom-3 left-3 bg-blue-50/90 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50 px-2.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
+              Alat Kesehatan &amp; Dental Care
             </div>
           </div>
 
           <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
             <div>
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Sistem ERP Distribusi Dental Multi-Cabang</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Pencatatan serial number alat medis, manajemen gudang multi-cabang, dan validasi pesanan dokter gigi nasional.
+              <h3 id="cs-title-0" class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">E-Commerce &amp; Distribusi Alat Kedokteran Gigi</h3>
+              <p id="cs-desc-0" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Platform e-commerce katalog dan pemesanan alat kedokteran gigi terintegrasi nasional, pelacakan inventaris gudang multi-cabang, serta sistem verifikasi izin edar alkes.
               </p>
 
-              <div class="mt-4 p-3 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">Hasil Utama:</div>
-                <div class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              <div class="mt-4 p-3.5 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
+                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Hasil Utama:</div>
+                <div id="cs-metric-0" class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                   <span>+45% Kecepatan Order</span>
                   <span>0% Selisih Stok</span>
                 </div>
@@ -174,7 +171,7 @@
             </div>
 
             <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button onclick="openConsultationModal('Case Study: Cobra Dental')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
+              <button onclick="openConsultationModal('Case Study: Cobra Dental')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1.5">
                 <span>Konsultasikan Solusi Serupa</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </button>
@@ -182,36 +179,36 @@
           </div>
         </div>
 
-        <!-- CASE STUDY 2: PETROKIMIA GRESIK -->
-        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group" data-category="manufacturing">
-          <div class="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-900">
-            <img id="cs-img-1" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Petrokimia Gresik" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
-              Petrokimia Gresik
+        <!-- CASE STUDY 2: HEMS PETROKIMIA GRESIK -->
+        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl transition-all duration-300" data-category="manufacturing">
+          <div class="relative h-60 overflow-hidden bg-slate-100 dark:bg-slate-900">
+            <img id="cs-img-1" src="/assets/images/portfolio/hems-petrokimia.png" alt="Petrokimia Gresik - HEMS" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+            <div id="cs-client-1" class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-3 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+              PT Petrokimia Gresik (SBU JPP)
             </div>
-            <div class="absolute bottom-3 left-3 bg-emerald-50/90 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 border border-transparent dark:border-emerald-700/50 px-2 py-0.5 rounded text-[10px] font-semibold">
-              Pupuk &amp; Manufaktur
+            <div id="cs-industry-1" class="absolute bottom-3 left-3 bg-emerald-50/90 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/50 px-2.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
+              Manufaktur &amp; Alat Berat
             </div>
           </div>
 
           <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
             <div>
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Digitalisasi Shift &amp; Monitoring Pabrik</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Pencatatan shift harian secara digital, pemantauan mesin pabrik, dan integrasi dasbor kinerja lini produksi.
+              <h3 id="cs-title-1" class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">HEMS - Heavy Equipment Management System</h3>
+              <p id="cs-desc-1" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Sistem manajemen dan pemeliharaan alat berat terpadu (HEMS) SBU JPP untuk monitoring kesiapan unit operasional, preventive maintenance, dan integrasi mitra industri strategis.
               </p>
 
-              <div class="mt-4 p-3 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">Hasil Utama:</div>
-                <div class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+              <div class="mt-4 p-3.5 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
+                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Hasil Utama:</div>
+                <div id="cs-metric-1" class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
                   <span>100% Shift Paperless</span>
-                  <span>-60% Waktu Rekap</span>
+                  <span>99.8% Kesiapan Unit</span>
                 </div>
               </div>
             </div>
 
             <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button onclick="openConsultationModal('Case Study: Petrokimia Gresik')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
+              <button onclick="openConsultationModal('Case Study: Petrokimia HEMS')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1.5">
                 <span>Konsultasikan Solusi Serupa</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </button>
@@ -219,147 +216,73 @@
           </div>
         </div>
 
-        <!-- CASE STUDY 3: FOKUS JASA MITRA -->
-        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group" data-category="workforce">
-          <div class="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-900">
-            <img id="cs-img-2" src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80" alt="Fokus Jasa Mitra" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
-              Fokus Jasa Mitra
+        <!-- CASE STUDY 3: PORTAL OPERASIONAL PETROKIMIA GRESIK -->
+        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl transition-all duration-300" data-category="manufacturing">
+          <div class="relative h-60 overflow-hidden bg-slate-100 dark:bg-slate-900">
+            <img id="cs-img-2" src="/assets/images/portfolio/petrokimia-expressa.png" alt="Petrokimia Gresik - Portal JPP" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+            <div id="cs-client-2" class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-3 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+              PT Petrokimia Gresik
             </div>
-            <div class="absolute bottom-3 left-3 bg-cyan-50/90 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 border border-transparent dark:border-cyan-700/50 px-2 py-0.5 rounded text-[10px] font-semibold">
+            <div id="cs-industry-2" class="absolute bottom-3 left-3 bg-indigo-50/90 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-700/50 px-2.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
+              Manufaktur &amp; Kimia Industri
+            </div>
+          </div>
+
+          <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
+            <div>
+              <h3 id="cs-title-2" class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Portal Operasional &amp; Layanan Terpadu JPP</h3>
+              <p id="cs-desc-2" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Portal terintegrasi keandalan pabrik kimia, layanan engineering &amp; turnaround (TA), operasi pabrik pupuk, dan koordinasi terpusat lintas departemen agroindustri.
+              </p>
+
+              <div class="mt-4 p-3.5 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
+                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Hasil Utama:</div>
+                <div id="cs-metric-2" class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span>-60% Waktu Rekap</span>
+                  <span>10 Layanan Terpusat</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <button onclick="openConsultationModal('Case Study: Petrokimia JPP')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1.5">
+                <span>Konsultasikan Solusi Serupa</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CASE STUDY 4: FOKUS JASA MITRA -->
+        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl transition-all duration-300" data-category="workforce">
+          <div class="relative h-60 overflow-hidden bg-slate-100 dark:bg-slate-900">
+            <img id="cs-img-3" src="/assets/images/portfolio/fjm-pengadaan.png" alt="Fokus Jasa Mitra" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+            <div id="cs-client-3" class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-3 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
+              PT Fokus Jasa Mitra (FJM)
+            </div>
+            <div id="cs-industry-3" class="absolute bottom-3 left-3 bg-cyan-50/90 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-300 border border-cyan-200 dark:border-cyan-700/50 px-2.5 py-0.5 rounded text-[10px] font-semibold backdrop-blur-sm">
               Manpower &amp; Outsourcing
             </div>
           </div>
 
           <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
             <div>
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Manajemen Presensi GPS &amp; Billing</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Aplikasi absensi mobile berbasis geofencing GPS, perhitungan otomatis lembur, dan otomasi penagihan invoice mitra.
+              <h3 id="cs-title-3" class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Sistem Pengadaan Barang &amp; Operasional Terpadu</h3>
+              <p id="cs-desc-3" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
+                Sistem manajemen pengadaan barang &amp; jasa (riksama), tracking purchase order, alur otorisasi multi-level, dan integrasi operasional penempatan ribuan tenaga kerja profesional.
               </p>
 
-              <div class="mt-4 p-3 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">Hasil Utama:</div>
-                <div class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  <span>5,000+ Staf Terkelola</span>
-                  <span>1-Click Invoicing</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
-              <button onclick="openConsultationModal('Case Study: Fokus Jasa Mitra')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
-                <span>Konsultasikan Solusi Serupa</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CASE STUDY 4: SUPPLY CHAIN FMCG -->
-        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group" data-category="logistics">
-          <div class="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-900">
-            <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80" alt="FMCG Logistics Hub" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
-              FMCG Logistics Hub
-            </div>
-            <div class="absolute bottom-3 left-3 bg-blue-50/90 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-transparent dark:border-blue-800/40 px-2 py-0.5 rounded text-[10px] font-semibold">
-              Supply Chain & Distribusi
-            </div>
-          </div>
-
-          <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Optimasi Rute Armada & e-POD</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Pemantauan rute pengiriman real-time, bukti serah terima digital, dan integrasi penagihan multi-titik toko retail.
-              </p>
-
-              <div class="mt-4 p-3 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">Hasil Utama:</div>
-                <div class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  <span>-25% Biaya BBM</span>
-                  <span>100% Real-time POD</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button onclick="openConsultationModal('Case Study: FMCG Logistics')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
-                <span>Konsultasikan Solusi Serupa</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CASE STUDY 5: B2B COMMERCE -->
-        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group" data-category="logistics">
-          <div class="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-900">
-            <img src="https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=800&q=80" alt="B2B Wholesale Portal" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
-              Enterprise Wholesale
-            </div>
-            <div class="absolute bottom-3 left-3 bg-purple-50/90 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border border-transparent dark:border-purple-800/40 px-2 py-0.5 rounded text-[10px] font-semibold">
-              Grosir & Retail
-            </div>
-          </div>
-
-          <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Portal Pemesanan Grosir B2B</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Pemesanan mandiri distributor dengan pengecekan limit kredit dan alokasi stok gudang otomatis.
-              </p>
-
-              <div class="mt-4 p-3 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">Hasil Utama:</div>
-                <div class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  <span>24/7 Self-Service</span>
-                  <span>Validasi Kredit Instan</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button onclick="openConsultationModal('Case Study: B2B Commerce')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
-                <span>Konsultasikan Solusi Serupa</span>
-                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CASE STUDY 6: FINANCIAL APPROVAL -->
-        <div class="portfolio-item-card clean-card bg-white dark:bg-[#182238] border border-slate-200/80 dark:border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group" data-category="workforce">
-          <div class="relative h-52 overflow-hidden bg-slate-100 dark:bg-slate-900">
-            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80" alt="Financial Approval System" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-            <div class="absolute top-3 left-3 bg-white/95 dark:bg-[#1E293B]/95 backdrop-blur-md px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-900 dark:text-white shadow-sm border border-slate-200 dark:border-slate-700">
-              Corporate Governance
-            </div>
-            <div class="absolute bottom-3 left-3 bg-amber-50/90 dark:bg-amber-950/80 text-amber-700 dark:text-amber-300 border border-transparent dark:border-amber-800/40 px-2 py-0.5 rounded text-[10px] font-semibold">
-              Keuangan & Approval
-            </div>
-          </div>
-
-          <div class="p-6 flex-1 flex flex-col justify-between space-y-4">
-            <div>
-              <h3 class="text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">Sistem Otorisasi Kas & Anggaran</h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">
-                Persetujuan pengeluaran dana berjenjang sesuai limit wewenang (DOA) dengan notifikasi WhatsApp langsung ke direksi.
-              </p>
-
-              <div class="mt-4 p-3 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
-                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase">Hasil Utama:</div>
-                <div class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
-                  <span>Approval < 15 Menit</span>
+              <div class="mt-4 p-3.5 bg-slate-50 dark:bg-[#131B2E]/90 rounded-xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
+                <div class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Hasil Utama:</div>
+                <div id="cs-metric-3" class="flex items-center justify-between text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span>5.000+ Staf Terkelola</span>
                   <span>100% Audit Trail</span>
                 </div>
               </div>
             </div>
 
-            <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-              <button onclick="openConsultationModal('Case Study: Financial Approval')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1">
+            <div class="pt-4 border-t border-slate-100 dark:border-slate-700/60 flex items-center justify-between">
+              <button onclick="openConsultationModal('Case Study: Fokus Jasa Mitra')" class="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1.5">
                 <span>Konsultasikan Solusi Serupa</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
               </button>

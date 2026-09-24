@@ -254,7 +254,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (industryEl && cs.industry) industryEl.textContent = cs.industry;
         if (titleEl && cs.title) titleEl.textContent = cs.title;
         if (descEl && cs.description) descEl.textContent = cs.description;
-        if (metricEl && cs.metric) metricEl.textContent = cs.metric;
+        if (metricEl && cs.metric) {
+          metricEl.textContent = cs.metric.includes('|') ? cs.metric.split('|')[0].trim() : cs.metric;
+        }
       });
     }
 

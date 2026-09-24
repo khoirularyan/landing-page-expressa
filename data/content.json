@@ -130,23 +130,42 @@
     {
       "id": "cobra-dental",
       "client": "Cobra Dental Indonesia",
+      "title": "E-Commerce & Distribusi Alat Kedokteran Gigi",
       "industry": "Alat Kesehatan & Dental Care",
-      "description": "Sistem terintegrasi untuk mendukung operasional multi-cabang, pelacakan inventaris, dan alur distribusi alat kesehatan yang lebih efisien.",
-      "imageUrl": "https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=800&q=80"
+      "category": "healthcare",
+      "description": "Platform e-commerce katalog dan pemesanan alat kedokteran gigi terintegrasi nasional, pelacakan inventaris gudang multi-cabang, serta sistem verifikasi izin edar alkes.",
+      "imageUrl": "/assets/images/portfolio/cobra-dental.png",
+      "metric": "+45% Kecepatan Order | 0% Selisih Stok"
+    },
+    {
+      "id": "hems-petrokimia",
+      "client": "PT Petrokimia Gresik (SBU JPP)",
+      "title": "HEMS - Heavy Equipment Management System",
+      "industry": "Manufaktur & Alat Berat",
+      "category": "manufacturing",
+      "description": "Sistem manajemen dan pemeliharaan alat berat terpadu (HEMS) SBU JPP untuk monitoring kesiapan unit operasional, preventive maintenance, dan integrasi mitra industri strategis.",
+      "imageUrl": "/assets/images/portfolio/hems-petrokimia.png",
+      "metric": "100% Shift Paperless | 99.8% Kesiapan Unit"
     },
     {
       "id": "petrokimia-gresik",
-      "client": "Petrokimia Gresik",
-      "industry": "Pupuk & Kimia",
-      "description": "Solusi digital untuk mendukung proses operasional pabrikasi, pencatatan otomatis shift produksi, dan pelaporan terintegrasi skala enterprise.",
-      "imageUrl": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80"
+      "client": "PT Petrokimia Gresik",
+      "title": "Portal Operasional & Layanan Terpadu JPP",
+      "industry": "Manufaktur & Kimia",
+      "category": "manufacturing",
+      "description": "Portal terintegrasi keandalan pabrik kimia, layanan engineering & turnaround (TA), operasi pabrik pupuk, dan koordinasi terpusat lintas departemen agroindustri.",
+      "imageUrl": "/assets/images/portfolio/petrokimia-expressa.png",
+      "metric": "-60% Waktu Rekap | 10 Layanan Terpusat"
     },
     {
       "id": "fokus-jasa-mitra",
-      "client": "Fokus Jasa Mitra",
-      "industry": "Manpower & Business Services",
-      "description": "Sistem manajemen operasional dan presensi untuk memantau penempatan ribuan tenaga kerja profesional di berbagai mitra perusahaan klien.",
-      "imageUrl": "https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80"
+      "client": "PT Fokus Jasa Mitra (FJM)",
+      "title": "Sistem Pengadaan Barang & Operasional Terpadu",
+      "industry": "Manpower & Outsourcing",
+      "category": "workforce",
+      "description": "Sistem manajemen pengadaan barang & jasa (riksama), tracking purchase order, alur otorisasi multi-level, dan integrasi operasional penempatan ribuan tenaga kerja profesional.",
+      "imageUrl": "/assets/images/portfolio/fjm-pengadaan.png",
+      "metric": "5.000+ Staf Terkelola | 100% Audit Trail"
     }
   ],
   "team": [

@@ -516,8 +516,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <div class="space-y-2">
             <div>
-              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Klien / Proyek</label>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Nama Klien / Perusahaan</label>
               <input type="text" class="cs-client-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(cs.client || '')}" placeholder="Contoh: Cobra Dental Indonesia">
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Judul Studi Kasus / Sistem</label>
+              <input type="text" class="cs-title-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(cs.title || '')}" placeholder="Contoh: E-Commerce & Distribusi Alat Kedokteran Gigi">
             </div>
             <div>
               <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Industri / Kategori</label>
@@ -526,6 +530,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <div>
               <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Deskripsi Singkat</label>
               <textarea rows="2" class="cs-desc-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-[11px] text-slate-300 focus:outline-none focus:border-blue-500 resize-none" placeholder="Gambaran singkat solusi yang diimplementasikan...">${escapeHtml(cs.description || '')}</textarea>
+            </div>
+            <div>
+              <label class="block text-[10px] font-semibold text-slate-400 mb-0.5">Hasil Utama / Metrik</label>
+              <input type="text" class="cs-metric-input w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-blue-500" value="${escapeHtml(cs.metric || '')}" placeholder="Contoh: +45% Kecepatan Order | 0% Selisih Stok">
             </div>
           </div>
 
@@ -585,14 +593,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Sync text inputs langsung ke currentContent
-        card.querySelector('.cs-client-input').addEventListener('input', (e) => {
+        card.querySelector('.cs-client-input')?.addEventListener('input', (e) => {
           currentContent.caseStudies[idx].client = e.target.value;
         });
-        card.querySelector('.cs-industry-input').addEventListener('input', (e) => {
+        card.querySelector('.cs-title-input')?.addEventListener('input', (e) => {
+          currentContent.caseStudies[idx].title = e.target.value;
+        });
+        card.querySelector('.cs-industry-input')?.addEventListener('input', (e) => {
           currentContent.caseStudies[idx].industry = e.target.value;
         });
-        card.querySelector('.cs-desc-input').addEventListener('input', (e) => {
+        card.querySelector('.cs-desc-input')?.addEventListener('input', (e) => {
           currentContent.caseStudies[idx].description = e.target.value;
+        });
+        card.querySelector('.cs-metric-input')?.addEventListener('input', (e) => {
+          currentContent.caseStudies[idx].metric = e.target.value;
         });
 
         // Hapus
@@ -617,8 +631,10 @@ document.addEventListener('DOMContentLoaded', () => {
         currentContent.caseStudies.push({
           id:          `cs-${Date.now()}`,
           client:      'Klien Baru',
+          title:       'Judul Sistem Baru',
           industry:    'Industri',
           description: '',
+          metric:      '',
           imageUrl:    '',
         });
         renderCaseStudyCards();

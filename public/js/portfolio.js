@@ -54,11 +54,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const titleEl = document.getElementById(`cs-title-${idx}`);
       const descEl = document.getElementById(`cs-desc-${idx}`);
 
+      const metricEl = document.getElementById(`cs-metric-${idx}`);
+
       if (imgEl && cs.imageUrl) imgEl.src = cs.imageUrl;
       if (clientEl && cs.client) clientEl.textContent = cs.client;
       if (industryEl && cs.industry) industryEl.textContent = cs.industry;
       if (titleEl && cs.title) titleEl.textContent = cs.title;
       if (descEl && cs.description) descEl.textContent = cs.description;
+      if (metricEl && cs.metric) {
+        if (cs.metric.includes('|')) {
+          metricEl.innerHTML = cs.metric.split('|').map(m => `<span>${m.trim()}</span>`).join('');
+        } else {
+          metricEl.textContent = cs.metric;
+        }
+      }
     });
   }
 
