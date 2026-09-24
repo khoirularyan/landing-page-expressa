@@ -374,6 +374,66 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     }
+
+    // 10. Testimonials — render from CMS
+    if (data.testimonials && Array.isArray(data.testimonials) && data.testimonials.length > 0) {
+      const badgeColors = [
+        'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30',
+        'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/30',
+        'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30',
+        'text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/30'
+      ];
+      const borderColors = [
+        'border-blue-200 dark:border-blue-700',
+        'border-emerald-200 dark:border-emerald-700',
+        'border-indigo-200 dark:border-indigo-700',
+        'border-purple-200 dark:border-purple-700'
+      ];
+      const quoteColors = [
+        'text-blue-300 dark:text-blue-700',
+        'text-emerald-300 dark:text-emerald-700',
+        'text-indigo-300 dark:text-indigo-700',
+        'text-purple-300 dark:text-purple-700'
+      ];
+      const stars = '<i data-lucide="star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400"></i>'.repeat(5);
+
+      const renderTCard = (t, i, bgClass) => `
+        <div class="clean-card ${bgClass} border border-slate-200 dark:border-slate-700/80 rounded-3xl p-6 sm:p-8 flex flex-col gap-4 shadow-sm">
+          <div class="flex items-start gap-4">
+            <img src="${t.photoUrl || ''}" alt="${t.name || ''}" class="w-16 h-16 rounded-2xl object-cover object-top border-2 border-blue-100 dark:border-blue-900/50 shadow-sm shrink-0">
+            <div class="flex-1 min-w-0">
+              <span class="inline-block text-[10px] font-bold ${badgeColors[i % 4]} uppercase tracking-wider px-2 py-0.5 rounded mb-1">${t.badge || ''}</span>
+              <h4 class="font-bold text-slate-900 dark:text-white text-sm leading-tight">${t.name || ''}</h4>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${t.title || ''}${t.company ? ' · ' + t.company : ''}</p>
+              <div class="flex items-center gap-0.5 mt-1">${stars}</div>
+            </div>
+          </div>
+          <div class="relative pl-4 border-l-2 ${borderColors[i % 4]}">
+            <i data-lucide="quote" class="w-5 h-5 ${quoteColors[i % 4]} absolute -top-1 -left-3 bg-white dark:bg-[#1E293B]"></i>
+            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed italic">"${t.quote || ''}"</p>
+          </div>
+        </div>
+      `;
+
+      const tmGrid = document.getElementById('testimonials-grid');
+      if (tmGrid) {
+        tmGrid.innerHTML = data.testimonials.map((t, i) => renderTCard(t, i, 'bg-white dark:bg-[#1E293B]')).join('');
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+
+    // 11. About Team Photos — render from CMS
+    if (data.aboutTeamPhotos && Array.isArray(data.aboutTeamPhotos) && data.aboutTeamPhotos.length > 0) {
+      const atpGrid = document.getElementById('about-team-photos-grid');
+      if (atpGrid) {
+        atpGrid.innerHTML = data.aboutTeamPhotos.map(p => `
+          <div class="relative rounded-2xl overflow-hidden aspect-[3/4] bg-slate-100 dark:bg-slate-900 shadow-sm border border-slate-200/80 dark:border-slate-800 group">
+            <img src="${p.photoUrl || ''}" alt="${p.caption || 'Tim Expressa'}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          </div>
+        `).join('');
+      }
+    }
   }
 
   async function loadDynamicContent() {
@@ -402,87 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.warn('[CMS Loader] Fallback to cache/static HTML:', err.message);
     }
-  }
-
-  // 8. Framework Connected Pipeline Controller
-  const frameworkTrack = document.getElementById('framework-track');
-  const stepWrappers = document.querySelectorAll('.step-wrapper');
-  const frameworkPrevBtn = document.getElementById('framework-prev-btn');
-  const frameworkNextBtn = document.getElementById('framework-next-btn');
-
-  let currentFrameworkStep = 0;
-  let isDraggingTrack = false;
-
-  function setActiveStep(index, scrollToView = true) {
-    if (index < 0 || index >= stepWrappers.length) return;
-    currentFrameworkStep = index;
-
-    stepWrappers.forEach((wrapper, idx) => {
-      if (idx === index) {
-        wrapper.classList.add('active');
-        if (scrollToView && frameworkTrack) {
-          wrapper.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-        }
-      } else {
-        wrapper.classList.remove('active');
-      }
-    });
-  }
-
-  if (stepWrappers.length > 0) {
-    stepWrappers.forEach((wrapper, idx) => {
-      wrapper.addEventListener('click', () => {
-        if (isDraggingTrack) return;
-        setActiveStep(idx, true);
-      });
-    });
-  }
-
-  if (frameworkPrevBtn && frameworkTrack) {
-    frameworkPrevBtn.addEventListener('click', () => {
-      frameworkTrack.scrollBy({ left: -260, behavior: 'smooth' });
-    });
-  }
-
-  if (frameworkNextBtn && frameworkTrack) {
-    frameworkNextBtn.addEventListener('click', () => {
-      frameworkTrack.scrollBy({ left: 260, behavior: 'smooth' });
-    });
-  }
-
-  // Mouse Drag to Scroll for Desktop on Track
-  if (frameworkTrack) {
-    let isDown = false;
-    let startX = 0;
-    let scrollLeft = 0;
-
-    frameworkTrack.addEventListener('mousedown', (e) => {
-      isDown = true;
-      isDraggingTrack = false;
-      startX = e.pageX - frameworkTrack.offsetLeft;
-      scrollLeft = frameworkTrack.scrollLeft;
-    });
-
-    frameworkTrack.addEventListener('mouseleave', () => {
-      isDown = false;
-      setTimeout(() => { isDraggingTrack = false; }, 50);
-    });
-
-    frameworkTrack.addEventListener('mouseup', () => {
-      isDown = false;
-      setTimeout(() => { isDraggingTrack = false; }, 50);
-    });
-
-    frameworkTrack.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      const x = e.pageX - frameworkTrack.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      if (Math.abs(walk) > 5) {
-        isDraggingTrack = true;
-      }
-      e.preventDefault();
-      frameworkTrack.scrollLeft = scrollLeft - walk;
-    });
   }
 
   loadDynamicContent();

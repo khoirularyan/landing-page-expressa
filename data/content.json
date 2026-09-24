@@ -255,5 +255,65 @@
       "description": "Portal pemesanan grosir tiering harga khusus distributor dengan plafon piutang otomatis."
     }
   ],
+  "testimonials": [
+    {
+      "id": "tmn-1",
+      "name": "Mayor Ckm Dr. drg. Nugroho Setyawan, Sp.BM, FICS., FICD., M.M.R.S",
+      "title": "Direktur",
+      "company": "RS Bhirawa Bhakti",
+      "photoUrl": "https://swadigitalsolusindo.com/images/testimoni/nugroho-setyawan.png",
+      "badge": "Sistem Manajemen Rumah Sakit",
+      "quote": "Expressa Group telah menjadi mitra teknologi terpercaya bagi rumah sakit kami. Dengan sistem custom yang dikembangkan, proses pelayanan pasien, pengelolaan data medis, hingga pelaporan manajemen menjadi lebih terintegrasi, cepat, dan akurat. Setiap kebutuhan kami direspons dengan solusi yang benar-benar tepat sasaran."
+    },
+    {
+      "id": "tmn-2",
+      "name": "dr. Suparmin, Sp.OG., M.Si",
+      "title": "Direktur",
+      "company": "RSI Muslimat Jombang",
+      "photoUrl": "https://swadigitalsolusindo.com/images/testimoni/dr-suparmin.png",
+      "badge": "Sistem Kerja Modern",
+      "quote": "Sejak menggunakan sistem custom dari Expressa Group, alur pelayanan pasien di rumah sakit kami menjadi jauh lebih tertata. Mulai dari pendaftaran, rekam medis, hingga laporan operasional dapat diakses secara realtime. Tim Expressa sangat responsif dan memahami kebutuhan spesifik layanan kesehatan."
+    },
+    {
+      "id": "tmn-3",
+      "name": "Dannar Whilasto",
+      "title": "COO",
+      "company": "PT. Cobra Dental Indonesia",
+      "photoUrl": "https://swadigitalsolusindo.com/images/testimoni/dannar-whilasto.jpeg",
+      "badge": "Sistem ERP Terintegrasi",
+      "quote": "Expressa Group telah menjadi andalan kami dalam mempermudah proses operasional perusahaan. Dengan adanya sistem ERP, pengelolaan data dan pembuatan laporan menjadi lebih cepat terintegrasi dan dapat diperbarui secara realtime. Sistem ini benar-benar mengubah cara kerja tim kami menjadi lebih efisien."
+    },
+    {
+      "id": "tmn-4",
+      "name": "Irma Hamdiah, SKM., MHPM",
+      "title": "Kasubag TU",
+      "company": "RSUD Dayaku Raja, Kalimantan Timur",
+      "photoUrl": "https://swadigitalsolusindo.com/images/testimoni/irma-hamdiah.png",
+      "badge": "Sistem Manajemen Terintegrasi",
+      "quote": "Implementasi sistem custom dari Expressa Group memberikan dampak positif bagi manajemen rumah sakit kami. Pengolahan data, monitoring operasional, serta pembuatan laporan kini lebih efisien dan terintegrasi dalam satu sistem. Kami sangat puas dengan dukungan dan kualitas sistem yang diberikan."
+    }
+  ],
+  "aboutTeamPhotos": [
+    {
+      "id": "atp-1",
+      "photoUrl": "https://swadigitalsolusindo.com/images/team/team-3.jpeg",
+      "caption": "Tim Expressa"
+    },
+    {
+      "id": "atp-2",
+      "photoUrl": "https://swadigitalsolusindo.com/images/team/team-4.jpeg",
+      "caption": "Tim Expressa"
+    },
+    {
+      "id": "atp-3",
+      "photoUrl": "https://swadigitalsolusindo.com/images/team/team-5.jpeg",
+      "caption": "Tim Expressa"
+    },
+    {
+      "id": "atp-4",
+      "photoUrl": "https://swadigitalsolusindo.com/images/team/team-6.jpeg",
+      "caption": "Tim Expressa"
+    }
+  ],
   "_lastUpdated": 1790061755671
 }
